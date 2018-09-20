@@ -13,7 +13,6 @@
 		36CF46A3B95EEF538D119736 /* include_juce_audio_formats.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4E5894026300C039FDC5B510 /* include_juce_audio_formats.mm */; };
 		387444C9FF55F2EA154A9B1E /* include_juce_data_structures.mm in Sources */ = {isa = PBXBuildFile; fileRef = E92A5BFB7C91453118356E81 /* include_juce_data_structures.mm */; };
 		47561DB8215293AF0012BED1 /* AserveComs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47561D8E215293AF0012BED1 /* AserveComs.cpp */; };
-		47561DB9215293AF0012BED1 /* AserveAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47561D91215293AF0012BED1 /* AserveAudio.cpp */; };
 		47561DBA215293AF0012BED1 /* AserveOscillators.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47561D93215293AF0012BED1 /* AserveOscillators.cpp */; };
 		47561DBB215293AF0012BED1 /* AudioFilePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47561D95215293AF0012BED1 /* AudioFilePlayer.cpp */; };
 		47561DBC215293AF0012BED1 /* AudioFilePlayerManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47561D97215293AF0012BED1 /* AudioFilePlayerManager.cpp */; };
@@ -83,8 +82,6 @@
 		471D2DA4F77738F73EDA55C1 /* include_juce_opengl.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_opengl.mm; path = ../../JuceLibraryCode/include_juce_opengl.mm; sourceTree = SOURCE_ROOT; };
 		47561D8E215293AF0012BED1 /* AserveComs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AserveComs.cpp; path = ../../Source/AserveComs.cpp; sourceTree = "<group>"; };
 		47561D8F215293AF0012BED1 /* AserveComs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AserveComs.h; path = ../../Source/AserveComs.h; sourceTree = "<group>"; };
-		47561D91215293AF0012BED1 /* AserveAudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AserveAudio.cpp; sourceTree = "<group>"; };
-		47561D92215293AF0012BED1 /* AserveAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AserveAudio.h; sourceTree = "<group>"; };
 		47561D93215293AF0012BED1 /* AserveOscillators.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AserveOscillators.cpp; sourceTree = "<group>"; };
 		47561D94215293AF0012BED1 /* AserveOscillators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AserveOscillators.h; sourceTree = "<group>"; };
 		47561D95215293AF0012BED1 /* AudioFilePlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFilePlayer.cpp; sourceTree = "<group>"; };
@@ -198,8 +195,6 @@
 		47561D90215293AF0012BED1 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
-				47561D91215293AF0012BED1 /* AserveAudio.cpp */,
-				47561D92215293AF0012BED1 /* AserveAudio.h */,
 				47561D93215293AF0012BED1 /* AserveOscillators.cpp */,
 				47561D94215293AF0012BED1 /* AserveOscillators.h */,
 				47561D95215293AF0012BED1 /* AudioFilePlayer.cpp */,
@@ -520,7 +515,6 @@
 				47561DBD215293AF0012BED1 /* AudioMain.cpp in Sources */,
 				670192CED42437948F514A9B /* include_juce_graphics.mm in Sources */,
 				4E3625E9ACE0F69C7A3D465B /* include_juce_gui_basics.mm in Sources */,
-				47561DB9215293AF0012BED1 /* AserveAudio.cpp in Sources */,
 				47561DC3215293AF0012BED1 /* ImpulseComponent.cpp in Sources */,
 				A9B4FC2E785724CC1BF9158E /* include_juce_gui_extra.mm in Sources */,
 				31E3DBFE3689BA138EAFDCD3 /* include_juce_opengl.mm in Sources */,
