@@ -19,12 +19,14 @@
 #include "BitVisualiser.h"
 #include "AserveComs.h"
 
+#undef SHOW_CODE_INPUT
+
 //==============================================================================
 /*
     This component lives inside our window, and this is where you should put all
     your controls and content.
 */
-class MainContentComponent   : public AudioAppComponent, public TextEditorListener , public Timer
+class MainContentComponent   : public AudioAppComponent, public TextEditorListener , public Timer, public TextButton::Listener
 {
 public:
     
@@ -36,8 +38,9 @@ public:
         // specify the number of input and output channels that we want to open
         setAudioChannels (2, 2);
         
-        
+#ifdef SHOW_CODE_INPUT
         addAndMakeVisible(entryLabel);
+#endif
         addAndMakeVisible(logText);
         
         logText.setReadOnly(true);
@@ -59,6 +62,10 @@ public:
         
         addAndMakeVisible(impulse);
         addAndMakeVisible(bitGrid);
+        
+        addAndMakeVisible(clearButton);
+        clearButton.setButtonText("Reset");
+        clearButton.addListener(this);
         startTimer(50);
     }
     
@@ -66,6 +73,12 @@ public:
     ~MainContentComponent()
     {
         shutdownAudio();
+    }
+    void buttonClicked (Button* btn)
+    {
+        if (btn == &clearButton) {
+            audioMain.reset();
+        }
     }
     void timerCallback()
     {
@@ -260,14 +273,22 @@ public:
         const int mid = getWidth() - (leftInset + rightInset);
         const int bottomRemained  = getHeight() - bottomDiv;
         
+        
+#ifdef SHOW_CODE_INPUT
         entryLabel.setBounds(leftInset + 3, bottomDiv, mid - 6, 40.0);
         logText.setBounds(entryLabel.getX(), entryLabel.getBottom() + 5, entryLabel.getWidth(), (getHeight() - 240) - (entryLabel.getBottom() + 10));
-        
+#else
+//        logText.setBounds(leftInset+3, bottomDiv+5, mid-6, (getHeight() - 240));
+        logText.setBounds(leftInset + 3, bottomDiv, mid - 6, (getHeight() - 240) - (bottomDiv + 10));
+  
+#endif
         
         audioScope.setBounds(leftInset + 3, 5, mid - 6, bottomDiv - 6);
         
         impulse.setBounds(100, getHeight() - 240, 800, 240);
         bitGrid.setBounds((getWidth() - rightInset) + 20, bottomDiv + 10, 210, 210);
+        
+        clearButton.setBounds(leftInset + 5, 5, 50, 25);
     }
     
     void textEditorReturnKeyPressed (TextEditor& txt)
@@ -336,7 +357,8 @@ private:
     
     TextEditor          entryLabel;
     TextEditor          logText;
-
+    TextButton          clearButton;
+    
     AudioMain           audioMain;
     Scope               audioScope;
 

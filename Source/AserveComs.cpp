@@ -138,6 +138,12 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
     
     //this could probably be refactored with string arrays etc..
     
+    
+    String errorA = "";
+    String errorB = "";
+    String errorC = "";
+    String errorD = "";
+    
     if (message.getAddressPattern().toString().startsWith(AserveOSC::oscilator)) {
         if (message.size() == 4) {
             //we have to do loads of error checking, dont want asserts being thrown...
@@ -146,8 +152,7 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
                 const float f = message[1].getFloat32();
                 const float a = message[2].getFloat32();
                 const float w = message[3].getInt32();
-                String errorA = "";
-                String errorB = "";
+
                 if (c >= 0 && c < OscillatorManager::NumOscillators) {
                     audio.getOscs().setFrequency(c, f);
                     audio.getOscs().setAmplitude(c, a);
@@ -162,15 +167,6 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
                 }
                 String message = "aserveOscillator(" + String(c) + ", " + String(f) + ", " + String(a) + ", " + String(w) + ");";
                 addMessageToLog(message);
-                if (errorB.isNotEmpty()) {
-                    addMessageToLog(errorB);
-                }
-                if (errorA.isNotEmpty()) {
-                    addMessageToLog(errorA);
-                }
-
-                
-
             }
             
         }
@@ -181,8 +177,7 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
             if (message[0].isInt32() && message[1].isString()) {
                 
                 
-                String errorA = "";
-                String errorB = "";
+
                 
                 const int index = message[0].getInt32();
                 const String path = message[1].getString();
@@ -204,12 +199,6 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
 
                 String message = "aserveLoadSample(" + String(index) + ", " + String(path) +  ");";
                 addMessageToLog(message);
-                if (errorB.isNotEmpty()) {
-                    addMessageToLog(errorB);
-                }
-                if (errorA.isNotEmpty()) {
-                    addMessageToLog(errorA);
-                }
                 
             }
         }
@@ -220,9 +209,31 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
         if (message.size() == 5) {
             if (message[0].isInt32() && message[1].isString() && message[2].isInt32()
                 && message[3].isFloat32() && message[4].isFloat32()) {
+ 
+                const int index = message[0].getInt32();
+                const String path = message[1].getString();
                 
-                audio.setResampleSynthSound(message[0].getInt32(), message[1].getString(), message[2].getInt32(),
-                                            message[3].getFloat32(), message[4].getFloat32());
+                if (index >= 0 && index < AudioMain::eMaxSamplerTracks) {
+                    
+                    File f(path);
+                    if (f.existsAsFile()) {
+                        audio.setResampleSynthSound(index, path, message[2].getInt32(),
+                                                    message[3].getFloat32(), message[4].getFloat32());
+                    }
+                    else {
+                        errorB = "ERROR! - " + path + " - Does not exist as a file!";
+                    }
+                }
+                else {
+                    errorA = "ERROR! - " + String(index) + " - Is an out of range channel value!";
+                }
+                
+                //note we wont check the other 3 parameters which are original pitch, attach, decay. These should simply produce interesting effects for the students.
+                
+                String log = "aserveLoadPitchedSample(" + String(index) + ", " + path + ", " + String(message[2].getInt32()) + ", " + String(message[3].getFloat32()) + ", " + String(message[4].getFloat32()) + ");";
+                
+                addMessageToLog(log);
+                
             }
         }
     }
@@ -234,27 +245,21 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
                 const int note = message[1].getInt32();
                 const float amp = message[2].getFloat32();
                 
-                String errorA = "";
-                String errorB = "";
-                
-                
-
-                
-                if (index >= 0 && index < AudioMain::eMaxFileTracks) {
+                if (index >= 0 && index < AudioMain::eMaxSamplerTracks) {
                     
                     if (note > 127 || note < 0 || amp < 0.0 || amp > 1.0) {
-                        errorB = "ERROR! Sampler values out of range!";
+                        errorA = "ERROR! Sampler values out of range!";
                     }
-                    audio.triggerSampledNote(index, note, amp);
+                    else {
+                        audio.triggerSampledNote(index, note, amp * 127.0);
+                    }
                 }
                 else {
                     errorB = "ERROR! Sampler: " + String(index) + " is not a valid sampler index";
                 }
-                String message = "aservePlaySample(" + String(index) + ", " + String(note) + ", " + String(amp) + ");";
+                String message = "aservePlayPitchedSample(" + String(index) + ", " + String(note) + ", " + String(amp) + ");";
                 addMessageToLog(message);
-                if (errorB.isNotEmpty()) {
-                    addMessageToLog(errorB);
-                }
+
 
             }
         }
@@ -262,16 +267,28 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
     else if (message.getAddressPattern().toString().startsWith(AserveOSC::sample)) {
         if (message.size() == 2) {
             if (message[0].isInt32() && message[1].isFloat32()) {
-                int chan = message[0].getInt32();
-                float amp = message[1].getFloat32();
-                audio.playFile( chan, amp );
+                
+                const int index = message[0].getInt32();
+                const float amp = message[1].getFloat32();
                 
                 
+                if (index >= 0 && index < AudioMain::eMaxFileTracks) {
+                    
+                    if (amp < 0.0 || amp > 1.0) {
+                        errorA = "ERROR! Sampler values out of range!";
+                    }
+                    else {
+                        audio.playFile(index, amp);
+                    }
+                }
+                else {
+                    errorB = "ERROR! Sampler: " + String(index) + " is not a valid sampler index";
+                }
                 
-                String message = "aservePlaySample(" + String(chan) + ", " + String(amp) +  ");";
+                
+                String message = "aservePlaySample(" + String(index) + ", " + String(amp) +  ");";
                 addMessageToLog(message);
             }
-            
 
         }
     }
@@ -279,7 +296,15 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
     else if (message.getAddressPattern().toString().startsWith(AserveOSC::lpf)) {
         if (message.size() == 1) {
             if (message[0].isFloat32()) {
-                audio.setLPF(message[0].getFloat32());
+                const float cuttoff = message[0].getFloat32();
+                if (cuttoff >= 20 && cuttoff < 22050) {
+                    audio.setLPF(cuttoff);
+                }
+                else {
+                    errorA = "ERROR! LPF cuttoff out of range: " + String(cuttoff);
+                }
+                String message = "aserveLPF(" + String(cuttoff) + ");";
+                addMessageToLog(message);
             }
         }
 
@@ -287,19 +312,50 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
     else if (message.getAddressPattern().toString().startsWith(AserveOSC::bpf)) {
         if (message.size() == 3) {
             if (message[0].isFloat32() && message[1].isFloat32() && message[2].isFloat32()) {
-                audio.setHighBand(message[0].getFloat32(), message[1].getFloat32(), message[2].getFloat32());
+                
+                const float cuttoff = message[0].getFloat32();
+                const float q = message[1].getFloat32();
+                const float gain = message[2].getFloat32();
+                
+                if (cuttoff >= 20 && cuttoff < 22050 && q >= 0) {
+                    audio.setHighBand(message[0].getFloat32(), message[1].getFloat32(), message[2].getFloat32());
+                }
+                else {
+                    errorA = "ERROR! BPF values out of range: " + String(cuttoff);
+
+                }
+                String message = "aserveBPF(" + String(cuttoff) + ", " + String(q) + ", " + String(gain) + ");";
+                addMessageToLog(message);
+                
+
             }
         }
     }
     else if (message.getAddressPattern().toString().startsWith(AserveOSC::brf)) {
         if (message.size() == 3) {
             if (message[0].isFloat32() && message[1].isFloat32() && message[2].isFloat32()) {
-//                audio.setHighBand(message[0].getFloat32(), message[1].getFloat32(), message[2].getFloat32());
+
+                const float cuttoff = message[0].getFloat32();
+                const float q = message[1].getFloat32();
+                const float gain = message[2].getFloat32();
+                
+                if (cuttoff >= 20 && cuttoff < 22050 && q >= 0) {
+//                    audio.setHighBand(message[0].getFloat32(), message[1].getFloat32(), message[2].getFloat32());
+                }
+                else {
+                    errorA = "ERROR! PRF values out of range: " + String(cuttoff);
+                    
+                }
+                String message = "aserveBRF(" + String(cuttoff) + ", " + String(q) + ", " + String(gain) + ");";
+                addMessageToLog(message);
+                
+                
             }
         }
     }
     else if (message.getAddressPattern().toString().startsWith(AserveOSC::reset)) {
         audio.reset();
+//        addMessageToLog("aserveReset()");
     }
     else if (message.getAddressPattern().toString().startsWith(AserveOSC::loadDefaultSounds)) {
         
@@ -310,8 +366,23 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
         audio.loadFile(1, froot.getChildFile("sd.wav").getFullPathName());
         audio.loadFile(2, froot.getChildFile("chh.wav").getFullPathName());
         audio.loadFile(3, froot.getChildFile("ohh.wav").getFullPathName());
-
+        addMessageToLog("aserveLoadDefaultSounds();");
     }
+    
+
+    if (errorD.isNotEmpty()) {
+        addMessageToLog(errorD);
+    }
+    if (errorC.isNotEmpty()) {
+        addMessageToLog(errorC);
+    }
+    if (errorB.isNotEmpty()) {
+        addMessageToLog(errorB);
+    }
+    if (errorA.isNotEmpty()) {
+        addMessageToLog(errorA);
+    }
+    
 
     
 }

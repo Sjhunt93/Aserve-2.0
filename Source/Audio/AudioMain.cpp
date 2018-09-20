@@ -74,9 +74,11 @@ void AudioMain::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
         resampleSynth[i].renderNextBlock(*bufferToFill.buffer, incomingMidi, bufferToFill.startSample, bufferToFill.numSamples);
     }
     
+    //First do LPF
     filter[0].processSamples(bufferToFill.buffer->getWritePointer(0), bufferToFill.buffer->getNumSamples());
     filter[1].processSamples(bufferToFill.buffer->getWritePointer(1), bufferToFill.buffer->getNumSamples());
     
+    //Then do BPF
     for (int i = 0; i < bufferToFill.buffer->getNumSamples(); i++) {
         for (int chan = 0; chan < bufferToFill.buffer->getNumChannels(); chan++) {
             *bufferToFill.buffer->getWritePointer(chan, i) =
