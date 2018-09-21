@@ -366,7 +366,23 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
         audio.loadFile(1, froot.getChildFile("sd.wav").getFullPathName());
         audio.loadFile(2, froot.getChildFile("chh.wav").getFullPathName());
         audio.loadFile(3, froot.getChildFile("ohh.wav").getFullPathName());
+        
+        audio.setResampleSynthSound(0, froot.getChildFile("pianoSample.wav").getFullPathName(), 60, 10, 1);
+        
         addMessageToLog("aserveLoadDefaultSounds();");
+    }
+    else if (message.getAddressPattern().toString().startsWith(AserveOSC::MIDI)) {
+        if (message.size() == 3) {
+            if (message[0].isInt32() && message[1].isInt32() && message[2].isInt32()) {
+                const int s = message[0].getInt32();
+                const int d1 = message[1].getInt32();
+                const int d2 = message[2].getInt32();
+                //send midi
+                const MidiMessage m(s, d1, d2);
+                
+            }
+
+        }
     }
     
 

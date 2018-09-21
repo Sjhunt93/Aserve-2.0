@@ -20,36 +20,18 @@
  Instead i parse the MIDI to create the OSC messages.
  */
 
-#undef USE_MIDI
-//#define USE_OSC
 
 class MidiManager {
 public:
     MidiManager(AserveComs & _aserveComs) : aserveComs(_aserveComs)
-#ifdef USE_MIDI
-    : midiOutput (MidiOutput::createNewDevice("Virtual Impulse\n"))
-#endif
     {
-#ifdef USE_MIDI
-        midiOutput->startBackgroundThread();
-#endif
+        
     }
-    
     void sendMessage (MidiMessage& message)
     {
-#ifdef USE_MIDI
-       midiOutput->sendBlockOfMessages (MidiBuffer (message), Time::getMillisecondCounter(), 44100);
-#endif
         aserveComs.sendMidiMessageFromImpulse(message);
-        
-        
     }
-    
 private:
-#ifdef USE_MIDI
-    ScopedPointer<MidiOutput> midiOutput;	//this will be our virtual midi input
-#endif
-    
     AserveComs & aserveComs;
 
 };

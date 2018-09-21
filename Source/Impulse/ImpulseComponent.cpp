@@ -9,15 +9,15 @@
 #include "ImpulseComponent.h"
 
 //==============================================================================
-ImpulseController::ImpulseController (MidiManager& m)
-:   midiManager (m),
+ImpulseController::ImpulseController (AserveComs& aComs)
+:   midiManager (aComs),
 keyboard (keyboardState, MidiKeyboardComponent::horizontalKeyboard),
-pitchModComponent (m),
-sliderControlComponent (m),
-progButtonComponent (m),
-rotaryControlComponent (m),
-transportButtonComponent (m),
-drumPadComponent (m)
+pitchModComponent (midiManager),
+sliderControlComponent (midiManager),
+progButtonComponent (midiManager),
+rotaryControlComponent (midiManager),
+transportButtonComponent (midiManager),
+drumPadComponent (midiManager)
 
 {
     keyboard.setLowestVisibleKey (36);
@@ -34,15 +34,10 @@ drumPadComponent (m)
     addAndMakeVisible (rotaryControlComponent);
     addAndMakeVisible (transportButtonComponent);
     addAndMakeVisible (drumPadComponent);
-    
-    
-    connectMidiAll();
-
 }
 
 ImpulseController::~ImpulseController()
 {
-    clearAllMidiInputs();
 }
 
 void ImpulseController::paint (Graphics& g)
@@ -101,30 +96,5 @@ void ImpulseController::handleIncomingMidiMessage (MidiInput* source, const Midi
     sliderControlComponent.handleIncomingMidiMessage(source, message);
     pitchModComponent.handleIncomingMidiMessage(source, message);
     MidiMessage mm = message;
-    midiManager.sendMessage(mm);
-}
-void ImpulseController::connectMidiAll ()
-{
-    StringArray newNames = MidiInput::getDevices();
-    
-    if (midiNames != newNames) {
-        midiNames = newNames;
-        //Could probably use newer new/delete methods...
-        clearAllMidiInputs();
-        
-        for (int i = 0; i < midiNames.size(); i++) {
-            inputs.push_back(MidiInput::openDevice(i, this));
-            inputs[i]->start();
-        }
-        
-    }
-    
-}
-void ImpulseController::clearAllMidiInputs ()
-{
-    for (int i = 0; i < inputs.size(); i++) {
-        inputs[i]->stop();
-        delete inputs[i];
-    }
-    inputs.clear();
+//    midiManager.sendMessage(mm);
 }

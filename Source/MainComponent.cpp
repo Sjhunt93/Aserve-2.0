@@ -14,10 +14,12 @@
 #include "LiveTextParser.h"
 #include "Scope.h"
 #include "AudioMain.h"
+#include "MIDIIO.h"
 #include "midiManager.h"
 #include "ImpulseComponent.h"
 #include "BitVisualiser.h"
 #include "AserveComs.h"
+
 
 #undef SHOW_CODE_INPUT
 
@@ -26,12 +28,12 @@
     This component lives inside our window, and this is where you should put all
     your controls and content.
 */
-class MainContentComponent   : public AudioAppComponent, public TextEditorListener , public Timer, public TextButton::Listener
+class MainContentComponent   : public AudioAppComponent, public TextEditorListener , public Timer, public TextButton::Listener, public MenuBarModel
 {
 public:
     
     //==============================================================================
-    MainContentComponent() : aserveComs(audioMain), midiManager(aserveComs), impulse(midiManager)
+    MainContentComponent() : aserveComs(audioMain), MIDIIO(aserveComs), impulse(aserveComs)
     {
         setSize (1000, 840);
 
@@ -67,6 +69,7 @@ public:
         clearButton.setButtonText("Reset");
         clearButton.addListener(this);
         startTimer(50);
+
     }
     
 
@@ -349,6 +352,36 @@ public:
         }
         logText.setText(thingToAdd + logText.getText());
     }
+    
+    
+    StringArray getMenuBarNames()
+    {
+        return {"MIDI"};
+    }
+    
+    PopupMenu getMenuForIndex (int topLevelMenuIndex, const String& menuName)
+    {
+        //we can assume the following code as there is only 1 menu..
+
+        PopupMenu pmenu;
+        StringArray inputs = MIDIIO.getMidiNames();
+        if (!inputs.size()) {
+            pmenu.addItem(1, "no inputs available", false, false);
+        }
+        for (int i = 0; i < inputs.size(); i++) {
+            bool state = MIDIIO.getState(i);
+            pmenu.addItem(i+1, inputs[i], true, state);
+        }
+        return pmenu;
+    }
+    void menuItemSelected (int menuItemID, int topLevelMenuIndex)
+    {
+        if (topLevelMenuIndex == 0) {
+            MIDIIO.setState(menuItemID-1, !MIDIIO.getState(menuItemID-1));
+            printf("Clicked %i \n", MIDIIO.getState(menuItemID-1));
+        }
+    }
+    
 
 private:
     //==============================================================================
@@ -365,9 +398,11 @@ private:
     BitVisualiser       bitGrid;
     
     AserveComs          aserveComs;
-    MidiManager         midiManager;
-    
+    MIDIIO              MIDIIO;
     ImpulseController   impulse;
+    
+    
+    std::vector<int>    midi;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
     

@@ -25,13 +25,11 @@
  your controls and content.
  */
 class ImpulseController   :  public Component,
-public MidiKeyboardStateListener,
-public MidiInputCallback
-
+public MidiKeyboardStateListener
 {
 public:
     //==============================================================================
-    ImpulseController (MidiManager& m);
+    ImpulseController (AserveComs& aComs);
     ~ImpulseController();
     
     void paint (Graphics&) override;
@@ -48,7 +46,7 @@ public:
     
 private:
     TooltipWindow tooltipWindow;
-    MidiManager& midiManager;
+    MidiManager midiManager;
     
     MidiKeyboardState keyboardState;
     MidiKeyboardComponent keyboard;
@@ -62,10 +60,6 @@ private:
     DrumPadComponent drumPadComponent;
     
 
-    void connectMidiAll ();
-    void clearAllMidiInputs ();
-    StringArray midiNames;
-    std::vector<MidiInput *> inputs;
     
     //==============================================================================
   };

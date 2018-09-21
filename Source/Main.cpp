@@ -68,6 +68,12 @@ public:
             setUsingNativeTitleBar (true);
             setContentOwned (createMainContentComponent(), true);
             setResizable (true, true);
+            
+            // wtf JUCE!?
+            MenuBarModel * mm = dynamic_cast<MenuBarModel *>(getContentComponent());
+            if (mm != nullptr) {
+                setMenuBar(mm);
+            }
 
             centreWithSize (getWidth(), getHeight());
             setVisible (true);

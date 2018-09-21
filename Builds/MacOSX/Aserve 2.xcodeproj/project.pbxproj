@@ -39,6 +39,7 @@
 		47561DDB215394A70012BED1 /* rs.WAV in Resources */ = {isa = PBXBuildFile; fileRef = 47561DD2215394A70012BED1 /* rs.WAV */; };
 		47561DDC215394A70012BED1 /* sd.WAV in Resources */ = {isa = PBXBuildFile; fileRef = 47561DD3215394A70012BED1 /* sd.WAV */; };
 		47561DDD215394A70012BED1 /* tapstretch.aif in Resources */ = {isa = PBXBuildFile; fileRef = 47561DD4215394A70012BED1 /* tapstretch.aif */; };
+		47561DE02154DF720012BED1 /* MIDIIO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47561DDE2154DF720012BED1 /* MIDIIO.cpp */; };
 		4800F810AA6C51BEA2A4633D /* include_juce_video.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AA4C5675C61C61CCB6E330A /* include_juce_video.mm */; };
 		4E3625E9ACE0F69C7A3D465B /* include_juce_gui_basics.mm in Sources */ = {isa = PBXBuildFile; fileRef = D83AD2045330F6198B350DA8 /* include_juce_gui_basics.mm */; };
 		4EB59B38753E02AB22389B70 /* include_juce_audio_basics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40429BA516AD5C39B1A08127 /* include_juce_audio_basics.mm */; };
@@ -125,6 +126,8 @@
 		47561DD2215394A70012BED1 /* rs.WAV */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = rs.WAV; sourceTree = "<group>"; };
 		47561DD3215394A70012BED1 /* sd.WAV */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sd.WAV; sourceTree = "<group>"; };
 		47561DD4215394A70012BED1 /* tapstretch.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = tapstretch.aif; sourceTree = "<group>"; };
+		47561DDE2154DF720012BED1 /* MIDIIO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MIDIIO.cpp; path = ../../Source/MIDIIO.cpp; sourceTree = "<group>"; };
+		47561DDF2154DF720012BED1 /* MIDIIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MIDIIO.h; path = ../../Source/MIDIIO.h; sourceTree = "<group>"; };
 		4A745CE13363691560632D19 /* JuceHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JuceHeader.h; path = ../../JuceLibraryCode/JuceHeader.h; sourceTree = SOURCE_ROOT; };
 		4B7D35183FCBBC0049660F3D /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4D5875B24C715915B01FF44A /* include_juce_audio_utils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_utils.mm; path = ../../JuceLibraryCode/include_juce_audio_utils.mm; sourceTree = SOURCE_ROOT; };
@@ -387,6 +390,8 @@
 				B69A02408C2C34BF6242AE66 /* Main.cpp */,
 				47561D8E215293AF0012BED1 /* AserveComs.cpp */,
 				47561D8F215293AF0012BED1 /* AserveComs.h */,
+				47561DDF2154DF720012BED1 /* MIDIIO.h */,
+				47561DDE2154DF720012BED1 /* MIDIIO.cpp */,
 				47561D90215293AF0012BED1 /* Audio */,
 				47561D9D215293AF0012BED1 /* GUI */,
 				47561DA4215293AF0012BED1 /* Impulse */,
@@ -491,6 +496,7 @@
 				6BBFBCC71B5BC0D685089E34 /* include_juce_audio_devices.mm in Sources */,
 				36CF46A3B95EEF538D119736 /* include_juce_audio_formats.mm in Sources */,
 				47561DB8215293AF0012BED1 /* AserveComs.cpp in Sources */,
+				47561DE02154DF720012BED1 /* MIDIIO.cpp in Sources */,
 				47561DC1215293AF0012BED1 /* Scope.cpp in Sources */,
 				AB49FB6533D32C0A0E22215F /* include_juce_audio_processors.mm in Sources */,
 				47561DC4215293AF0012BED1 /* MidiManager.cpp in Sources */,
