@@ -26,6 +26,7 @@ namespace AserveOSC
     static const String sample = "/aserve/sample";
     static const String pitchedSample = "/aserve/samplepitch";
     static const String setPixelGrid = "/aserve/pixelgrid";
+    static const String pixelGridClicked = aserve + "clickedpixelgrid";
     static const String loadsample = aserve + "loadsample";
     static const String loadPitchedSample = aserve + "loadpitchedsample";
     static const String lpf = aserve + "lpf";
@@ -34,6 +35,7 @@ namespace AserveOSC
     
     static const String loadDefaultSounds = aserve + "loaddefaults";
     static const String reset = aserve + "reset";
+
 }
 
 
@@ -91,9 +93,11 @@ void AserveComs::sendMidiMessageFromImpulse (MidiMessage midiMessage)
     // Also send pure MIDI aswell..
     if (midiMessage.getRawDataSize() == 3) {
         OSCMessage message(AserveOSC::MIDI, midiMessage.getRawData()[0], midiMessage.getRawData()[1], midiMessage.getRawData()[2]);
+        sender.send(message);
     }
     else if (midiMessage.getRawDataSize() == 2) {
         OSCMessage message(AserveOSC::MIDI, midiMessage.getRawData()[0], midiMessage.getRawData()[1], 0);
+        sender.send(message);
     }
 
     //plus we allways send MIDI for the more advance stuff..
@@ -379,9 +383,20 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
                 const int d2 = message[2].getInt32();
                 //send midi
                 const MidiMessage m(s, d1, d2);
+                sendActionMessage("MIDI:" + String(s) + "," + String(d1) + "," + String(d2));
                 
             }
 
+        }
+    }
+    else if (message.getAddressPattern().toString().startsWith(AserveOSC::setPixelGrid)) {
+        if (message.size() == 2) {
+            if (message[0].isInt32() && message[1].isInt32()) {
+                const int a = message[0].getInt32();
+                const int b = message[1].getInt32();
+                sendActionMessage("PIXEL:" + String(a) + "," + String(b));
+
+            }
         }
     }
     
@@ -403,3 +418,8 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
     
 }
 
+void AserveComs::sendGridMessage (const int x, const int y)
+{
+    OSCMessage message(AserveOSC::pixelGridClicked, x, y);
+    sender.send(message);
+}

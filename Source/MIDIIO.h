@@ -27,10 +27,11 @@ public:
     StringArray getMidiNames ();
     
     void setImpulseComponent (ImpulseController * impulse);
+    void sendMIDI (MidiMessage message);
     
     bool getState (int index);
     void setState (int index, bool state);
-    
+
 private:
     AserveComs & aserveComs;
     ScopedPointer<MidiOutput> midiOutput;	//this will be our virtual midi output

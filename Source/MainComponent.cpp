@@ -28,7 +28,13 @@
     This component lives inside our window, and this is where you should put all
     your controls and content.
 */
-class MainContentComponent   : public AudioAppComponent, public TextEditorListener , public Timer, public TextButton::Listener, public MenuBarModel
+class MainContentComponent   :
+public AudioAppComponent,
+public TextEditorListener,
+public Timer,
+public TextButton::Listener,
+public MenuBarModel,
+public ActionListener
 {
 public:
     
@@ -68,6 +74,10 @@ public:
         addAndMakeVisible(clearButton);
         clearButton.setButtonText("Reset");
         clearButton.addListener(this);
+        
+        aserveComs.addActionListener(this);
+        bitGrid.addActionListener(this);
+        
         startTimer(50);
 
     }
@@ -248,7 +258,8 @@ public:
 
             g.setColour(Colours::white);
             g.drawText("Pitched Sampler State: ", (getWidth()-rightInset) + 5, startPoint, rightInset-10, 30, Justification::centred);
-
+            g.drawText("Bit Gird", (getWidth()-rightInset) + 5, bitGrid.getY() - 38, rightInset-10, 30, Justification::centred);
+            
             startPoint += 30;
 
             for (int i = 0; i < AudioMain::eMaxSamplerTracks; i++) {
@@ -264,6 +275,7 @@ public:
                 
                 
             }
+            
         }
     }
 
@@ -379,6 +391,19 @@ public:
         if (topLevelMenuIndex == 0) {
             MIDIIO.setState(menuItemID-1, !MIDIIO.getState(menuItemID-1));
             printf("Clicked %i \n", MIDIIO.getState(menuItemID-1));
+        }
+    }
+    void actionListenerCallback (const String& message)
+    {
+        if (message.startsWith("PIXEL")) {
+            const int a = message.fromFirstOccurrenceOf(":", false, false).upToFirstOccurrenceOf(",", false, false).getIntValue();
+            const int b = message.fromLastOccurrenceOf(",", false, false).getIntValue();
+            bitGrid.set(b, a);
+        }
+        if (message.startsWith("GRID")) {
+            const int x = message.fromFirstOccurrenceOf(":", false, false).upToFirstOccurrenceOf(",", false, false).getIntValue();
+            const int y = message.fromLastOccurrenceOf(",", false, false).getIntValue();
+            aserveComs.sendGridMessage(x, y);
         }
     }
     

@@ -33,7 +33,7 @@ static const uint32_t new_piskel_data[1][256] = {
     }
 };
 
-class BitVisualiser : public Component {
+class BitVisualiser : public Component, public ActionBroadcaster {
 public:
     BitVisualiser ();
     ~BitVisualiser ();
@@ -41,6 +41,9 @@ public:
 
     void paint (Graphics & g);
     void set (UInt16 pixelRow, int row);
+    
+    void mouseDown (const MouseEvent& event);
+
     
 private:
     UInt16 pixelGrid[16];

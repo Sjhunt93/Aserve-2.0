@@ -15,13 +15,15 @@
 
 class AserveComs :
 private OSCReceiver,
-private OSCReceiver::Listener<OSCReceiver::RealtimeCallback>
+private OSCReceiver::Listener<OSCReceiver::RealtimeCallback>,
+public ActionBroadcaster
 {
 public:
     AserveComs (AudioMain &audio);
     virtual ~AserveComs ();
     
     void sendMidiMessageFromImpulse (MidiMessage message);
+    void sendGridMessage (const int x, const int y);
     
     bool checkAndClearRedraw ();
     StringArray getAndClearMessageLog ();

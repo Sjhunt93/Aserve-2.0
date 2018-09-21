@@ -51,9 +51,28 @@ void BitVisualiser::paint (Graphics & g)
         }
     }
     
+    g.setColour(Colours::black);
+    for (int i = 0; i < 15; i++) {
+
+        g.drawLine(size*i + size, 0, size *i + size, getHeight());
+        
+        g.drawLine(0, size*i + size, getWidth(), size*i + size);
+    }
+    
 }
 void BitVisualiser::set (UInt16 pixelRow, int row)
 {
-    pixelGrid[row] = pixelRow;
-    repaint();
+    if (row < 16 && row >= 0) {
+        pixelGrid[row] = pixelRow;
+        repaint();
+    }
+
+}
+void BitVisualiser::mouseDown (const MouseEvent& event)
+{
+    float size = ((getWidth()-2) / 16);
+    
+    const int x = event.x / size;
+    const int y = event.y / size;
+    sendActionMessage("GRID:" + String(x) + "," + String(y));
 }
