@@ -78,6 +78,7 @@ public:
         aserveComs.addActionListener(this);
         bitGrid.addActionListener(this);
         
+        
         startTimer(50);
 
     }
@@ -135,10 +136,12 @@ public:
                 logText.clear();
             }
             
+            String total = "";
+            
             for (String st : totalStrings) {
                 String final = (Time::getCurrentTime().toString(false, true) + " :: " + st + "\n");
                 
-                logText.setCaretPosition(logText.getText().length());
+             //   logText.setCaretPosition(logText.getText().length());
 
                 logText.setColour(TextEditor::ColourIds::textColourId , st.startsWith("ERROR") ? Colours::crimson : Colour(59, 252,52));
                 
@@ -275,10 +278,17 @@ public:
                 
                 
             }
+            g.setColour(Colours::black);
+            g.drawLine(getWidth() - rightInset, startPoint, getWidth(), startPoint, 3.0);
             
         }
     }
-
+    void paintOverChildren (Graphics& g)
+    {
+        g.setColour(Colours::lightgrey);
+        g.setFont(10);
+        g.drawText("Version: " + String(ProjectInfo::versionString), audioScope.getX() + 5, audioScope.getBottom() - 20, 100, 20, Justification::left);
+    }
     void resized() override
     {
 
@@ -294,7 +304,7 @@ public:
         logText.setBounds(entryLabel.getX(), entryLabel.getBottom() + 5, entryLabel.getWidth(), (getHeight() - 240) - (entryLabel.getBottom() + 10));
 #else
 //        logText.setBounds(leftInset+3, bottomDiv+5, mid-6, (getHeight() - 240));
-        logText.setBounds(leftInset + 3, bottomDiv, mid - 6, (getHeight() - 240) - (bottomDiv + 10));
+        logText.setBounds(leftInset + 3, bottomDiv, mid - 6, (getHeight() - 240) - (bottomDiv));
   
 #endif
         

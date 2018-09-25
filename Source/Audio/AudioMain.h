@@ -42,6 +42,8 @@ public:
      */
     OscillatorManager &getOscs ();
     void setLPF (const int cuttoff);
+    void setHPF (const int cuttoff);
+
     void setHighBand (const float cuttoff, const float q, const float gain);
     void setHighBandGain (const float gain);
     
@@ -74,6 +76,11 @@ private:
     float prevHBCuttoff, prevHBQ, prevHBGain;
     
     float lpfCuttoff;
+    float hpfCuttoff;
+    
+    float lastLpf, lastHpf;
+    
+    
     StringArray audioNames;
     StringArray resampledNames;
 };

@@ -30,6 +30,7 @@ namespace AserveOSC
     static const String loadsample = aserve + "loadsample";
     static const String loadPitchedSample = aserve + "loadpitchedsample";
     static const String lpf = aserve + "lpf";
+    static const String hpf = aserve + "hpf";
     static const String bpf = aserve + "bpf";
     static const String brf = aserve + "brf";
     
@@ -312,6 +313,22 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
             }
         }
 
+    }
+    else if (message.getAddressPattern().toString().startsWith(AserveOSC::hpf)) {
+        if (message.size() == 1) {
+            if (message[0].isFloat32()) {
+                const float cuttoff = message[0].getFloat32();
+                if (cuttoff >= 20 && cuttoff < 22050) {
+                    audio.setHPF(cuttoff);
+                }
+                else {
+                    errorA = "ERROR! HPF cuttoff out of range: " + String(cuttoff);
+                }
+                String message = "aserveHPF(" + String(cuttoff) + ");";
+                addMessageToLog(message);
+            }
+        }
+        
     }
     else if (message.getAddressPattern().toString().startsWith(AserveOSC::bpf)) {
         if (message.size() == 3) {
