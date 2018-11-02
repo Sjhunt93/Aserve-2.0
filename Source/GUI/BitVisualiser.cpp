@@ -60,7 +60,7 @@ void BitVisualiser::paint (Graphics & g)
     }
     
 }
-void BitVisualiser::set (UInt16 pixelRow, int row)
+void BitVisualiser::set (uint16 pixelRow, int row)
 {
     if (row < 16 && row >= 0) {
         pixelGrid[row] = pixelRow;

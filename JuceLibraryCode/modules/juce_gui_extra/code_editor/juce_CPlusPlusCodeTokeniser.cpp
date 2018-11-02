@@ -50,7 +50,7 @@ CodeEditorComponent::ColourScheme CPlusPlusCodeTokeniser::getDefaultColourScheme
         { "Comment",            0xff00aa00 },
         { "Keyword",            0xff0000cc },
         { "Operator",           0xff225500 },
-        { "Identifier",         0xffffffff },
+        { "Identifier",         0xff000000 },
         { "Integer",            0xff880000 },
         { "Float",              0xff885500 },
         { "String",             0xff990099 },
@@ -60,8 +60,9 @@ CodeEditorComponent::ColourScheme CPlusPlusCodeTokeniser::getDefaultColourScheme
     };
 
     CodeEditorComponent::ColourScheme cs;
-    for (unsigned int i = 0; i < sizeof (types) / sizeof (types[0]); ++i)  // (NB: numElementsInArray doesn't work here in GCC4.2)
-        cs.set (types[i].name, Colour (types[i].colour));
+
+    for (auto& t : types)
+        cs.set (t.name, Colour (t.colour));
 
     return cs;
 }

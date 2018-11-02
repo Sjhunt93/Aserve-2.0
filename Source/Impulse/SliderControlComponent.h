@@ -14,7 +14,7 @@
 #include "MidiManager.h"
 
 class SliderControlComponent  :	public Component,
-								public SliderListener
+	public Slider::Listener
 {
 public:
 	//==============================================================================

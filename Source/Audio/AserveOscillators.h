@@ -93,7 +93,7 @@ class Noise : public Oscillator {
 public:
     double renderWaveShape(void)
     {
-        return (((arc4random() % 2000) * 0.001) - 1.0) * 0.7;
+		return 0.0;// (((arc4random() % 2000) * 0.001) - 1.0) * 0.7;
     }
 
 };

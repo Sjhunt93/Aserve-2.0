@@ -40,13 +40,13 @@ public:
     
 
     void paint (Graphics & g);
-    void set (UInt16 pixelRow, int row);
+    void set (uint16 pixelRow, int row);
     
     void mouseDown (const MouseEvent& event);
 
     
 private:
-    UInt16 pixelGrid[16];
+	uint16 pixelGrid[16];
 };
 
 

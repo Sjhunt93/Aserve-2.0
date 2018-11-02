@@ -13,6 +13,10 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "AudioMain.h"
 
+#ifdef JUCE_WINDOWS
+typedef unsigned char Byte;
+#endif
+
 class AserveComs :
 private OSCReceiver,
 private OSCReceiver::Listener<OSCReceiver::RealtimeCallback>,

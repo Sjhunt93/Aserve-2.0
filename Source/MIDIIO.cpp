@@ -12,9 +12,16 @@
 
 
 
-MIDIIO::MIDIIO(AserveComs & _aserveComs) : aserveComs(_aserveComs), midiOutput (MidiOutput::createNewDevice("Virtual Impulse"))
+MIDIIO::MIDIIO(AserveComs & _aserveComs) : aserveComs(_aserveComs)
+#ifndef JUCE_WINDOWS
+, midiOutput(MidiOutput::createNewDevice("Virtual Impulse"))
+#endif // JUCE_WINDOWS
+
 {
+#ifndef JUCE_WINDOWS
     midiOutput->startBackgroundThread();
+#endif // JUCE_WINDOWS
+
     connectMidiAll();
     impulse = nullptr;
 }

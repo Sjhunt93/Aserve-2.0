@@ -30,7 +30,7 @@
 */
 class MainContentComponent   :
 public AudioAppComponent,
-public TextEditorListener,
+public TextEditor::Listener,
 public Timer,
 public TextButton::Listener,
 public MenuBarModel,
@@ -44,7 +44,7 @@ public:
         setSize (1000, 840);
 
         // specify the number of input and output channels that we want to open
-        setAudioChannels (2, 2);
+        setAudioChannels (0, 2);
         
 #ifdef SHOW_CODE_INPUT
         addAndMakeVisible(entryLabel);
@@ -64,7 +64,7 @@ public:
         logText.setColour(TextEditor::ColourIds::textColourId , Colour(59, 252,52));
 
         entryLabel.setColour(TextEditor::ColourIds::highlightedTextColourId , Colour(59, 252,52));
-        entryLabel.setColour(TextEditor::ColourIds::highlightColourId , Colour(59, 252,52).withAlpha((UInt8)120));
+        entryLabel.setColour(TextEditor::ColourIds::highlightColourId , Colour(59, 252,52).withAlpha((Byte)120));
         
         addAndMakeVisible(audioScope);
         
@@ -80,6 +80,9 @@ public:
         
         
         startTimer(50);
+
+		audioMain.getOscs().setAmplitude(0, 1.0);
+		audioMain.getOscs().setFrequency (0, 440.0);
 
     }
     
@@ -318,61 +321,10 @@ public:
     
     void textEditorReturnKeyPressed (TextEditor& txt)
     {
-        String toParse = entryLabel.getText();
-        if (toParse == "play") {
-//            audioMain.loadFile(0, "/Users/sj4-hunt/Music/iTunes/iTunes Media/Music/Dream Theater/Awake/01 6_00.wav");
-//
-//            audioMain.playFile(0, 1.0);
-
-        }
-        if (toParse == "sample") {
-            audioMain.triggerSampledNote(0, arc4random() % 12 + 60, 120);
-        }
-        if (toParse == "killall();") {
-            audioMain.stopAll();
-        }
         
-        LiveTextParser::Parsed parsed = LiveTextParser::parse(toParse);
-        String thingToAdd = Time::getCurrentTime().toString(false, true) + " :: ";
-        //+ logText.getText() + "\n";
-        if (parsed.error.length()) {
-            thingToAdd += entryLabel.getText() + " :: ERROR! " + parsed.error + "\n";
-            
-          
-
-        }
-        else {
-            thingToAdd += entryLabel.getText() + "\n";
-         //   entryLabel.clear();
-            
-            if (parsed.type == LiveTextParser::eOsc) {
-                int channel = parsed.data[0];
-                float frequency = parsed.data[1];
-                float amp = parsed.data[2];
-                int wavetype = parsed.data[3];
-                if (channel >= 0 && channel < 16 /*&& amp >= 0 && amp <= 1.0*/) {
-                    
-                    
-                    audioMain.getOscs().setFrequency(channel, frequency);
-                    audioMain.getOscs().setAmplitude(channel, amp);
-                    audioMain.getOscs().setWaveform(channel, wavetype);
-                }
-            }
-            if (parsed.type == LiveTextParser::eLpf) {
-                float lpf = parsed.data[0];
-                if (lpf > 20.0 && lpf < 20000) {
-                    audioMain.setLPF(lpf);
-                }
-                
-                
-            }
             
      
-            
-            repaint();
-
-        }
-        logText.setText(thingToAdd + logText.getText());
+  
     }
     
     

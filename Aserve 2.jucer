@@ -2,22 +2,94 @@
 
 <JUCERPROJECT id="LWk9A3" name="Aserve 2.0" projectType="guiapp" version="1.0.0"
               bundleIdentifier="com.yourcompany.Aserve2_0" includeBinaryInAppConfig="1"
-              jucerVersion="5.1.2" displaySplashScreen="1" reportAppUsage="1"
+              jucerVersion="5.3.2" displaySplashScreen="1" reportAppUsage="1"
               splashScreenColour="Dark" cppLanguageStandard="11">
   <MAINGROUP id="Nmve0f" name="Aserve 2.0">
+    <GROUP id="{F487C040-40B2-E5CC-CD0F-25B99A9A7716}" name="Audio">
+      <FILE id="htS6w4" name="AserveAudio.cpp" compile="1" resource="0" file="Source/Audio/AserveAudio.cpp"/>
+      <FILE id="FYG0Nt" name="AserveAudio.h" compile="0" resource="0" file="Source/Audio/AserveAudio.h"/>
+      <FILE id="AQYgot" name="AserveOscillators.cpp" compile="1" resource="0"
+            file="Source/Audio/AserveOscillators.cpp"/>
+      <FILE id="LKIREY" name="AserveOscillators.h" compile="0" resource="0"
+            file="Source/Audio/AserveOscillators.h"/>
+      <FILE id="jrTZvY" name="AudioFilePlayer.cpp" compile="1" resource="0"
+            file="Source/Audio/AudioFilePlayer.cpp"/>
+      <FILE id="SYcQTN" name="AudioFilePlayer.h" compile="0" resource="0"
+            file="Source/Audio/AudioFilePlayer.h"/>
+      <FILE id="v1obgn" name="AudioFilePlayerManager.cpp" compile="1" resource="0"
+            file="Source/Audio/AudioFilePlayerManager.cpp"/>
+      <FILE id="a6G2m4" name="AudioFilePlayerManager.h" compile="0" resource="0"
+            file="Source/Audio/AudioFilePlayerManager.h"/>
+      <FILE id="K54i3Y" name="AudioMain.cpp" compile="1" resource="0" file="Source/Audio/AudioMain.cpp"/>
+      <FILE id="yrrFbh" name="AudioMain.h" compile="0" resource="0" file="Source/Audio/AudioMain.h"/>
+      <FILE id="yqKYR3" name="OscillatorManager.cpp" compile="1" resource="0"
+            file="Source/Audio/OscillatorManager.cpp"/>
+      <FILE id="RxxZbg" name="OscillatorManager.h" compile="0" resource="0"
+            file="Source/Audio/OscillatorManager.h"/>
+    </GROUP>
+    <GROUP id="{975C91A7-0CA1-A75E-1F63-102A62767EFC}" name="GUI">
+      <FILE id="YEgdek" name="AserveRootGUI.cpp" compile="1" resource="0"
+            file="Source/GUI/AserveRootGUI.cpp"/>
+      <FILE id="TFfRGd" name="AserveRootGUI.h" compile="0" resource="0" file="Source/GUI/AserveRootGUI.h"/>
+      <FILE id="bRf00n" name="BitVisualiser.cpp" compile="1" resource="0"
+            file="Source/GUI/BitVisualiser.cpp"/>
+      <FILE id="xvetb6" name="BitVisualiser.h" compile="0" resource="0" file="Source/GUI/BitVisualiser.h"/>
+      <FILE id="dyiGkF" name="Scope.cpp" compile="1" resource="0" file="Source/GUI/Scope.cpp"/>
+      <FILE id="W2YeUk" name="Scope.h" compile="0" resource="0" file="Source/GUI/Scope.h"/>
+    </GROUP>
+    <GROUP id="{025644A1-5E7C-1831-3157-11156BDE58CE}" name="Impulse">
+      <FILE id="u0bZj4" name="DrumPadComponent.cpp" compile="1" resource="0"
+            file="Source/Impulse/DrumPadComponent.cpp"/>
+      <FILE id="c5Eegv" name="DrumPadComponent.h" compile="0" resource="0"
+            file="Source/Impulse/DrumPadComponent.h"/>
+      <FILE id="IchYU0" name="ImpulseComponent.cpp" compile="1" resource="0"
+            file="Source/Impulse/ImpulseComponent.cpp"/>
+      <FILE id="sbkkWN" name="ImpulseComponent.h" compile="0" resource="0"
+            file="Source/Impulse/ImpulseComponent.h"/>
+      <FILE id="JqSesC" name="MidiManager.cpp" compile="1" resource="0" file="Source/Impulse/MidiManager.cpp"/>
+      <FILE id="JpHygK" name="MidiManager.h" compile="0" resource="0" file="Source/Impulse/MidiManager.h"/>
+      <FILE id="GJ02ah" name="PitchModComponent.cpp" compile="1" resource="0"
+            file="Source/Impulse/PitchModComponent.cpp"/>
+      <FILE id="WqWFEb" name="PitchModComponent.h" compile="0" resource="0"
+            file="Source/Impulse/PitchModComponent.h"/>
+      <FILE id="QArxAs" name="ProgButtonComponent.cpp" compile="1" resource="0"
+            file="Source/Impulse/ProgButtonComponent.cpp"/>
+      <FILE id="WcZknH" name="ProgButtonComponent.h" compile="0" resource="0"
+            file="Source/Impulse/ProgButtonComponent.h"/>
+      <FILE id="p2jrJb" name="RotaryControlComponent.cpp" compile="1" resource="0"
+            file="Source/Impulse/RotaryControlComponent.cpp"/>
+      <FILE id="FYTR0a" name="RotaryControlComponent.h" compile="0" resource="0"
+            file="Source/Impulse/RotaryControlComponent.h"/>
+      <FILE id="dTArlV" name="SliderControlComponent.cpp" compile="1" resource="0"
+            file="Source/Impulse/SliderControlComponent.cpp"/>
+      <FILE id="a36dQw" name="SliderControlComponent.h" compile="0" resource="0"
+            file="Source/Impulse/SliderControlComponent.h"/>
+      <FILE id="F49eta" name="TransportButtonComponent.cpp" compile="1" resource="0"
+            file="Source/Impulse/TransportButtonComponent.cpp"/>
+      <FILE id="eGjshk" name="TransportButtonComponent.h" compile="0" resource="0"
+            file="Source/Impulse/TransportButtonComponent.h"/>
+    </GROUP>
     <GROUP id="{F02A591B-CBC5-7150-3135-D3D46C5530A0}" name="Source">
+      <FILE id="hTDS2T" name="AserveComs.cpp" compile="1" resource="0" file="Source/AserveComs.cpp"/>
+      <FILE id="ROvXZY" name="AserveComs.h" compile="0" resource="0" file="Source/AserveComs.h"/>
+      <FILE id="BfQGvy" name="MIDIIO.cpp" compile="1" resource="0" file="Source/MIDIIO.cpp"/>
+      <FILE id="LnXqBt" name="MIDIIO.h" compile="0" resource="0" file="Source/MIDIIO.h"/>
       <FILE id="iVx2Kw" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
       <FILE id="lZ8p8z" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+    </GROUP>
+    <GROUP id="{74A63AAB-8F09-0224-19C2-DED2E0879E2A}" name="TextParser">
+      <FILE id="L7V8Ay" name="LiveTextParser.cpp" compile="1" resource="0"
+            file="Source/TextParser/LiveTextParser.cpp"/>
+      <FILE id="PfmL1t" name="LiveTextParser.h" compile="0" resource="0"
+            file="Source/TextParser/LiveTextParser.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX">
       <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
-                       isDebug="1" optimisation="1" targetName="Aserve 2.0"/>
-        <CONFIGURATION name="Release" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
-                       isDebug="0" optimisation="3" targetName="Aserve 2.0"/>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="Aserve 2.0"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="Aserve 2.0"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_core" path="../../../Downloads/JUCE-OSX/modules"/>
@@ -87,6 +159,29 @@
         <MODULEPATH id="juce_osc" path="../../../JUCE/modules"/>
       </MODULEPATHS>
     </VS2013>
+    <VS2017 targetFolder="Builds/VisualStudio2017">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug"/>
+        <CONFIGURATION isDebug="0" name="Release"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video" path="../../../Downloads/JUCE-OSX/modules"/>
+        <MODULEPATH id="juce_osc" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../Downloads/JUCE-OSX/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../Downloads/JUCE-OSX/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../Downloads/JUCE-OSX/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../Downloads/JUCE-OSX/modules"/>
+        <MODULEPATH id="juce_events" path="../../../Downloads/JUCE-OSX/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../Downloads/JUCE-OSX/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../Downloads/JUCE-OSX/modules"/>
+        <MODULEPATH id="juce_core" path="../../../Downloads/JUCE-OSX/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../Downloads/JUCE-OSX/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../Downloads/JUCE-OSX/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../Downloads/JUCE-OSX/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../Downloads/JUCE-OSX/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../Downloads/JUCE-OSX/modules"/>
+      </MODULEPATHS>
+    </VS2017>
   </EXPORTFORMATS>
   <MODULES>
     <MODULES id="juce_audio_basics" showAllCode="1" useLocalCopy="1" useGlobalPath="1"/>
@@ -106,4 +201,7 @@
     <MODULES id="juce_video" showAllCode="1" useLocalCopy="1" useGlobalPath="1"/>
   </MODULES>
   <JUCEOPTIONS/>
+  <LIVE_SETTINGS>
+    <WINDOWS/>
+  </LIVE_SETTINGS>
 </JUCERPROJECT>
