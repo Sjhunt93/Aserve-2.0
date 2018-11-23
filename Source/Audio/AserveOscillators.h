@@ -127,6 +127,7 @@ public:
         Sawtooth,
         InverseSawtooth,
         Tri,
+        eNoise,
         NumWaveforms
     };
 		WaveOscillator();

@@ -131,7 +131,15 @@ void AserveComs::addMessageToLog (String message)
         
     }
     isMessageLocked.set(true);
-    messageLog.add(message);
+    if (messageLog.size() < 30) {
+        messageLog.add(message);
+
+        
+    }
+    if (messageLog.size() == 30) {
+        messageLog.add("ERROR! Message log overloaded!");
+    }
+    
     isMessageLocked.set(false);
 }
 
@@ -388,7 +396,8 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
         audio.loadFile(2, froot.getChildFile("chh.wav").getFullPathName());
         audio.loadFile(3, froot.getChildFile("ohh.wav").getFullPathName());
         
-        audio.setResampleSynthSound(0, froot.getChildFile("pianoSample.wav").getFullPathName(), 60, 10, 1);
+        //double attack, double release)
+        audio.setResampleSynthSound(0, froot.getChildFile("pianoSample.wav").getFullPathName(), 60, 0.01, 0.3);
         
         addMessageToLog("aserveLoadDefaultSounds();");
     }
