@@ -45,7 +45,7 @@ void BitVisualiser::paint (Graphics & g)
     g.setColour(Colours::white);
     for (int y = 0; y < 16; y++) {
         for (int x = 0; x < 16; x++) {
-            if (pixelGrid[y] & 1 << x) {
+            if (pixelGrid[y] & 1 << (15-x)) {
                 g.fillRect(1+ x*size, 1 + y*size, size - 1, size - 1);
             }
         }

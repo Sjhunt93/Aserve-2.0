@@ -59,6 +59,7 @@ AserveComs::AserveComs (AudioMain &_audio) : audio(_audio)
     addListener (this);
     
     isMessageLocked.set(false);
+    logEnabled.set(true);
 }
 AserveComs::~AserveComs ()
 {
@@ -124,23 +125,36 @@ StringArray AserveComs::getAndClearMessageLog ()
     isMessageLocked.set(false);
     return d;
 }
+void AserveComs:: enableLoggger (bool state)
+{
+    if (!state) {
+        addMessageToLog("Message Log Disabled");
+    }
+    logEnabled.set(state);
+    if (state) {
+        addMessageToLog("Message Log Enabled");
+    }
+}
 
 void AserveComs::addMessageToLog (String message)
 {
-    while (isMessageLocked.get()) { //will keep trying while message is locked by other operation
+    if (logEnabled.get()) {
+        while (isMessageLocked.get()) { //will keep trying while message is locked by other operation
+            
+        }
+        isMessageLocked.set(true);
+        if (messageLog.size() < 30) {
+            messageLog.add(message);
+            
+            
+        }
+        if (messageLog.size() == 30) {
+            messageLog.add("ERROR! Message log overloaded!");
+        }
         
-    }
-    isMessageLocked.set(true);
-    if (messageLog.size() < 30) {
-        messageLog.add(message);
+        isMessageLocked.set(false);
 
-        
     }
-    if (messageLog.size() == 30) {
-        messageLog.add("ERROR! Message log overloaded!");
-    }
-    
-    isMessageLocked.set(false);
 }
 
 

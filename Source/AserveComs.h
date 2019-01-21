@@ -28,6 +28,7 @@ public:
     bool checkAndClearRedraw ();
     StringArray getAndClearMessageLog ();
     
+    void enableLoggger (bool state);
 private:
     void oscMessageReceived (const OSCMessage& message) override;
     void sendOsc (const int channel, const float frequency, const float amplitude, const int wavetype);
@@ -42,5 +43,7 @@ private:
     
     Atomic<int>  isMessageLocked;
     Atomic<int>  redrawNeeded; //this is set when a message is recived.. its later checked so that visuals can be updated etc..
+    Atomic<int>  logEnabled;
+    
 };
 #endif /* defined(__Aserve_2__AserveComs__) */

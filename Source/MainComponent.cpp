@@ -78,7 +78,7 @@ public:
         aserveComs.addActionListener(this);
         bitGrid.addActionListener(this);
         
-        
+        logEnabled = true;
         startTimer(50);
 
     }
@@ -88,13 +88,13 @@ public:
     {
         shutdownAudio();
     }
-    void buttonClicked (Button* btn)
+    void buttonClicked (Button* btn) override
     {
         if (btn == &clearButton) {
             audioMain.reset();
         }
     }
-    void timerCallback()
+    void timerCallback() override
     {
 
         if (aserveComs.checkAndClearRedraw()) {
@@ -200,8 +200,8 @@ public:
         
         const int leftInset = 200;
         const int rightInset = 250;
-        const int bottomDiv = (getHeight() - 240) * 0.6;
-        const int mid = getWidth() - (leftInset + rightInset);
+//        const int bottomDiv = (getHeight() - 240) * 0.6;
+//        const int mid = getWidth() - (leftInset + rightInset);
         
         g.fillAll (Colours::black);
         
@@ -283,7 +283,7 @@ public:
             
         }
     }
-    void paintOverChildren (Graphics& g)
+    void paintOverChildren (Graphics& g) override
     {
         g.setColour(Colours::lightgrey);
         g.setFont(10);
@@ -316,7 +316,7 @@ public:
         clearButton.setBounds(leftInset + 5, 5, 50, 25);
     }
     
-    void textEditorReturnKeyPressed (TextEditor& txt)
+    void textEditorReturnKeyPressed (TextEditor& txt) override
     {
         String toParse = entryLabel.getText();
         if (toParse == "play") {
@@ -376,34 +376,45 @@ public:
     }
     
     
-    StringArray getMenuBarNames()
+    StringArray getMenuBarNames() override
     {
-        return {"MIDI"};
+        return {"MIDI", "Log"};
     }
     
-    PopupMenu getMenuForIndex (int topLevelMenuIndex, const String& menuName)
+    PopupMenu getMenuForIndex (int topLevelMenuIndex, const String& menuName) override
     {
         //we can assume the following code as there is only 1 menu..
-
         PopupMenu pmenu;
-        StringArray inputs = MIDIIO.getMidiNames();
-        if (!inputs.size()) {
-            pmenu.addItem(1, "no inputs available", false, false);
+        if (topLevelMenuIndex == 0) {
+            StringArray inputs = MIDIIO.getMidiNames();
+            if (!inputs.size()) {
+                pmenu.addItem(1, "no inputs available", false, false);
+            }
+            for (int i = 0; i < inputs.size(); i++) {
+                bool state = MIDIIO.getState(i);
+                pmenu.addItem(i+1, inputs[i], true, state);
+            }
         }
-        for (int i = 0; i < inputs.size(); i++) {
-            bool state = MIDIIO.getState(i);
-            pmenu.addItem(i+1, inputs[i], true, state);
+        else {
+            pmenu.addItem(1, "log enabled", true, logEnabled);
         }
+        
+
         return pmenu;
     }
-    void menuItemSelected (int menuItemID, int topLevelMenuIndex)
+    void menuItemSelected (int menuItemID, int topLevelMenuIndex) override
     {
         if (topLevelMenuIndex == 0) {
             MIDIIO.setState(menuItemID-1, !MIDIIO.getState(menuItemID-1));
             printf("Clicked %i \n", MIDIIO.getState(menuItemID-1));
         }
+        else if (topLevelMenuIndex == 1) {
+            
+            logEnabled = !logEnabled;
+            aserveComs.enableLoggger(logEnabled);
+        }
     }
-    void actionListenerCallback (const String& message)
+    void actionListenerCallback (const String& message) override
     {
         if (message.startsWith("PIXEL")) {
             const int a = message.fromFirstOccurrenceOf(":", false, false).upToFirstOccurrenceOf(",", false, false).getIntValue();
@@ -438,7 +449,7 @@ private:
     
     
     std::vector<int>    midi;
-    
+    bool                logEnabled;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
     
 };
