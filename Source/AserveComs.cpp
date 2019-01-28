@@ -160,7 +160,8 @@ void AserveComs::addMessageToLog (String message)
 
 void AserveComs::oscMessageReceived (const OSCMessage& message)
 {
-    redrawNeeded.set(true);
+
+	redrawNeeded.set(true);
     //std::cout << message.getAddressPattern().toString() << "\n";
     
     //this could probably be refactored with string arrays etc..
@@ -402,6 +403,11 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
     }
     else if (message.getAddressPattern().toString().startsWith(AserveOSC::loadDefaultSounds)) {
         
+#ifdef JUCE_WINDOWS
+	addMessageToLog("ERROR! aserveLoadDefaultSounds(); not supported on windows load files manually instead");
+	return;
+#endif // JUCE_WINDOWS
+
         File froot = File::getSpecialLocation(File::SpecialLocationType::currentApplicationFile ).getChildFile("Contents").getChildFile("Resources");
         
 
