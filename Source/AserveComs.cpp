@@ -59,6 +59,7 @@ AserveComs::AserveComs (AudioMain &_audio) : audio(_audio)
     addListener (this);
     
     isMessageLocked.set(false);
+    logEnabled.set(true);
 }
 AserveComs::~AserveComs ()
 {
@@ -124,15 +125,36 @@ StringArray AserveComs::getAndClearMessageLog ()
     isMessageLocked.set(false);
     return d;
 }
+void AserveComs:: enableLoggger (bool state)
+{
+    if (!state) {
+        addMessageToLog("Message Log Disabled");
+    }
+    logEnabled.set(state);
+    if (state) {
+        addMessageToLog("Message Log Enabled");
+    }
+}
 
 void AserveComs::addMessageToLog (String message)
 {
-    while (isMessageLocked.get()) { //will keep trying while message is locked by other operation
+    if (logEnabled.get()) {
+        while (isMessageLocked.get()) { //will keep trying while message is locked by other operation
+            
+        }
+        isMessageLocked.set(true);
+        if (messageLog.size() < 30) {
+            messageLog.add(message);
+            
+            
+        }
+        if (messageLog.size() == 30) {
+            messageLog.add("ERROR! Message log overloaded!");
+        }
         
+        isMessageLocked.set(false);
+
     }
-    isMessageLocked.set(true);
-    messageLog.add(message);
-    isMessageLocked.set(false);
 }
 
 
@@ -388,7 +410,8 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
         audio.loadFile(2, froot.getChildFile("chh.wav").getFullPathName());
         audio.loadFile(3, froot.getChildFile("ohh.wav").getFullPathName());
         
-        audio.setResampleSynthSound(0, froot.getChildFile("pianoSample.wav").getFullPathName(), 60, 10, 1);
+        //double attack, double release)
+        audio.setResampleSynthSound(0, froot.getChildFile("pianoSample.wav").getFullPathName(), 60, 0.01, 0.3);
         
         addMessageToLog("aserveLoadDefaultSounds();");
     }

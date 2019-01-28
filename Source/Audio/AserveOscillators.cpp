@@ -163,7 +163,7 @@ void TriOscillator::reset(void)
 void TriOscillator::setFrequency(const double val)
 {
     for (int i = 0; i < 10; i++) {
-        sineOscs[i].Oscillator::setFrequency(val*(i*2+1));
+        sineOscs[i].setFrequency(val*(i*2+1));
     }
 }
 void TriOscillator::prepare(double sampleRate_)
@@ -446,7 +446,7 @@ WaveOscillator::~WaveOscillator()
 void WaveOscillator::setWave(int val)
 {
 	wave = val;
-    waveOutOfRange = val > Tri || val < 0;
+    waveOutOfRange = val > eNoise || val < 0;
 }
 
 void WaveOscillator::setFrequency(const double val)
@@ -495,6 +495,7 @@ void WaveOscillator::stop(void)
 	sawOscillator.stop();
     triOscillator.stop();
     inverseSaw.stop();
+    noiseOscillator.stop();
 }
 
 double WaveOscillator::nextSample(void)
