@@ -134,6 +134,7 @@ public:
 		~WaveOscillator();
 		void setWave(int val);
 		void setFrequency(const double val);
+    const double getFrequency ();
 		void setAmplitude(const float val);
 		void prepare(double sampleRate_);
 		void stop(void);

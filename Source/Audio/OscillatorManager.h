@@ -25,6 +25,11 @@ public:
         NumOscillators = 24,
         NumWaveforms = WaveOscillator::NumWaveforms
     };
+    enum eOscillatorMode
+    {
+      eNormal = 0,
+        eFm8,
+    };
     /** 
      Constructor 
      */
@@ -69,9 +74,16 @@ public:
     String getState (const int oscillatorNumber);
     bool isActive (const int oscillatorNumber);
     bool isOutOfRange (const int oscillatorNumber);
-private:
-    OwnedArray<WaveOscillator> oscillators;
     
+    //oscillator routing
+    void setOscillatorRoutingMode (const eOscillatorMode mode);
+    eOscillatorMode getOscillatorRoutingMode ();
+    
+private:
+    OwnedArray<WaveOscillator>  oscillators;
+    float                       coreFreq[24];
+    float                       coreAmp[24];
+    eOscillatorMode             oscillatorMode;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OscillatorManager)
 };  
 

@@ -461,6 +461,10 @@ void WaveOscillator::setFrequency(const double val)
     triOscillator.setFrequency(val);
     inverseSaw.setFrequency(val);
 }
+const double WaveOscillator::getFrequency ()
+{
+    return sinOscillator.getFrequency();
+}
 
 void WaveOscillator::setAmplitude(const float val)
 {

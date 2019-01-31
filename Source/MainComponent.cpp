@@ -213,7 +213,13 @@ public:
         
         
         g.setColour(Colours::white);
-        g.drawText("Oscillator State", 5, 5, leftInset-10, 30, Justification::centred);
+        const int mode = audioMain.getOscs().getOscillatorRoutingMode();
+        if (mode == OscillatorManager::eNormal) {
+            g.drawText("Oscillator State (normal)", 5, 5, leftInset-10, 30, Justification::centred);
+        }
+        if (mode == OscillatorManager::eFm8) {
+            g.drawText("Oscillator State (FM 8)", 5, 5, leftInset-10, 30, Justification::centred);
+        }
         
         float startPoint = 40.0;
         
@@ -288,6 +294,7 @@ public:
         g.setColour(Colours::lightgrey);
         g.setFont(10);
         g.drawText("Version: " + String(ProjectInfo::versionString), audioScope.getX() + 5, audioScope.getBottom() - 20, 100, 20, Justification::left);
+        
     }
     void resized() override
     {

@@ -37,6 +37,7 @@ namespace AserveOSC
     static const String loadDefaultSounds = aserve + "loaddefaults";
     static const String reset = aserve + "reset";
 
+    static const String mode = aserve + "mode";
 }
 
 
@@ -436,6 +437,30 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
                 const int b = message[1].getInt32();
                 sendActionMessage("PIXEL:" + String(a) + "," + String(b));
 
+            }
+        }
+    }
+    else if (message.getAddressPattern().toString().startsWith(AserveOSC::mode)) {
+        if (message.size() == 1) {
+            if (message[0].isInt32()) {
+                const int mode = message[0].getInt32();
+                if (mode >= OscillatorManager::eOscillatorMode::eNormal) {
+                    switch (mode) {
+                        case OscillatorManager::eOscillatorMode::eNormal:
+                            audio.getOscs().setOscillatorRoutingMode(OscillatorManager::eOscillatorMode::eNormal);
+                            break;
+                        case OscillatorManager::eOscillatorMode::eFm8:
+                            audio.getOscs().setOscillatorRoutingMode(OscillatorManager::eOscillatorMode::eFm8);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else {
+                    errorA = "ERROR! Incorrect Mode Operation: " + String(mode);
+                }
+                String message = "aserveOscillatorMode(" + String(mode) + ");";
+                addMessageToLog(message);
             }
         }
     }
