@@ -39,10 +39,10 @@ public ActionListener
 public:
     
     //==============================================================================
-    MainContentComponent() : aserveComs(audioMain), MIDIIO(aserveComs), impulse(aserveComs)
+    MainContentComponent() :
+    aserveComs(audioMain), MIDIIO(aserveComs), impulse(aserveComs) ,
+      logEnabled(true), gridPanelEnabled(true), impulsePanelEnabled(true), scopeLogPanelEnabled(true)
     {
-        setSize (1000, 840);
-
         // specify the number of input and output channels that we want to open
         setAudioChannels (2, 2);
         
@@ -77,10 +77,10 @@ public:
         
         aserveComs.addActionListener(this);
         bitGrid.addActionListener(this);
-        
-        logEnabled = true;
+      
+        setSize (1000, 500);
+      
         startTimer(50);
-
     }
     
 
@@ -107,7 +107,8 @@ public:
             if (!totalStrings.size()) {
                 return;
             }
-            
+
+// what's this?
 #if 0
             String final;
             bool setRed = false;
@@ -191,104 +192,120 @@ public:
 
         // For more details, see the help for AudioProcessor::releaseResources()
         audioMain.releaseResources();
+        MIDIIO.clearAllMidiInputs();
     }
-
+  
+    void setPanelInsets()
+    {
+        // inset from right depends on visibility of the bit grid and sampler state panel
+        panelLeftInset = 10;
+        panelRightInset = 0;
+      
+        if (oscPanelEnabled)    panelLeftInset = 200;
+        if (gridPanelEnabled)   panelRightInset = 250;
+    }
+  
     //=======================================================================
     void paint (Graphics& g) override
     {
-        // (Our component is opaque, so we must completely fill the background with a solid colour)
-        
-        const int leftInset = 200;
-        const int rightInset = 250;
-//        const int bottomDiv = (getHeight() - 240) * 0.6;
-//        const int mid = getWidth() - (leftInset + rightInset);
-        
+        setPanelInsets(); // 'inset' parameters depend on visibility of various panels
+      
+        // what is startpoint?
+        float startPoint = 40.0;
+    
+        // height of these panels depends on visibility of impulse midi keyboard controller
+        float height = (getHeight() - startPoint);
+        if( impulsePanelEnabled )
+        {
+          height = ((getHeight() - 240) - startPoint);
+        }
+        height /= ((float)OscillatorManager::OscillatorManagerConstants::NumOscillators);
+      
         g.fillAll (Colours::black);
-        
+      
+        // left and right panels
         g.setColour(Colours::darkgrey);
-        g.fillRect(0,0, (int) leftInset, getHeight());
-        
-        g.fillRect(getWidth() - rightInset, 0, rightInset, getHeight());
-        
-        
-        
+        g.fillRect(0,0, (int) panelLeftInset, getHeight());
+        g.fillRect(getWidth() - panelRightInset, 0, panelRightInset, getHeight());
+      
+        g.setColour(Colours::darkgrey.darker());
+        g.fillRect(0, getHeight() - 240, getWidth(), 240);
+      
         g.setColour(Colours::white);
         const int mode = audioMain.getOscs().getOscillatorRoutingMode();
         if (mode == OscillatorManager::eNormal) {
-            g.drawText("Oscillator State (normal)", 5, 5, leftInset-10, 30, Justification::centred);
+            g.drawText("Oscillator State (normal)", 5, 5, panelLeftInset-10, 30, Justification::centred);
         }
         if (mode == OscillatorManager::eFm8) {
-            g.drawText("Oscillator State (FM 8)", 5, 5, leftInset-10, 30, Justification::centred);
+            g.drawText("Oscillator State (FM 8)", 5, 5, panelLeftInset-10, 30, Justification::centred);
         }
-        
-        float startPoint = 40.0;
-        
-        float height = ((getHeight() - 240) - startPoint) / ((float)OscillatorManager::OscillatorManagerConstants::NumOscillators);
-        
-        g.setColour(Colours::darkgrey.darker());
-        g.fillRect(0, getHeight() - 240, getWidth(), 240);
-        
+      
         Colour offCol = Colours::white.withAlpha(0.2f);
-        
+      
         for (int i = 0; i < OscillatorManager::OscillatorManagerConstants::NumOscillators; i++) {
             g.setColour(Colours::black);
-            g.drawLine(0, startPoint, leftInset, startPoint);
-            
+            g.drawLine(0, startPoint, panelLeftInset, startPoint);
+          
             g.setColour( audioMain.getOscs().isActive(i) ? (  audioMain.getOscs().isOutOfRange(i) ? Colours::red : Colours::white )  : offCol );
-            
-            g.drawText(/*String("Oscillator: ") +*/ String(i) + " | " + audioMain.getOscs().getState(i) , 5, startPoint, leftInset, height, Justification::left);
-            
+          
+            g.drawText(/*String("Oscillator: ") +*/ String(i) + " | " + audioMain.getOscs().getState(i) , 5, startPoint, panelLeftInset, height, Justification::left);
+          
             startPoint += height;
-            
+          
         }
-        
+      
+        if( gridPanelEnabled )
         {
             g.setColour(Colours::white);
-            g.drawText("Sampler State", getWidth()-rightInset, 5, rightInset , 30, Justification::centred);
-            
+            g.drawText("Sampler State", getWidth()-panelRightInset, 5, panelRightInset , 30, Justification::centred);
+          
             float startPoint = 40.0;
 
-            
+          
             for (int i = 0; i < AudioMain::eMaxFileTracks; i++) {
                 g.setColour(Colours::black);
-                g.drawLine(getWidth() - rightInset, startPoint, getWidth(), startPoint);
-                
+                g.drawLine(getWidth() - panelRightInset, startPoint, getWidth(), startPoint);
+              
                 g.setColour(audioMain.getAudioFileNames()[i] != "Empty" ? Colours::white : Colours::white.withAlpha(0.2f));
-                
+              
                 g.drawText(/*"Sampler: " +*/ String(i) + " | " + audioMain.getAudioFileNames()[i]
-                           , (getWidth()-rightInset) + 5, startPoint, rightInset-10, height, Justification::left);
-                
+                           , (getWidth()-panelRightInset) + 5, startPoint, panelRightInset-10, height, Justification::left);
+              
                 startPoint += height;
 
-                
+              
             }
             g.setColour(Colours::black);
-            g.drawLine(getWidth() - rightInset, startPoint, getWidth(), startPoint, 3.0);
+            g.drawLine(getWidth() - panelRightInset, startPoint, getWidth(), startPoint, 3.0);
 
             g.setColour(Colours::white);
-            g.drawText("Pitched Sampler State: ", (getWidth()-rightInset) + 5, startPoint, rightInset-10, 30, Justification::centred);
-            g.drawText("Bit Gird", (getWidth()-rightInset) + 5, bitGrid.getY() - 38, rightInset-10, 30, Justification::centred);
-            
+            g.drawText("Pitched Sampler State: ", (getWidth()-panelRightInset) + 5, startPoint, panelRightInset-10, 30, Justification::centred);
+        
+            g.drawText("Bit Gird", (getWidth()-panelRightInset) + 5, bitGrid.getY() - 38, panelRightInset-10, 30, Justification::centred);
+        
             startPoint += 30;
 
             for (int i = 0; i < AudioMain::eMaxSamplerTracks; i++) {
                 g.setColour(Colours::black);
-                g.drawLine(getWidth() - rightInset, startPoint, getWidth(), startPoint);
-                
+                g.drawLine(getWidth() - panelRightInset, startPoint, getWidth(), startPoint);
+              
                 g.setColour(audioMain.getResampledNames()[i] != "Empty" ? Colours::white : Colours::white.withAlpha(0.2f));
-                
+              
                 g.drawText(/*"Sampler: " +*/ String(i) + " | " + audioMain.getResampledNames()[i]
-                           , (getWidth()-rightInset) + 5, startPoint, rightInset-10, height, Justification::left);
-                
+                           , (getWidth()-panelRightInset) + 5, startPoint, panelRightInset-10, height, Justification::left);
+              
                 startPoint += height;
-                
-                
+              
+              
             }
             g.setColour(Colours::black);
-            g.drawLine(getWidth() - rightInset, startPoint, getWidth(), startPoint, 3.0);
-            
+            g.drawLine(getWidth() - panelRightInset, startPoint, getWidth(), startPoint, 3.0);
+          
         }
+      
+      
     }
+  
     void paintOverChildren (Graphics& g) override
     {
         g.setColour(Colours::lightgrey);
@@ -298,29 +315,25 @@ public:
     }
     void resized() override
     {
-
-        const int leftInset = 200;
-        const int rightInset = 250;
+        setPanelInsets();
+      
         const int bottomDiv = (getHeight() - 240) * 0.6;
-        const int mid = getWidth() - (leftInset + rightInset);
+        const int mid = getWidth() - (panelLeftInset + panelRightInset);
         const int bottomRemained  = getHeight() - bottomDiv;
         
-        
 #ifdef SHOW_CODE_INPUT
-        entryLabel.setBounds(leftInset + 3, bottomDiv, mid - 6, 40.0);
+        entryLabel.setBounds(panelLeftInset + 3, bottomDiv, mid - 6, 40.0);
         logText.setBounds(entryLabel.getX(), entryLabel.getBottom() + 5, entryLabel.getWidth(), (getHeight() - 240) - (entryLabel.getBottom() + 10));
 #else
-//        logText.setBounds(leftInset+3, bottomDiv+5, mid-6, (getHeight() - 240));
-        logText.setBounds(leftInset + 3, bottomDiv, mid - 6, (getHeight() - 240) - (bottomDiv));
-  
+        logText.setBounds(panelLeftInset + 3, bottomDiv, mid - 6, (getHeight() - 240) - (bottomDiv));
 #endif
         
-        audioScope.setBounds(leftInset + 3, 5, mid - 6, bottomDiv - 6);
-        
+        audioScope.setBounds(panelLeftInset + 3, 5, mid - 6, bottomDiv - 6);
+      
         impulse.setBounds(100, getHeight() - 240, 800, 240);
-        bitGrid.setBounds((getWidth() - rightInset) + 20, bottomDiv + 10, 210, 210);
+        bitGrid.setBounds((getWidth() - panelRightInset) + 20, bottomDiv + 10, 210, 210);
         
-        clearButton.setBounds(leftInset + 5, 5, 50, 25);
+        clearButton.setBounds(panelLeftInset + 5, 5, 50, 25);
     }
     
     void textEditorReturnKeyPressed (TextEditor& txt) override
@@ -373,26 +386,24 @@ public:
                 
                 
             }
-            
-     
-            
             repaint();
 
         }
         logText.setText(thingToAdd + logText.getText());
     }
     
-    
+  
     StringArray getMenuBarNames() override
     {
-        return {"MIDI", "Log"};
+        return {"MIDI", "Log", "View"};
     }
     
     PopupMenu getMenuForIndex (int topLevelMenuIndex, const String& menuName) override
     {
         //we can assume the following code as there is only 1 menu..
         PopupMenu pmenu;
-        if (topLevelMenuIndex == 0) {
+        if (topLevelMenuIndex == 0) // MIDI
+        {
             StringArray inputs = MIDIIO.getMidiNames();
             if (!inputs.size()) {
                 pmenu.addItem(1, "no inputs available", false, false);
@@ -402,25 +413,62 @@ public:
                 pmenu.addItem(i+1, inputs[i], true, state);
             }
         }
-        else {
+        else if (topLevelMenuIndex == 1) // Log
+        {
             pmenu.addItem(1, "log enabled", true, logEnabled);
         }
-        
+        else if (topLevelMenuIndex == 2) // View
+        {
+            pmenu.addItem(1, "Impulse", true, impulsePanelEnabled);
+            pmenu.addItem(2, "Bit grid", true, gridPanelEnabled);
+            pmenu.addItem(3, "Oscillators", true, oscPanelEnabled);
+            pmenu.addItem(4, "Scope & Log", true, scopeLogPanelEnabled);
+        }
 
         return pmenu;
     }
+  
     void menuItemSelected (int menuItemID, int topLevelMenuIndex) override
     {
-        if (topLevelMenuIndex == 0) {
+        if (topLevelMenuIndex == 0) // MIDI
+        {
             MIDIIO.setState(menuItemID-1, !MIDIIO.getState(menuItemID-1));
             printf("Clicked %i \n", MIDIIO.getState(menuItemID-1));
         }
-        else if (topLevelMenuIndex == 1) {
-            
+        else if (topLevelMenuIndex == 1) // Log
+        {
             logEnabled = !logEnabled;
             aserveComs.enableLoggger(logEnabled);
         }
+        else if (topLevelMenuIndex == 2) // View
+        {
+            if (menuItemID == 1) // Impulse
+            {
+              impulsePanelEnabled = !impulsePanelEnabled;
+              impulse.setVisible(impulsePanelEnabled);
+            }
+            else if (menuItemID == 2) // Bit grid
+            {
+              gridPanelEnabled = !gridPanelEnabled;
+              bitGrid.setVisible(gridPanelEnabled);
+            }
+            else if (menuItemID == 3) // Oscillators
+            {
+              oscPanelEnabled = !oscPanelEnabled;
+            }
+            else if (menuItemID == 4) // Scope
+            {
+              scopeLogPanelEnabled = !scopeLogPanelEnabled;
+              audioScope.setVisible(scopeLogPanelEnabled);
+              logText.setVisible(scopeLogPanelEnabled);
+            }
+          
+            resized();
+            repaint();
+        }
+      
     }
+  
     void actionListenerCallback (const String& message) override
     {
         if (message.startsWith("PIXEL")) {
@@ -456,7 +504,18 @@ private:
     
     
     std::vector<int>    midi;
+  
+    // enable/disable logging of messages
     bool                logEnabled;
+  
+    // show and enable / hide and disable GUI panels
+    int                 panelRightInset;
+    int                 panelLeftInset;
+    bool                scopeLogPanelEnabled;
+    bool                impulsePanelEnabled;
+    bool                gridPanelEnabled;
+    bool                oscPanelEnabled;
+  
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
     
 };

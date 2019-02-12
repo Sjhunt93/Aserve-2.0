@@ -28,7 +28,8 @@ public:
     {
         // This method is where you should put your application's initialisation code..
 
-        mainWindow = new MainWindow (getApplicationName());
+        String version = " (" + String(ProjectInfo::versionString) + ")";
+        mainWindow = new MainWindow (getApplicationName() + version);
     }
 
     void shutdown() override
