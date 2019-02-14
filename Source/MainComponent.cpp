@@ -41,7 +41,11 @@ public:
     //==============================================================================
     MainContentComponent() :
     aserveComs(audioMain), MIDIIO(aserveComs), impulse(aserveComs) ,
-      logEnabled(true), gridPanelEnabled(true), impulsePanelEnabled(true), scopeLogPanelEnabled(true)
+      logEnabled(true),
+      oscPanelEnabled(true),
+      scopeLogPanelEnabled(true),
+      gridPanelEnabled(true),
+      impulsePanelEnabled(true)
     {
         // specify the number of input and output channels that we want to open
         setAudioChannels (2, 2);
@@ -78,7 +82,7 @@ public:
         aserveComs.addActionListener(this);
         bitGrid.addActionListener(this);
       
-        setSize (1000, 500);
+        setSize (1000, 700);
       
         startTimer(50);
     }
@@ -181,8 +185,7 @@ public:
         
         audioMain.getNextAudioBlock(bufferToFill);
 
-        audioScope.render(bufferToFill);
-        
+        if( scopeLogPanelEnabled )  audioScope.render(bufferToFill);
     }
 
     void releaseResources() override
@@ -197,12 +200,14 @@ public:
   
     void setPanelInsets()
     {
-        // inset from right depends on visibility of the bit grid and sampler state panel
-        panelLeftInset = 10;
+        // insets depend on visibility of bit grid / sampler state / impulse panel
+        panelLeftInset = 0;
         panelRightInset = 0;
+        panelBottomInset = 0;
       
-        if (oscPanelEnabled)    panelLeftInset = 200;
-        if (gridPanelEnabled)   panelRightInset = 250;
+        if (impulsePanelEnabled)  panelBottomInset = 240;
+        if (oscPanelEnabled)      panelLeftInset = 200;
+        if (gridPanelEnabled)     panelRightInset = 250;
     }
   
     //=======================================================================
@@ -213,13 +218,10 @@ public:
         // what is startpoint?
         float startPoint = 40.0;
     
-        // height of these panels depends on visibility of impulse midi keyboard controller
-        float height = (getHeight() - startPoint);
-        if( impulsePanelEnabled )
-        {
-          height = ((getHeight() - 240) - startPoint);
-        }
+        // height adjusted by 'bottom' inset - to make room for impulse midi keyboard panel
+        float height = ((getHeight() - panelBottomInset) - startPoint);
         height /= ((float)OscillatorManager::OscillatorManagerConstants::NumOscillators);
+        if (height <= 10) height = 10;
       
         g.fillAll (Colours::black);
       
@@ -228,31 +230,37 @@ public:
         g.fillRect(0,0, (int) panelLeftInset, getHeight());
         g.fillRect(getWidth() - panelRightInset, 0, panelRightInset, getHeight());
       
+        // bottom panel
         g.setColour(Colours::darkgrey.darker());
-        g.fillRect(0, getHeight() - 240, getWidth(), 240);
       
-        g.setColour(Colours::white);
-        const int mode = audioMain.getOscs().getOscillatorRoutingMode();
-        if (mode == OscillatorManager::eNormal) {
-            g.drawText("Oscillator State (normal)", 5, 5, panelLeftInset-10, 30, Justification::centred);
-        }
-        if (mode == OscillatorManager::eFm8) {
-            g.drawText("Oscillator State (FM 8)", 5, 5, panelLeftInset-10, 30, Justification::centred);
+        g.fillRect(0, getHeight() - panelBottomInset, getWidth(), panelBottomInset);
+      
+        if (oscPanelEnabled)
+        {
+            g.setColour(Colours::white);
+            const int mode = audioMain.getOscs().getOscillatorRoutingMode();
+            if (mode == OscillatorManager::eNormal) {
+                g.drawText("Oscillator State (normal)", 5, 5, panelLeftInset-10, 30, Justification::centred);
+            }
+            if (mode == OscillatorManager::eFm8) {
+                g.drawText("Oscillator State (FM 8)", 5, 5, panelLeftInset-10, 30, Justification::centred);
+            }
+          
+            Colour offCol = Colours::white.withAlpha(0.2f);
+          
+            for (int i = 0; i < OscillatorManager::OscillatorManagerConstants::NumOscillators; i++) {
+                g.setColour(Colours::black);
+                g.drawLine(0, startPoint, panelLeftInset, startPoint);
+              
+                g.setColour( audioMain.getOscs().isActive(i) ? (  audioMain.getOscs().isOutOfRange(i) ? Colours::red : Colours::white )  : offCol );
+              
+                g.drawText(/*String("Oscillator: ") +*/ String(i) + " | " + audioMain.getOscs().getState(i) , 5, startPoint, panelLeftInset, height, Justification::left);
+              
+                startPoint += height;
+              
+            }
         }
       
-        Colour offCol = Colours::white.withAlpha(0.2f);
-      
-        for (int i = 0; i < OscillatorManager::OscillatorManagerConstants::NumOscillators; i++) {
-            g.setColour(Colours::black);
-            g.drawLine(0, startPoint, panelLeftInset, startPoint);
-          
-            g.setColour( audioMain.getOscs().isActive(i) ? (  audioMain.getOscs().isOutOfRange(i) ? Colours::red : Colours::white )  : offCol );
-          
-            g.drawText(/*String("Oscillator: ") +*/ String(i) + " | " + audioMain.getOscs().getState(i) , 5, startPoint, panelLeftInset, height, Justification::left);
-          
-            startPoint += height;
-          
-        }
       
         if( gridPanelEnabled )
         {
@@ -261,7 +269,6 @@ public:
           
             float startPoint = 40.0;
 
-          
             for (int i = 0; i < AudioMain::eMaxFileTracks; i++) {
                 g.setColour(Colours::black);
                 g.drawLine(getWidth() - panelRightInset, startPoint, getWidth(), startPoint);
@@ -280,9 +287,7 @@ public:
 
             g.setColour(Colours::white);
             g.drawText("Pitched Sampler State: ", (getWidth()-panelRightInset) + 5, startPoint, panelRightInset-10, 30, Justification::centred);
-        
-            g.drawText("Bit Gird", (getWidth()-panelRightInset) + 5, bitGrid.getY() - 38, panelRightInset-10, 30, Justification::centred);
-        
+      
             startPoint += 30;
 
             for (int i = 0; i < AudioMain::eMaxSamplerTracks; i++) {
@@ -295,29 +300,22 @@ public:
                            , (getWidth()-panelRightInset) + 5, startPoint, panelRightInset-10, height, Justification::left);
               
                 startPoint += height;
-              
-              
             }
+          
             g.setColour(Colours::black);
             g.drawLine(getWidth() - panelRightInset, startPoint, getWidth(), startPoint, 3.0);
           
+            startPoint += 10;
+            bitGrid.setBounds(getWidth() - panelRightInset + 20, startPoint, 210, 210);
+          
         }
-      
-      
     }
-  
-    void paintOverChildren (Graphics& g) override
-    {
-        g.setColour(Colours::lightgrey);
-        g.setFont(10);
-        g.drawText("Version: " + String(ProjectInfo::versionString), audioScope.getX() + 5, audioScope.getBottom() - 20, 100, 20, Justification::left);
-        
-    }
+ 
     void resized() override
     {
         setPanelInsets();
       
-        const int bottomDiv = (getHeight() - 240) * 0.6;
+        const int bottomDiv = (getHeight() - panelBottomInset) * 0.6;
         const int mid = getWidth() - (panelLeftInset + panelRightInset);
         const int bottomRemained  = getHeight() - bottomDiv;
         
@@ -325,15 +323,16 @@ public:
         entryLabel.setBounds(panelLeftInset + 3, bottomDiv, mid - 6, 40.0);
         logText.setBounds(entryLabel.getX(), entryLabel.getBottom() + 5, entryLabel.getWidth(), (getHeight() - 240) - (entryLabel.getBottom() + 10));
 #else
-        logText.setBounds(panelLeftInset + 3, bottomDiv, mid - 6, (getHeight() - 240) - (bottomDiv));
+        logText.setBounds(panelLeftInset + 3, bottomDiv, mid - 6, (getHeight() - panelBottomInset) - (bottomDiv));
 #endif
         
         audioScope.setBounds(panelLeftInset + 3, 5, mid - 6, bottomDiv - 6);
-      
-        impulse.setBounds(100, getHeight() - 240, 800, 240);
-        bitGrid.setBounds((getWidth() - panelRightInset) + 20, bottomDiv + 10, 210, 210);
-        
         clearButton.setBounds(panelLeftInset + 5, 5, 50, 25);
+      
+        impulse.setBounds(100, getHeight() - panelBottomInset, 800, 240);
+      
+        // now set in paint() to use startPoint offset
+        //bitGrid.setBounds((getWidth() - panelRightInset) + 20, bottomDiv + 10, 210, 210);
     }
     
     void textEditorReturnKeyPressed (TextEditor& txt) override
@@ -357,9 +356,6 @@ public:
         //+ logText.getText() + "\n";
         if (parsed.error.length()) {
             thingToAdd += entryLabel.getText() + " :: ERROR! " + parsed.error + "\n";
-            
-          
-
         }
         else {
             thingToAdd += entryLabel.getText() + "\n";
@@ -419,10 +415,10 @@ public:
         }
         else if (topLevelMenuIndex == 2) // View
         {
-            pmenu.addItem(1, "Impulse", true, impulsePanelEnabled);
-            pmenu.addItem(2, "Bit grid", true, gridPanelEnabled);
-            pmenu.addItem(3, "Oscillators", true, oscPanelEnabled);
-            pmenu.addItem(4, "Scope & Log", true, scopeLogPanelEnabled);
+            pmenu.addItem(1, "Oscillators", true, oscPanelEnabled);
+            pmenu.addItem(2, "Scope & Log", true, scopeLogPanelEnabled);
+            pmenu.addItem(3, "Bit grid", true, gridPanelEnabled);
+            pmenu.addItem(4, "Impulse", true, impulsePanelEnabled);
         }
 
         return pmenu;
@@ -442,25 +438,26 @@ public:
         }
         else if (topLevelMenuIndex == 2) // View
         {
-            if (menuItemID == 1) // Impulse
+            if (menuItemID == 1) // Oscillators
             {
-              impulsePanelEnabled = !impulsePanelEnabled;
-              impulse.setVisible(impulsePanelEnabled);
+              oscPanelEnabled = !oscPanelEnabled;
             }
-            else if (menuItemID == 2) // Bit grid
+            else if (menuItemID == 2) // Scope
+            {
+              scopeLogPanelEnabled = !scopeLogPanelEnabled;
+              clearButton.setVisible(scopeLogPanelEnabled);
+              audioScope.setVisible(scopeLogPanelEnabled);
+              logText.setVisible(scopeLogPanelEnabled);
+            }
+            else if (menuItemID == 3) // Bit grid
             {
               gridPanelEnabled = !gridPanelEnabled;
               bitGrid.setVisible(gridPanelEnabled);
             }
-            else if (menuItemID == 3) // Oscillators
+            else if (menuItemID == 4) // Impulse
             {
-              oscPanelEnabled = !oscPanelEnabled;
-            }
-            else if (menuItemID == 4) // Scope
-            {
-              scopeLogPanelEnabled = !scopeLogPanelEnabled;
-              audioScope.setVisible(scopeLogPanelEnabled);
-              logText.setVisible(scopeLogPanelEnabled);
+              impulsePanelEnabled = !impulsePanelEnabled;
+              impulse.setVisible(impulsePanelEnabled);
             }
           
             resized();
@@ -511,10 +508,11 @@ private:
     // show and enable / hide and disable GUI panels
     int                 panelRightInset;
     int                 panelLeftInset;
-    bool                scopeLogPanelEnabled;
-    bool                impulsePanelEnabled;
-    bool                gridPanelEnabled;
+    int                 panelBottomInset;
     bool                oscPanelEnabled;
+    bool                scopeLogPanelEnabled;
+    bool                gridPanelEnabled;
+    bool                impulsePanelEnabled;
   
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
     
