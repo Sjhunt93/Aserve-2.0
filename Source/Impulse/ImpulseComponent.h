@@ -35,10 +35,8 @@ public:
     void paint (Graphics&) override;
     void resized() override;
     
-    void handleNoteOn (MidiKeyboardState* source,
-                       int midiChannel, int midiNoteNumber, float velocity);
-    void handleNoteOff (MidiKeyboardState* source,
-                        int midiChannel, int midiNoteNumber, float velocity);
+    void handleNoteOn (MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
+    void handleNoteOff (MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
 
     
     //Handle messages from real aserve..

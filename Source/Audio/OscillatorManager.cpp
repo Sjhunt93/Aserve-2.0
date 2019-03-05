@@ -61,6 +61,11 @@ void OscillatorManager::setWaveform (const int oscillatorIndex, const int wave)
     oscillators[oscillatorIndex]->setWave(wave);
 }
 
+void OscillatorManager::setPanning (const int oscillatorIndex, const float left, const float right)
+{
+    oscillators[oscillatorIndex]->setPan(left, right);
+}
+
 //==============================================================================
 void OscillatorManager::prepareToPlay (int /*samplesPerBlockExpected*/, double sampleRate_)
 {
@@ -79,11 +84,15 @@ void OscillatorManager::getNextAudioBlock (const AudioSourceChannelInfo& info)
     
     for (int i = 0; i < info.numSamples; ++i)
     {
-		float sample = 0.0f;
+        float sampleL = 0.0f;
+        float sampleR = 0.0f;
         /* read all 24 oscialltors*/
         if (mode == eNormal) {
-            for (int oscillatorIndex = NumOscillators; --oscillatorIndex >= 0;)
-                sample += (float)(oscillators[oscillatorIndex]->nextSample());
+            for (int oscillatorIndex = NumOscillators; --oscillatorIndex >= 0;) {
+                const float sample = (float)(oscillators[oscillatorIndex]->nextSample());
+                sampleL += sample * oscillators[oscillatorIndex]->getLPan();
+                sampleR += sample * oscillators[oscillatorIndex]->getRPan();
+            }
         }
         else if (mode == eFm8) {
             for (int index = 16; index < NumOscillators; ++index) {
@@ -93,13 +102,15 @@ void OscillatorManager::getNextAudioBlock (const AudioSourceChannelInfo& info)
                 oscillators[index-16]->setFrequency(carrier);
             }
             for (int index = 0; index < NumOscillators-8; ++index) {
-                sample += (float)(oscillators[index]->nextSample());
+                sampleL += (float)(oscillators[index]->nextSample());
+                sampleR = sampleL;
             }
         }
 
-		
-        for (int j = info.buffer->getNumChannels(); --j >= 0;)
-            *info.buffer->getWritePointer (j, info.startSample + i) = sample;
+        *info.buffer->getWritePointer (0, info.startSample + i) = sampleL;
+        *info.buffer->getWritePointer (1, info.startSample + i) = sampleR;
+//        for (int j = info.buffer->getNumChannels(); --j >= 0;)
+//            *info.buffer->getWritePointer (j, info.startSample + i) = sample;
     }
 }
 

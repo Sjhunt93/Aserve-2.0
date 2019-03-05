@@ -395,31 +395,6 @@ double SawOscillator :: renderWaveShape( void )
 }
 
 
-/*
-
-class TriOscillator : public Oscillator
-{
-private:
-    void updateHarmonics( void );
-    
-    unsigned int nHarmonics_, m_;
-    double rate_, phase_;
-    double p_,a_,C2_;
-    double state_, lastOutput_;
-    
-public:
-    TriOscillator();
-    ~TriOscillator();
-    
-    void reset(void);
-    void setFrequency(const double val);
-    void prepare(double sampleRate_);
-    double renderWaveShape(void);
-};
-
-
-
-*/
 
 
 
@@ -436,6 +411,14 @@ WaveOscillator::WaveOscillator() : wave(0)
 {
 	lastAmp = 0.0;
     ampOutOfRange = frequencyOutOfRange = false;
+    lPan = rPan = 1.0;
+    oscs.push_back(&sinOscillator);
+    oscs.push_back(&squareOscillator);
+    oscs.push_back(&sawOscillator);
+    oscs.push_back(&inverseSaw);
+    oscs.push_back(&triOscillator);
+    oscs.push_back(&noiseOscillator);
+    
 }
 	
 WaveOscillator::~WaveOscillator()
@@ -455,11 +438,9 @@ void WaveOscillator::setFrequency(const double val)
     if (frequencyOutOfRange) {
 
     }
-    sinOscillator.setFrequency(val);
-    squareOscillator.setFrequency(val);
-    sawOscillator.setFrequency(val);
-    triOscillator.setFrequency(val);
-    inverseSaw.setFrequency(val);
+    for (Oscillator * osc : oscs) {
+        osc->setFrequency(val);
+    }
 }
 const double WaveOscillator::getFrequency ()
 {
@@ -474,49 +455,29 @@ void WaveOscillator::setAmplitude(const float val)
         lastAmp = 1.0;
     }
     
-	sinOscillator.setAmplitude(lastAmp);
-	squareOscillator.setAmplitude(lastAmp);
-	sawOscillator.setAmplitude(lastAmp);
-    triOscillator.setAmplitude(lastAmp);
-    inverseSaw.setAmplitude(lastAmp);
-    noiseOscillator.setAmplitude(lastAmp);
-
+    for (Oscillator * osc : oscs) {
+        osc->setAmplitude(lastAmp);
+    }
 }
 
 void WaveOscillator::prepare(double sampleRate_)
 {
-	sinOscillator.prepare(sampleRate_);
-	squareOscillator.prepare(sampleRate_);
-	sawOscillator.prepare(sampleRate_);
-    triOscillator.prepare(sampleRate_);
-    inverseSaw.prepare(sampleRate_);
+    for (Oscillator * osc : oscs) {
+        osc->prepare(sampleRate_);
+    }
 }
 
-void WaveOscillator::stop(void)
+void WaveOscillator::stop()
 {
-	sinOscillator.stop();
-	squareOscillator.stop();
-	sawOscillator.stop();
-    triOscillator.stop();
-    inverseSaw.stop();
-    noiseOscillator.stop();
+    for (Oscillator * osc : oscs) {
+        osc->stop();
+    }
 }
 
-double WaveOscillator::nextSample(void)
+double WaveOscillator::nextSample()
 {
-	double sample = 0;
-	switch(wave)
-	{
-		case 1 : sample = squareOscillator.nextSample(); break; 
-		case 2 : sample = sawOscillator.nextSample(); break;
-        case 3 : sample = inverseSaw.nextSample(); break;
-        case 4 : sample = triOscillator.nextSample(); break;
-        case 5: sample = noiseOscillator.nextSample(); break;
-		default: sample = sinOscillator.nextSample(); break;
-	}
-	return sample;
+    return oscs[wave]->nextSample();
 }
-
 
 
 String WaveOscillator::getStates ()
@@ -526,4 +487,24 @@ String WaveOscillator::getStates ()
 float WaveOscillator::getLastAmp ()
 {
     return lastAmp;
+}
+
+inline float clip (float a)
+{
+    return (a > 1.0 ? 1.0 : (a < -1.0 ? -1.0 : a));
+    
+}
+
+void WaveOscillator::setPan (float left, float right)
+{
+    lPan = clip(left);
+    rPan = clip(right);
+}
+float WaveOscillator::getLPan ()
+{
+    return lPan;
+}
+float WaveOscillator::getRPan ()
+{
+    return rPan;
 }

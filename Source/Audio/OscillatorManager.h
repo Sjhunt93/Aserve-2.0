@@ -23,7 +23,7 @@ public:
     enum OscillatorManagerConstants 
     {
         NumOscillators = 24,
-        NumWaveforms = WaveOscillator::NumWaveforms
+        NumWaveforms = WaveOscillator::eNumWaveforms
     };
     enum eOscillatorMode
     {
@@ -65,6 +65,11 @@ public:
      */
     void stop(const int oscillatorNumber);
 	
+    /*
+     
+     */
+    void setPanning (const int oscillatorNumber, const float left, const float right);
+    
 
     //AudioSouce Callbacks
     virtual void prepareToPlay (int samplesPerBlockExpected, double sampleRate);

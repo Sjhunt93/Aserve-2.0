@@ -38,6 +38,8 @@ namespace AserveOSC
     static const String reset = aserve + "reset";
 
     static const String mode = aserve + "mode";
+    
+    static const String pan = aserve + "pan";
 }
 
 
@@ -464,7 +466,31 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
             }
         }
     }
-    
+    else if (message.getAddressPattern().toString().startsWith(AserveOSC::pan)) {
+        if (message.size() == 3) {
+            //we have to do loads of error checking, dont want asserts being thrown...
+            if (message[0].isInt32() && message[1].isFloat32() && message[2].isFloat32()) {
+                const int c = message[0].getInt32();
+                const float l = message[1].getFloat32();
+                const float r = message[2].getFloat32();
+            
+                
+                if (c >= 0 && c < OscillatorManager::NumOscillators) {
+                    audio.getOscs().setPanning(c, l, r);
+
+                    if (fabs(l) > 1.0 || fabs(r) > 1.0) {
+                        errorA = "ERROR! PAN: " + String(c) + " configured with out of range values";
+                    }
+                }
+                else {
+                    errorB = "ERROR! PAN: " + String(c) + " is not a valid oscillator index";
+                }
+                String message = "aservePanOscillator(" + String(c) + ", " + String(l) + ", " + String(r) + ");";
+                addMessageToLog(message);
+            }
+            
+        }
+    }
 
     if (errorD.isNotEmpty()) {
         addMessageToLog(errorD);

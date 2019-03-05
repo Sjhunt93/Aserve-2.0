@@ -112,30 +112,6 @@ public:
                 return;
             }
 
-// what's this?
-#if 0
-            String final;
-            bool setRed = false;
-            for (String st : totalStrings) {
-                final += (Time::getCurrentTime().toString(false, true) + " :: " + st + "\n");
-                if (st.startsWith("ERROR")) {
-                    setRed = true;
-                }
-            }
-            
-            String lastStr = logText.getText();
-            if (lastStr.length() > 1000) {
-                lastStr = lastStr.substring(lastStr.length() - 1000, lastStr.length());
-                lastStr = lastStr.fromFirstOccurrenceOf("\n", false, false);
-            }
-            
-            logText.setText( lastStr);
-            logText.setCaretPosition(logText.getText().length());
-            
-            logText.setColour(TextEditor::ColourIds::textColourId , setRed ? Colours::crimson : Colour(59, 252,52));
-            
-            logText.insertTextAtCaret(final);
-#else
 
             if (logText.getTotalNumChars() > 10000) {
                 logText.clear();
@@ -144,16 +120,13 @@ public:
             String total = "";
             
             for (String st : totalStrings) {
-                String final = (Time::getCurrentTime().toString(false, true) + " :: " + st + "\n");
+                String finalString = (Time::getCurrentTime().toString(false, true) + " :: " + st + "\n");
                 
-             //   logText.setCaretPosition(logText.getText().length());
-
                 logText.setColour(TextEditor::ColourIds::textColourId , st.startsWith("ERROR") ? Colours::crimson : Colour(59, 252,52));
                 
-                logText.insertTextAtCaret(final);
+                logText.insertTextAtCaret(finalString);
             }
             logText.setCaretPosition(logText.getText().length());
-#endif
         }
 
     }
@@ -161,25 +134,12 @@ public:
     //=======================================================================
     void prepareToPlay (int samplesPerBlockExpected, double sampleRate) override
     {
-        // This function will be called when the audio device is started, or when
-        // its settings (i.e. sample rate, block size, etc) are changed.
-
-        // You can use this function to initialise any resources you might need,
-        // but be careful - it will be called on the audio thread, not the GUI thread.
-
-        // For more details, see the help for AudioProcessor::prepareToPlay()
-
         audioMain.prepareToPlay(samplesPerBlockExpected, sampleRate);
     }
 
     void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill) override
     {
-        // Your audio-processing code goes here!
-
-        // For more details, see the help for AudioProcessor::getNextAudioBlock()
-
-        // Right now we are not producing any data, in which case we need to clear the buffer
-        // (to prevent the output of random noise)
+        
         
         bufferToFill.clearActiveBufferRegion();
         
@@ -190,10 +150,6 @@ public:
 
     void releaseResources() override
     {
-        // This will be called when the audio device stops, or when it is being
-        // restarted due to a setting change.
-
-        // For more details, see the help for AudioProcessor::releaseResources()
         audioMain.releaseResources();
         MIDIIO.clearAllMidiInputs();
     }
@@ -205,9 +161,9 @@ public:
         panelRightInset = 0;
         panelBottomInset = 0;
       
-        if (impulsePanelEnabled)  panelBottomInset = 240;
-        if (oscPanelEnabled)      panelLeftInset = 200;
-        if (gridPanelEnabled)     panelRightInset = 250;
+        if (impulsePanelEnabled) {  panelBottomInset = 240; }
+        if (oscPanelEnabled) {      panelLeftInset = 200; }
+        if (gridPanelEnabled) {     panelRightInset = 250; }
     }
   
     //=======================================================================
@@ -306,6 +262,7 @@ public:
             g.drawLine(getWidth() - panelRightInset, startPoint, getWidth(), startPoint, 3.0);
           
             startPoint += 10;
+            //this should not be set here really! - hmmm
             bitGrid.setBounds(getWidth() - panelRightInset + 20, startPoint, 210, 210);
           
         }
@@ -317,7 +274,7 @@ public:
       
         const int bottomDiv = (getHeight() - panelBottomInset) * 0.6;
         const int mid = getWidth() - (panelLeftInset + panelRightInset);
-        const int bottomRemained  = getHeight() - bottomDiv;
+//        const int bottomRemained  = getHeight() - bottomDiv;
         
 #ifdef SHOW_CODE_INPUT
         entryLabel.setBounds(panelLeftInset + 3, bottomDiv, mid - 6, 40.0);
@@ -337,12 +294,14 @@ public:
     
     void textEditorReturnKeyPressed (TextEditor& txt) override
     {
+        /*
+         Only used if the live code input is enabled
+         */
         String toParse = entryLabel.getText();
         if (toParse == "play") {
 //            audioMain.loadFile(0, "/Users/sj4-hunt/Music/iTunes/iTunes Media/Music/Dream Theater/Awake/01 6_00.wav");
 //
 //            audioMain.playFile(0, 1.0);
-
         }
         if (toParse == "sample") {
             audioMain.triggerSampledNote(0, arc4random() % 12 + 60, 120);
@@ -417,7 +376,7 @@ public:
         {
             pmenu.addItem(1, "Oscillators", true, oscPanelEnabled);
             pmenu.addItem(2, "Scope & Log", true, scopeLogPanelEnabled);
-            pmenu.addItem(3, "Bit grid", true, gridPanelEnabled);
+            pmenu.addItem(3, "Bit grid & Samplers", true, gridPanelEnabled);
             pmenu.addItem(4, "Impulse", true, impulsePanelEnabled);
         }
 
@@ -429,7 +388,6 @@ public:
         if (topLevelMenuIndex == 0) // MIDI
         {
             MIDIIO.setState(menuItemID-1, !MIDIIO.getState(menuItemID-1));
-            printf("Clicked %i \n", MIDIIO.getState(menuItemID-1));
         }
         else if (topLevelMenuIndex == 1) // Log
         {
@@ -506,13 +464,9 @@ private:
     bool                logEnabled;
   
     // show and enable / hide and disable GUI panels
-    int                 panelRightInset;
-    int                 panelLeftInset;
-    int                 panelBottomInset;
-    bool                oscPanelEnabled;
-    bool                scopeLogPanelEnabled;
-    bool                gridPanelEnabled;
-    bool                impulsePanelEnabled;
+    int                 panelRightInset, panelLeftInset, panelBottomInset;
+    bool                oscPanelEnabled, scopeLogPanelEnabled, gridPanelEnabled, impulsePanelEnabled;
+    
   
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
     
