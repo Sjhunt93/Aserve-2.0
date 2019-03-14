@@ -7,7 +7,7 @@
 //
 
 #include "AserveComs.h"
-
+#include "AserveUnitTest.hpp"
 
 namespace AserveOSC
 {
@@ -63,6 +63,7 @@ AserveComs::AserveComs (AudioMain &_audio) : audio(_audio)
     
     isMessageLocked.set(false);
     logEnabled.set(true);
+    unitTest = nullptr;
 }
 AserveComs::~AserveComs ()
 {
@@ -197,6 +198,11 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
                 }
                 String message = "aserveOscillator(" + String(c) + ", " + String(f) + ", " + String(a) + ", " + String(w) + ");";
                 addMessageToLog(message);
+                if (unitTest) {
+                    unitTest->testMessageReceived("osc", {String(c),String(f),String(a),String(w)});
+                }
+                
+                // send to 
             }
             
         }
@@ -513,4 +519,9 @@ void AserveComs::sendGridMessage (const int x, const int y)
 {
     OSCMessage message(AserveOSC::pixelGridClicked, x, y);
     sender.send(message);
+}
+
+void AserveComs::setUniTestPtr (AserveUnitTest * test)
+{
+    unitTest = test;
 }

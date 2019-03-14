@@ -19,7 +19,7 @@
 #include "ImpulseComponent.h"
 #include "BitVisualiser.h"
 #include "AserveComs.h"
-
+#include "AUTMtof.hpp"
 
 #undef SHOW_CODE_INPUT
 
@@ -40,7 +40,7 @@ public:
     
     //==============================================================================
     MainContentComponent() :
-    aserveComs(audioMain), MIDIIO(aserveComs), impulse(aserveComs) ,
+    aserveComs(audioMain), MIDIIO(aserveComs), impulse(aserveComs) , unitTest(aserveComs),
       logEnabled(true),
       oscPanelEnabled(true),
       scopeLogPanelEnabled(true),
@@ -85,6 +85,7 @@ public:
         setSize (1000, 700);
       
         startTimer(50);
+        unitTest.addActionListener(this);
     }
     
 
@@ -95,7 +96,8 @@ public:
     void buttonClicked (Button* btn) override
     {
         if (btn == &clearButton) {
-            audioMain.reset();
+//            audioMain.reset();
+            unitTest.startUnitTest(1000);
         }
     }
     void timerCallback() override
@@ -378,6 +380,7 @@ public:
             pmenu.addItem(2, "Scope & Log", true, scopeLogPanelEnabled);
             pmenu.addItem(3, "Bit grid & Samplers", true, gridPanelEnabled);
             pmenu.addItem(4, "Impulse", true, impulsePanelEnabled);
+            pmenu.addItem(4, "Impulse", true, unitTestEnabled);
         }
 
         return pmenu;
@@ -417,6 +420,10 @@ public:
               impulsePanelEnabled = !impulsePanelEnabled;
               impulse.setVisible(impulsePanelEnabled);
             }
+            else if (menuItemID == 5)
+            {
+                unitTestEnabled = !unitTestEnabled;
+            }
           
             resized();
             repaint();
@@ -435,6 +442,9 @@ public:
             const int x = message.fromFirstOccurrenceOf(":", false, false).upToFirstOccurrenceOf(",", false, false).getIntValue();
             const int y = message.fromLastOccurrenceOf(",", false, false).getIntValue();
             aserveComs.sendGridMessage(x, y);
+        }
+        if (message.startsWith("finished")) {
+            std::cout << unitTest.getErrors() << " : " << unitTest.getResult() << "\n";
         }
     }
     
@@ -456,7 +466,8 @@ private:
     AserveComs          aserveComs;
     MIDIIO              MIDIIO;
     ImpulseController   impulse;
-    
+//    AserveUnitTest      unitTester;
+    AUTMtof             unitTest;
     
     std::vector<int>    midi;
   
@@ -466,7 +477,7 @@ private:
     // show and enable / hide and disable GUI panels
     int                 panelRightInset, panelLeftInset, panelBottomInset;
     bool                oscPanelEnabled, scopeLogPanelEnabled, gridPanelEnabled, impulsePanelEnabled;
-    
+    bool                unitTestEnabled;
   
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
     
