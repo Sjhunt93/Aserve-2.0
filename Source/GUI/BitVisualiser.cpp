@@ -14,7 +14,6 @@ BitVisualiser::BitVisualiser ()
 {
     for (int i = 0; i < 16; i++) {
         pixelGrid[i] = 0;
-           // pixelGrid[i] = arc4random() % 65536;
     }
 
     
@@ -73,6 +72,6 @@ void BitVisualiser::mouseDown (const MouseEvent& event)
     float size = ((getWidth()-2) / 16);
     
     const int x = event.x / size;
-    const int y = event.y / size;
+    const int y = ( event.y-30) / size;
     sendActionMessage("GRID:" + String(x) + "," + String(y));
 }
