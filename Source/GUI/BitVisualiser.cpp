@@ -71,7 +71,13 @@ void BitVisualiser::mouseDown (const MouseEvent& event)
 {
     float size = ((getWidth()-2) / 16);
     
-    const int x = event.x / size;
-    const int y = ( event.y-30) / size;
+    int x = event.x / size;
+    int y = ( event.y-30) / size;
+    if (x > 15) {
+        x = 15;
+    }
+    if (y > 15) {
+        y = 15;
+    }
     sendActionMessage("GRID:" + String(x) + "," + String(y));
 }

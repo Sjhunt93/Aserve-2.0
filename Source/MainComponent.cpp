@@ -82,7 +82,7 @@ public:
         aserveComs.addActionListener(this);
         bitGrid.addActionListener(this);
       
-        setSize (1000, 700);
+        setSize (1000, 730);
       
         startTimer(50);
     }
@@ -263,7 +263,7 @@ public:
           
             startPoint += 10;
             //this should not be set here really! - hmmm
-            bitGrid.setBounds(getWidth() - panelRightInset + 20, startPoint, 210, 210);
+            bitGrid.setBounds(getWidth() - panelRightInset + 20, startPoint, 210, 210+30);
           
         }
     }
