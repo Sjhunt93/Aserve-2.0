@@ -428,8 +428,18 @@ WaveOscillator::~WaveOscillator()
 
 void WaveOscillator::setWave(int val)
 {
-	wave = val;
     waveOutOfRange = val > eNoise || val < 0;
+	
+    
+    if (val < 0) {
+        wave = eSinusoid;
+    }
+    else if (val > 5) {
+        wave = eNoise;
+    }
+    else {
+        wave = val;
+    }
 }
 
 void WaveOscillator::setFrequency(const double val)

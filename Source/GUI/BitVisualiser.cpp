@@ -35,7 +35,7 @@ BitVisualiser::~BitVisualiser ()
 
 void BitVisualiser::paint (Graphics & g)
 {
-    jassert(getWidth() == getHeight());
+//    jassert(getWidth() == getHeight());
     
     float size = ((getWidth()-2) / 16);
   
