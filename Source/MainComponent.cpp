@@ -20,6 +20,7 @@
 #include "BitVisualiser.h"
 #include "AserveComs.h"
 #include "AUTMtof.hpp"
+#include "UnitTestUI.hpp"
 
 #undef SHOW_CODE_INPUT
 
@@ -40,12 +41,13 @@ public:
     
     //==============================================================================
     MainContentComponent() :
-    aserveComs(audioMain), MIDIIO(aserveComs), impulse(aserveComs) , unitTest(aserveComs),
+    aserveComs(audioMain), MIDIIO(aserveComs), impulse(aserveComs),
       logEnabled(true),
       oscPanelEnabled(true),
       scopeLogPanelEnabled(true),
       gridPanelEnabled(true),
-      impulsePanelEnabled(true)
+      impulsePanelEnabled(true),
+    unitTestGUI(aserveComs)
     {
         // specify the number of input and output channels that we want to open
         setAudioChannels (2, 2);
@@ -85,7 +87,9 @@ public:
         setSize (1000, 700);
       
         startTimer(50);
-        unitTest.addActionListener(this);
+        
+        
+        addAndMakeVisible(unitTestGUI);
     }
     
 
@@ -96,8 +100,7 @@ public:
     void buttonClicked (Button* btn) override
     {
         if (btn == &clearButton) {
-//            audioMain.reset();
-            unitTest.startUnitTest(1000);
+            audioMain.reset();
         }
     }
     void timerCallback() override
@@ -289,7 +292,7 @@ public:
         clearButton.setBounds(panelLeftInset + 5, 5, 50, 25);
       
         impulse.setBounds(100, getHeight() - panelBottomInset, 800, 240);
-      
+        unitTestGUI.setBounds(getWidth() - 100, 0, 100, bottomDiv);
         // now set in paint() to use startPoint offset
         //bitGrid.setBounds((getWidth() - panelRightInset) + 20, bottomDiv + 10, 210, 210);
     }
@@ -443,9 +446,6 @@ public:
             const int y = message.fromLastOccurrenceOf(",", false, false).getIntValue();
             aserveComs.sendGridMessage(x, y);
         }
-        if (message.startsWith("finished")) {
-            std::cout << unitTest.getErrors() << " : " << unitTest.getResult() << "\n";
-        }
     }
     
 
@@ -467,7 +467,8 @@ private:
     MIDIIO              MIDIIO;
     ImpulseController   impulse;
 //    AserveUnitTest      unitTester;
-    AUTMtof             unitTest;
+    UnitTestGUI         unitTestGUI;
+    
     
     std::vector<int>    midi;
   
