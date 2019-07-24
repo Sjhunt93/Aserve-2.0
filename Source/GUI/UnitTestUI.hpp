@@ -19,11 +19,11 @@ public:
     ~UnitTestGUI ();
     
     void paint (Graphics &g) override;
-    void resized ();
+    void resized () override;
     
-    void actionListenerCallback (const String& message);
+    void actionListenerCallback (const String& message) override;
 
-    void buttonClicked (Button* btn);
+    void buttonClicked (Button* btn) override;
 
 private:
     TextButton runTest1, runTest2;
