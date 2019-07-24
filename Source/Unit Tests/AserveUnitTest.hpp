@@ -24,7 +24,7 @@ public:
     };
     
     //Note the unit test will register itself with aserveComs, then disable itself after exiting.
-    AserveUnitTest (AserveComs & coms, String unitTestName);
+    AserveUnitTest (AserveComs & coms, String unitTestName, String folderName);
     virtual ~AserveUnitTest ();
     
     //Thread will call this, then call runningUnitTest
@@ -43,6 +43,12 @@ public:
     
     StringArray getAndClearMessageLog ();
     
+
+    static String solutionsPath;
+    static String projectPath;
+
+    void saveToFile ();
+    
 protected:
     AserveComs & coms;
     const String testName;
@@ -51,6 +57,7 @@ protected:
     int timeout;
     eTestState currentState;
     int defaultTimeOutInc;
+    String folderName;
 private:
     StringArray messageQue;
     Atomic<int> simpleMutex; //used a simple thread safe thingy..

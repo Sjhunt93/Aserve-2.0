@@ -45,6 +45,7 @@
 		4794C2C222BA55EC008CCD7C /* AUTTestTone.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4794C2C022BA55EC008CCD7C /* AUTTestTone.cpp */; };
 		47DECE5522E88A3B00946189 /* OscillatorViewer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE5322E88A3B00946189 /* OscillatorViewer.cpp */; };
 		47DECE5822E890A700946189 /* SamplerStateViewer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE5622E890A700946189 /* SamplerStateViewer.cpp */; };
+		47DECE5B22E8B8D100946189 /* ConfigWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE5922E8B8D100946189 /* ConfigWindow.cpp */; };
 		47DF3DA622BA51BE006DD7EA /* UnitTestUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DF3DA422BA51BE006DD7EA /* UnitTestUI.cpp */; };
 		4800F810AA6C51BEA2A4633D /* include_juce_video.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AA4C5675C61C61CCB6E330A /* include_juce_video.mm */; };
 		4E3625E9ACE0F69C7A3D465B /* include_juce_gui_basics.mm in Sources */ = {isa = PBXBuildFile; fileRef = D83AD2045330F6198B350DA8 /* include_juce_gui_basics.mm */; };
@@ -144,6 +145,8 @@
 		47DECE5422E88A3B00946189 /* OscillatorViewer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OscillatorViewer.hpp; sourceTree = "<group>"; };
 		47DECE5622E890A700946189 /* SamplerStateViewer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SamplerStateViewer.cpp; sourceTree = "<group>"; };
 		47DECE5722E890A700946189 /* SamplerStateViewer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SamplerStateViewer.hpp; sourceTree = "<group>"; };
+		47DECE5922E8B8D100946189 /* ConfigWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigWindow.cpp; path = ../../Source/ConfigWindow.cpp; sourceTree = "<group>"; };
+		47DECE5A22E8B8D100946189 /* ConfigWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ConfigWindow.hpp; path = ../../Source/ConfigWindow.hpp; sourceTree = "<group>"; };
 		47DF3DA422BA51BE006DD7EA /* UnitTestUI.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UnitTestUI.cpp; sourceTree = "<group>"; };
 		47DF3DA522BA51BE006DD7EA /* UnitTestUI.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UnitTestUI.hpp; sourceTree = "<group>"; };
 		4A745CE13363691560632D19 /* JuceHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JuceHeader.h; path = ../../JuceLibraryCode/JuceHeader.h; sourceTree = SOURCE_ROOT; };
@@ -431,6 +434,8 @@
 				47561D8F215293AF0012BED1 /* AserveComs.h */,
 				47561DDF2154DF720012BED1 /* MIDIIO.h */,
 				47561DDE2154DF720012BED1 /* MIDIIO.cpp */,
+				47DECE5922E8B8D100946189 /* ConfigWindow.cpp */,
+				47DECE5A22E8B8D100946189 /* ConfigWindow.hpp */,
 				47561D90215293AF0012BED1 /* Audio */,
 				47561D9D215293AF0012BED1 /* GUI */,
 				47561DA4215293AF0012BED1 /* Impulse */,
@@ -542,6 +547,7 @@
 				47561DC1215293AF0012BED1 /* Scope.cpp in Sources */,
 				AB49FB6533D32C0A0E22215F /* include_juce_audio_processors.mm in Sources */,
 				47561DC4215293AF0012BED1 /* MidiManager.cpp in Sources */,
+				47DECE5B22E8B8D100946189 /* ConfigWindow.cpp in Sources */,
 				47561DC7215293AF0012BED1 /* RotaryControlComponent.cpp in Sources */,
 				47561DC8215293AF0012BED1 /* SliderControlComponent.cpp in Sources */,
 				47DECE5522E88A3B00946189 /* OscillatorViewer.cpp in Sources */,

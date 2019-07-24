@@ -10,7 +10,12 @@
 
 const String AserveUnitTest::TEST_TIMEOUT = "Test Timeout - please check your code for excessive sleeps.\n";
 
-AserveUnitTest::AserveUnitTest (AserveComs & _coms, String unitTestName) : Thread("Unit Tester"), coms(_coms), testName(unitTestName)
+#ifdef DEBUG
+    String AserveUnitTest::solutionsPath = "/Users/sj4-hunt/Downloads/IAP-2018-2019-master 6/Solutions/Unit Tests";
+    String AserveUnitTest::projectPath = "/Users/sj4-hunt/Downloads/IAP-2018-2019-master 6/iapProj/Source";
+#endif
+
+AserveUnitTest::AserveUnitTest (AserveComs & _coms, String unitTestName, String fn) : Thread("Unit Tester"), coms(_coms), testName(unitTestName), folderName(fn)
 {
     timeout = 0;
     currentState = eNone;
@@ -96,4 +101,32 @@ AserveUnitTest::eTestState AserveUnitTest::getResult ()
 String AserveUnitTest::getErrors ()
 {
     return errorMessages;
+}
+
+void AserveUnitTest::saveToFile ()
+{
+    File root(solutionsPath);
+    File fFolder = root.getChildFile(folderName);
+    if (!fFolder.exists() ) {
+        fFolder.createDirectory();
+    }
+    else if (fFolder.isDirectory()) {
+        //
+        
+        File codeFolder = File(projectPath);
+        File cpp = codeFolder.getChildFile("IAP.cpp");
+        File h = codeFolder.getChildFile("IAP.h");
+        if (cpp.exists() && h.exists()) {
+            File hCopy = fFolder.getChildFile("IAP.h");
+            File cppCopy = fFolder.getChildFile("IAP.cpp");
+            if (hCopy.exists()) {
+                hCopy.deleteFile();
+            }
+            if (cppCopy.exists()) {
+                cppCopy.deleteFile();
+            }
+            h.copyFileTo(hCopy);
+            cpp.copyFileTo(cppCopy);
+        }
+    }
 }

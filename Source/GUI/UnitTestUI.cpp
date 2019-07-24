@@ -44,6 +44,7 @@ void UnitTestGUI::actionListenerCallback (const String& message)
         if (unitTest->getResult() == 2) {
             currentTest->setColour(TextButton::ColourIds::buttonColourId, Colours::green);
         }
+        unitTest->saveToFile();
         unitTest = nullptr;
     }
 }

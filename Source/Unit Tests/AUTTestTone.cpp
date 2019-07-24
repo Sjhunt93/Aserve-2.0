@@ -8,7 +8,7 @@
 #include "AUTTestTone.hpp"
 
 
-AUTTestTone::AUTTestTone (AserveComs & coms) : AserveUnitTest(coms, "Test Tone")
+AUTTestTone::AUTTestTone (AserveComs & coms) : AserveUnitTest(coms, "Test Tone", "unit test 0")
 {
     
 }

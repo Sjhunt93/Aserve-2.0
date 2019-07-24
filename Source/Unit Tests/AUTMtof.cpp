@@ -8,7 +8,7 @@
 #include "AUTMtof.hpp"
 
 
-AUTMtof::AUTMtof (AserveComs & coms) : AserveUnitTest(coms, "mtof")
+AUTMtof::AUTMtof (AserveComs & coms) : AserveUnitTest(coms, "mtof", "unit test 1")
 {
     
 }
@@ -27,9 +27,9 @@ void AUTMtof::runningUnitTest ()
         int counter = 0;
         do {
             tt = getAndClearMessageLog();
-            Thread::sleep(100);
+            Thread::sleep(10);
             counter++;
-        } while (!tt.size() && counter < 5);
+        } while (!tt.size() && counter < 100);
         
         const String inital = tt[0];
         if (inital.startsWith("osc")) {

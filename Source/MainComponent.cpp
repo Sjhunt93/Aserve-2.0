@@ -212,7 +212,7 @@ public:
     
     StringArray getMenuBarNames() override
     {
-        return {"MIDI", "Log", "View"};
+        return {"MIDI", "Log", "View", "Settings"};
     }
     
     PopupMenu getMenuForIndex (int topLevelMenuIndex, const String& menuName) override
@@ -242,7 +242,10 @@ public:
             pmenu.addItem(4, "Impulse", true, impulsePanelEnabled);
             pmenu.addItem(5, "Unit Tests", true, unitTestEnabled);
         }
-        
+        else if (topLevelMenuIndex == 3) // View
+        {
+            pmenu.addItem(1, "Unit test setup", true);
+        }
         return pmenu;
     }
     
@@ -288,7 +291,24 @@ public:
             resized();
             repaint();
         }
-        
+        else if (topLevelMenuIndex == 3) {
+            //            AlertWindow window;
+            AlertWindow al("Unit Test Setup", "Only mess around here if you are having problems with your unit tests saving...", AlertWindow::QuestionIcon);
+            al.addTextBlock("Enter Your project path here:");
+            al.addTextEditor("Project Path", AserveUnitTest::projectPath);
+            al.addTextBlock("Enter Your solutions path here:");
+            al.addTextEditor("Solutions Path", AserveUnitTest::solutionsPath);
+            
+            al.addButton("Ok", 1);
+            al.addButton("Cancel", 2);
+            
+            const int value = al.runModalLoop();
+            if (value == 1) {
+                const String project = al.getTextEditor("Project Path")->getText();
+                const String solutions = al.getTextEditor("Solutions Path")->getText();
+            }
+
+        }
     }
     
     void actionListenerCallback (const String& message) override
