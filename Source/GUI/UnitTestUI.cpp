@@ -44,32 +44,32 @@ void UnitTestGUI::actionListenerCallback (const String& message)
         if (unitTest->getResult() == 2) {
             currentTest->setColour(TextButton::ColourIds::buttonColourId, Colours::green);
         }
+        unitTest = nullptr;
     }
 }
 
 void UnitTestGUI::runUnitTest1()
 {
-    unitTest = new AUTMtof(coms);
-    unitTest->addActionListener(this);
-    unitTest->startUnitTest(1000);
     
 }
 void UnitTestGUI::runUnitTest2()
 {
-    unitTest = new AUTTestTone(coms);
-    unitTest->addActionListener(this);
-    unitTest->startUnitTest(1000);
 }
 
 void UnitTestGUI::buttonClicked (Button* btn)
 {
+    if (unitTest != nullptr) {
+        return;
+    }
     if (btn == &runTest1) {
-        runUnitTest1();
-        currentTest = &runTest1;
+        unitTest = new AUTMtof(coms);
     }
     if (btn == &runTest2) {
-        runUnitTest2();
-        currentTest = &runTest2;
+        unitTest = new AUTTestTone(coms);
     }
+    currentTest = btn;
+    unitTest->addActionListener(this);
+    unitTest->startUnitTest(1000);
+
 }
 //

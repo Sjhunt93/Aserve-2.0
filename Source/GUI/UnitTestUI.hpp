@@ -34,7 +34,7 @@ private:
     void runUnitTest2();
     AserveComs & coms;
     
-    TextButton * currentTest;
+    Button * currentTest;
 };
 
 #endif /* UnitTestUI_hpp */

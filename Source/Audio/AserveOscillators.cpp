@@ -476,7 +476,11 @@ void WaveOscillator::stop()
 
 double WaveOscillator::nextSample()
 {
-    return oscs[wave]->nextSample();
+    if (wave >= 0 && wave < oscs.size()) {
+        return oscs[wave]->nextSample();
+    }
+    return 0;
+    
 }
 
 

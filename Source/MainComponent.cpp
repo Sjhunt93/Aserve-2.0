@@ -21,6 +21,8 @@
 #include "AserveComs.h"
 #include "AUTMtof.hpp"
 #include "UnitTestUI.hpp"
+#include "OscillatorViewer.hpp"
+#include "SamplerStateViewer.hpp"
 
 #undef SHOW_CODE_INPUT
 
@@ -46,6 +48,8 @@ public:
       oscPanelEnabled(true),
       scopeLogPanelEnabled(true),
       gridPanelEnabled(true),
+    oscViewer (audioMain),
+    samplerViewer (audioMain),
       impulsePanelEnabled(true),
     unitTestGUI(aserveComs)
     {
@@ -73,7 +77,8 @@ public:
         entryLabel.setColour(TextEditor::ColourIds::highlightColourId , Colour(59, 252,52).withAlpha((UInt8)120));
         
         addAndMakeVisible(audioScope);
-        
+        addAndMakeVisible(oscViewer);
+        addAndMakeVisible(samplerViewer);
         addAndMakeVisible(impulse);
         addAndMakeVisible(bitGrid);
         
@@ -90,6 +95,8 @@ public:
         
         
         addAndMakeVisible(unitTestGUI);
+        
+        
     }
     
 
@@ -175,15 +182,7 @@ public:
     void paint (Graphics& g) override
     {
         setPanelInsets(); // 'inset' parameters depend on visibility of various panels
-      
-        // what is startpoint?
-        float startPoint = 40.0;
-    
-        // height adjusted by 'bottom' inset - to make room for impulse midi keyboard panel
-        float height = ((getHeight() - panelBottomInset) - startPoint);
-        height /= ((float)OscillatorManager::OscillatorManagerConstants::NumOscillators);
-        if (height <= 10) height = 10;
-      
+        
         g.fillAll (Colours::black);
       
         // left and right panels
@@ -196,81 +195,6 @@ public:
       
         g.fillRect(0, getHeight() - panelBottomInset, getWidth(), panelBottomInset);
       
-        if (oscPanelEnabled)
-        {
-            g.setColour(Colours::white);
-            const int mode = audioMain.getOscs().getOscillatorRoutingMode();
-            if (mode == OscillatorManager::eNormal) {
-                g.drawText("Oscillator State (normal)", 5, 5, panelLeftInset-10, 30, Justification::centred);
-            }
-            if (mode == OscillatorManager::eFm8) {
-                g.drawText("Oscillator State (FM 8)", 5, 5, panelLeftInset-10, 30, Justification::centred);
-            }
-          
-            Colour offCol = Colours::white.withAlpha(0.2f);
-          
-            for (int i = 0; i < OscillatorManager::OscillatorManagerConstants::NumOscillators; i++) {
-                g.setColour(Colours::black);
-                g.drawLine(0, startPoint, panelLeftInset, startPoint);
-              
-                g.setColour( audioMain.getOscs().isActive(i) ? (  audioMain.getOscs().isOutOfRange(i) ? Colours::red : Colours::white )  : offCol );
-              
-                g.drawText(/*String("Oscillator: ") +*/ String(i) + " | " + audioMain.getOscs().getState(i) , 5, startPoint, panelLeftInset, height, Justification::left);
-              
-                startPoint += height;
-              
-            }
-        }
-      
-      
-        if( gridPanelEnabled )
-        {
-            g.setColour(Colours::white);
-            g.drawText("Sampler State", getWidth()-panelRightInset, 5, panelRightInset , 30, Justification::centred);
-          
-            float startPoint = 40.0;
-
-            for (int i = 0; i < AudioMain::eMaxFileTracks; i++) {
-                g.setColour(Colours::black);
-                g.drawLine(getWidth() - panelRightInset, startPoint, getWidth(), startPoint);
-              
-                g.setColour(audioMain.getAudioFileNames()[i] != "Empty" ? Colours::white : Colours::white.withAlpha(0.2f));
-              
-                g.drawText(/*"Sampler: " +*/ String(i) + " | " + audioMain.getAudioFileNames()[i]
-                           , (getWidth()-panelRightInset) + 5, startPoint, panelRightInset-10, height, Justification::left);
-              
-                startPoint += height;
-
-              
-            }
-            g.setColour(Colours::black);
-            g.drawLine(getWidth() - panelRightInset, startPoint, getWidth(), startPoint, 3.0);
-
-            g.setColour(Colours::white);
-            g.drawText("Pitched Sampler State: ", (getWidth()-panelRightInset) + 5, startPoint, panelRightInset-10, 30, Justification::centred);
-      
-            startPoint += 30;
-
-            for (int i = 0; i < AudioMain::eMaxSamplerTracks; i++) {
-                g.setColour(Colours::black);
-                g.drawLine(getWidth() - panelRightInset, startPoint, getWidth(), startPoint);
-              
-                g.setColour(audioMain.getResampledNames()[i] != "Empty" ? Colours::white : Colours::white.withAlpha(0.2f));
-              
-                g.drawText(/*"Sampler: " +*/ String(i) + " | " + audioMain.getResampledNames()[i]
-                           , (getWidth()-panelRightInset) + 5, startPoint, panelRightInset-10, height, Justification::left);
-              
-                startPoint += height;
-            }
-          
-            g.setColour(Colours::black);
-            g.drawLine(getWidth() - panelRightInset, startPoint, getWidth(), startPoint, 3.0);
-          
-            startPoint += 10;
-            //this should not be set here really! - hmmm
-            bitGrid.setBounds(getWidth() - panelRightInset + 20, startPoint, 210, 210);
-          
-        }
     }
  
     void resized() override
@@ -293,8 +217,11 @@ public:
       
         impulse.setBounds(100, getHeight() - panelBottomInset, 800, 240);
         unitTestGUI.setBounds(getWidth() - 100, 0, 100, bottomDiv);
+        
+        oscViewer.setBounds(0, 0, panelLeftInset, getHeight() - panelBottomInset);
+        samplerViewer.setBounds(getWidth() - panelRightInset, 0, panelRightInset, 200);
         // now set in paint() to use startPoint offset
-        //bitGrid.setBounds((getWidth() - panelRightInset) + 20, bottomDiv + 10, 210, 210);
+        bitGrid.setBounds(samplerViewer.getX() + ((samplerViewer.getWidth() - 210) * 0.5), samplerViewer.getBottom() + 10, 210, 210);
     }
     
     void textEditorReturnKeyPressed (TextEditor& txt) override
@@ -454,13 +381,16 @@ private:
 
     // Your private member variables go here...
     
-    TextEditor          entryLabel;
-    TextEditor          logText;
+    TextEditor          entryLabel, logText;
     TextButton          clearButton;
     
     AudioMain           audioMain;
+    
+    //Visualiser components
     Scope               audioScope;
-
+    OscillatorViewer    oscViewer;
+    SamplerStateViewer  samplerViewer;
+    
     BitVisualiser       bitGrid;
     
     AserveComs          aserveComs;
