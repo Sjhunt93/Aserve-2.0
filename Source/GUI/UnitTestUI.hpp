@@ -12,6 +12,27 @@
 #include "AserveComs.h"
 #include "AUTMtof.hpp"
 #include "AUTTestTone.hpp"
+#include "AUTDrumSampler.hpp"
+#include "ComponentList.h"
+
+
+class TestSelector : public Component, public ActionBroadcaster {
+public:
+    TestSelector (String name);
+    ~TestSelector ();
+    void resized ();
+    void paint (Graphics & g);
+    void mouseUp (const MouseEvent & event);
+    void setState (AserveUnitTest::eTestState state);
+
+    bool selected;
+    const String name ();
+private:
+    Label label;
+    AserveUnitTest::eTestState state;
+};
+
+
 class UnitTestGUI : public Component, public ActionListener, public Button::Listener {
   
 public:
@@ -25,16 +46,17 @@ public:
 
     void buttonClicked (Button* btn) override;
 
+    TestSelector * getSelectorForName (String name);
+    void resetSelectors (int idSelect);
 private:
-    TextButton runTest1, runTest2;
+    TextButton runTest1;
     TextEditor results;
     ScopedPointer<AserveUnitTest> unitTest;
+    String selectedTest;
     
-    void runUnitTest1();
-    void runUnitTest2();
     AserveComs & coms;
     
-    Button * currentTest;
+    ComponentListViewport compList;
 };
 
 #endif /* UnitTestUI_hpp */

@@ -324,6 +324,10 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
                 
                 String message = "aservePlaySample(" + String(index) + ", " + String(amp) +  ");";
                 addMessageToLog(message);
+                
+                if (unitTest) {
+                    unitTest->testMessageReceived("playSample", {String(index),String(amp)});
+                }
             }
 
         }

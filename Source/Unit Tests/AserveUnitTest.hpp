@@ -11,6 +11,17 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "AserveComs.h"
 
+
+
+namespace AUT
+{
+    static const int nbrOfTests = 10;
+    static const char * unitTestNames [nbrOfTests] = {
+        "mtof", "Drum Sampler", "Chord Machine", "Fix noteoff", "Scale Quantisation", "HF test", "Music Sequencer", "Reading from a file", "Writing to a file", "Sorting"
+    };
+}
+
+
 class AserveUnitTest : public Thread, public ActionBroadcaster {
 public:
     
@@ -21,6 +32,12 @@ public:
         eRunning,
         eEndedPass,
         eEndedFail,
+    };
+    
+    struct Test {
+        String name;
+        String folder;
+        int state;
     };
     
     //Note the unit test will register itself with aserveComs, then disable itself after exiting.
@@ -42,12 +59,19 @@ public:
     String getErrors ();
     
     StringArray getAndClearMessageLog ();
+    StringArray getCue (int timeout, int messagesToWaitFor, const int lagInMs = 10); //wait this long for a message then return with what ever is recieved
     
+    void saveToFile ();
+    static File fodlerForTestResults (String name);
 
     static String solutionsPath;
     static String projectPath;
 
-    void saveToFile ();
+    static StringArray getTestList ();
+    static AserveUnitTest * allocateForTest (String t, AserveComs & coms); //will return nullptr
+    static eTestState getStateForTest (String t);
+    
+    
     
 protected:
     AserveComs & coms;

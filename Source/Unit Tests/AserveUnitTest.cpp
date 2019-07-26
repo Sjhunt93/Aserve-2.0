@@ -6,6 +6,9 @@
 //
 
 #include "AserveUnitTest.hpp"
+#include "AUTMtof.hpp"
+#include "AUTDrumSampler.hpp"
+#include "AUTTestTone.hpp"
 
 
 const String AserveUnitTest::TEST_TIMEOUT = "Test Timeout - please check your code for excessive sleeps.\n";
@@ -93,6 +96,18 @@ StringArray AserveUnitTest::getAndClearMessageLog ()
     return messages;
 }
 
+StringArray AserveUnitTest::getCue (int timeout, int messagesToWaitFor, const int lagInMs)
+{
+    StringArray tt;
+    int counter = 0;
+    do {
+        tt.addArray(getAndClearMessageLog());
+        Thread::sleep(lagInMs);
+        counter += lagInMs;
+    } while (tt.size() < messagesToWaitFor && counter < timeout);
+    return tt;
+}
+
 AserveUnitTest::eTestState AserveUnitTest::getResult ()
 {
     return currentState;
@@ -101,6 +116,21 @@ AserveUnitTest::eTestState AserveUnitTest::getResult ()
 String AserveUnitTest::getErrors ()
 {
     return errorMessages;
+}
+
+ File AserveUnitTest::fodlerForTestResults (String name)
+{
+    File root(solutionsPath);
+    
+    StringArray list = getTestList();
+    const int index  = list.indexOf(name);
+    if (index >= 0) {
+        String name = "unit test " + String(index+1);
+        File fFolder = root.getChildFile(name);
+        return fFolder;
+    }
+    
+    return File("");
 }
 
 void AserveUnitTest::saveToFile ()
@@ -117,8 +147,11 @@ void AserveUnitTest::saveToFile ()
         File cpp = codeFolder.getChildFile("IAP.cpp");
         File h = codeFolder.getChildFile("IAP.h");
         if (cpp.exists() && h.exists()) {
-            File hCopy = fFolder.getChildFile("IAP.h");
-            File cppCopy = fFolder.getChildFile("IAP.cpp");
+            
+            String prePend = (getResult() == eEndedPass) ? "Pass_" : "Failed_";
+            
+            File hCopy = fFolder.getChildFile(prePend + "IAP.h");
+            File cppCopy = fFolder.getChildFile(prePend + "IAP.cpp");
             if (hCopy.exists()) {
                 hCopy.deleteFile();
             }
@@ -129,4 +162,45 @@ void AserveUnitTest::saveToFile ()
             cpp.copyFileTo(cppCopy);
         }
     }
+}
+
+
+/*static*/ StringArray AserveUnitTest::getTestList ()
+{
+    StringArray array;
+    for (int i = 0; i < AUT::nbrOfTests; i++) {
+        array.add(AUT::unitTestNames[i]);
+    }
+    return array;
+}
+AserveUnitTest * AserveUnitTest::allocateForTest (String t, AserveComs & coms)
+{
+    StringArray list = getTestList();
+    const int index  = list.indexOf(t);
+    switch (index) {
+        case 0:
+            return new AUTMtof(coms);
+            
+        case 1:
+            return new AUTDrumSampler(coms);
+            
+        default:
+            break;
+    }
+    return nullptr;
+}
+
+/*static*/ AserveUnitTest::eTestState AserveUnitTest::getStateForTest (String t)
+{
+    File f = fodlerForTestResults(t);
+    if (f.exists() && f.isDirectory()) {
+        if (f.getChildFile("Pass_IAP.cpp").exists()) {
+            return eTestState::eEndedPass;
+        }
+        else if (f.getChildFile("Failed_IAP.cpp").exists()) {
+            return eTestState::eEndedFail;
+            
+        }
+    }
+    return eTestState::eNone;
 }

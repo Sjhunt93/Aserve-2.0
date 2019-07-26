@@ -46,6 +46,8 @@
 		47DECE5522E88A3B00946189 /* OscillatorViewer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE5322E88A3B00946189 /* OscillatorViewer.cpp */; };
 		47DECE5822E890A700946189 /* SamplerStateViewer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE5622E890A700946189 /* SamplerStateViewer.cpp */; };
 		47DECE5B22E8B8D100946189 /* ConfigWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE5922E8B8D100946189 /* ConfigWindow.cpp */; };
+		47DECE5E22E8C9D700946189 /* AUTDrumSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE5C22E8C9D700946189 /* AUTDrumSampler.cpp */; };
+		47DECE6122EB536800946189 /* ComponentList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE6022EB536700946189 /* ComponentList.cpp */; };
 		47DF3DA622BA51BE006DD7EA /* UnitTestUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DF3DA422BA51BE006DD7EA /* UnitTestUI.cpp */; };
 		4800F810AA6C51BEA2A4633D /* include_juce_video.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AA4C5675C61C61CCB6E330A /* include_juce_video.mm */; };
 		4E3625E9ACE0F69C7A3D465B /* include_juce_gui_basics.mm in Sources */ = {isa = PBXBuildFile; fileRef = D83AD2045330F6198B350DA8 /* include_juce_gui_basics.mm */; };
@@ -147,6 +149,10 @@
 		47DECE5722E890A700946189 /* SamplerStateViewer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SamplerStateViewer.hpp; sourceTree = "<group>"; };
 		47DECE5922E8B8D100946189 /* ConfigWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigWindow.cpp; path = ../../Source/ConfigWindow.cpp; sourceTree = "<group>"; };
 		47DECE5A22E8B8D100946189 /* ConfigWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ConfigWindow.hpp; path = ../../Source/ConfigWindow.hpp; sourceTree = "<group>"; };
+		47DECE5C22E8C9D700946189 /* AUTDrumSampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AUTDrumSampler.cpp; sourceTree = "<group>"; };
+		47DECE5D22E8C9D700946189 /* AUTDrumSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AUTDrumSampler.hpp; sourceTree = "<group>"; };
+		47DECE5F22EB536700946189 /* ComponentList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentList.h; sourceTree = "<group>"; };
+		47DECE6022EB536700946189 /* ComponentList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComponentList.cpp; sourceTree = "<group>"; };
 		47DF3DA422BA51BE006DD7EA /* UnitTestUI.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UnitTestUI.cpp; sourceTree = "<group>"; };
 		47DF3DA522BA51BE006DD7EA /* UnitTestUI.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UnitTestUI.hpp; sourceTree = "<group>"; };
 		4A745CE13363691560632D19 /* JuceHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JuceHeader.h; path = ../../JuceLibraryCode/JuceHeader.h; sourceTree = SOURCE_ROOT; };
@@ -223,6 +229,8 @@
 				471BF7C62231361D00339211 /* AserveUnitTest.cpp */,
 				471BF7CA22313B5B00339211 /* AUTMtof.hpp */,
 				471BF7C922313B5B00339211 /* AUTMtof.cpp */,
+				47DECE5C22E8C9D700946189 /* AUTDrumSampler.cpp */,
+				47DECE5D22E8C9D700946189 /* AUTDrumSampler.hpp */,
 				4794C2C022BA55EC008CCD7C /* AUTTestTone.cpp */,
 				4794C2C122BA55EC008CCD7C /* AUTTestTone.hpp */,
 			);
@@ -251,6 +259,8 @@
 		47561D9D215293AF0012BED1 /* GUI */ = {
 			isa = PBXGroup;
 			children = (
+				47DECE6022EB536700946189 /* ComponentList.cpp */,
+				47DECE5F22EB536700946189 /* ComponentList.h */,
 				47DF3DA422BA51BE006DD7EA /* UnitTestUI.cpp */,
 				47DF3DA522BA51BE006DD7EA /* UnitTestUI.hpp */,
 				47561D9E215293AF0012BED1 /* AserveRootGUI.cpp */,
@@ -553,6 +563,7 @@
 				47DECE5522E88A3B00946189 /* OscillatorViewer.cpp in Sources */,
 				47561DBF215293AF0012BED1 /* AserveRootGUI.cpp in Sources */,
 				47561DC0215293AF0012BED1 /* BitVisualiser.cpp in Sources */,
+				47DECE6122EB536800946189 /* ComponentList.cpp in Sources */,
 				47DECE5822E890A700946189 /* SamplerStateViewer.cpp in Sources */,
 				47DF3DA622BA51BE006DD7EA /* UnitTestUI.cpp in Sources */,
 				47561DC9215293AF0012BED1 /* TransportButtonComponent.cpp in Sources */,
@@ -575,6 +586,7 @@
 				47561DC3215293AF0012BED1 /* ImpulseComponent.cpp in Sources */,
 				A9B4FC2E785724CC1BF9158E /* include_juce_gui_extra.mm in Sources */,
 				31E3DBFE3689BA138EAFDCD3 /* include_juce_opengl.mm in Sources */,
+				47DECE5E22E8C9D700946189 /* AUTDrumSampler.cpp in Sources */,
 				303F25750901AF396EF20ACD /* include_juce_osc.cpp in Sources */,
 				4800F810AA6C51BEA2A4633D /* include_juce_video.mm in Sources */,
 			);
