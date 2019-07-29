@@ -410,7 +410,7 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
         }
     }
     else if (message.getAddressPattern().toString().startsWith(AserveOSC::reset)) {
-        audio.reset();
+        reset();
 //        addMessageToLog("aserveReset()");
     }
     else if (message.getAddressPattern().toString().startsWith(AserveOSC::loadDefaultSounds)) {
@@ -528,4 +528,9 @@ void AserveComs::sendGridMessage (const int x, const int y)
 void AserveComs::setUniTestPtr (AserveUnitTest * test)
 {
     unitTest = test;
+}
+
+void AserveComs::reset ()
+{
+    audio.reset();
 }

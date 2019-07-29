@@ -89,4 +89,33 @@ private:
 
 };
 
+class AserveUnitTestUtilityClass {
+public:
+    static float getFrequency (String inital)
+    {
+        const float freq = inital.fromFirstOccurrenceOf("|", false, false).fromFirstOccurrenceOf("|", false, false).upToFirstOccurrenceOf("|", false, false).getFloatValue();
+        return freq;
+
+    }
+    static int getChannel (String msg)
+    {
+        return msg.fromFirstOccurrenceOf("|", false, false).upToFirstOccurrenceOf("|", false, false).getIntValue();
+        
+
+    }
+    static float mtof (int note)
+    {
+        return 440.0 * pow(2.0, (note-69)/12.0);
+    }
+    static std::vector<float> freqFromNoteSeq (std::vector<int> notes)
+    {
+        std::vector<float> freqs;
+        for (int n : notes) {
+            freqs.push_back(mtof(n));
+        }
+        return freqs;
+    }
+};
+
+
 #endif /* AserveUnitTest_hpp */

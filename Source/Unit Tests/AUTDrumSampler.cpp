@@ -33,7 +33,7 @@ void AUTDrumSampler::runningUnitTest ()
     StringArray results =  getCue(2000, 8);
     if (results.size() != 4) {
         currentState = eTestState::eEndedFail;
-        errorMessages += "Test failed: expected 4 messages recived: " + String(results.size());
+        errorMessages += "Test failed: expected 4 messages received: " + String(results.size());
     }
     else {
         for (int i = 0; i < results.size(); i++) {
@@ -41,7 +41,7 @@ void AUTDrumSampler::runningUnitTest ()
             if (inital.startsWith("playSample")) {
                 const int noteNum = inital.fromFirstOccurrenceOf("|", false, false).getIntValue();
                 if (noteNum != i) {
-                    errorMessages += "Test failed: expected sample number: " + String(i) + " for note number : " + String(notes[i]) + " recived sample number: " + String(noteNum) + " instead";
+                    errorMessages += "Test failed: expected sample number: " + String(i) + " for note number : " + String(notes[i]) + " received sample number: " + String(noteNum) + " instead";
                     currentState = eTestState::eEndedFail;
                 }
 

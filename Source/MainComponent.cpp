@@ -204,7 +204,7 @@ public:
         bitGrid.setBounds(samplerViewer.getX() + ((samplerViewer.getWidth() - 210) * 0.5), samplerViewer.getBottom() + 10, 210, 210);
         
         
-        unitTestGUI.setBounds(getWidth() - panelRightInset, 0, unitTestEnabled ? panelRightInset : 0, getHeight() - bottomDiv);
+        unitTestGUI.setBounds(getWidth() - panelRightInset, 0, unitTestEnabled ? panelRightInset : 0, getHeight() - panelBottomInset);
         
     }
     

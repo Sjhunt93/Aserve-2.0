@@ -84,7 +84,9 @@ UnitTestGUI::UnitTestGUI (AserveComs & _coms) : coms(_coms)
         
     }
     addAndMakeVisible(compList);
-    
+    addAndMakeVisible(results);
+    results.setText("Errors will be shown here: ");
+    results.setMultiLine(true);
 }
 UnitTestGUI::~UnitTestGUI ()
 {
@@ -93,7 +95,8 @@ UnitTestGUI::~UnitTestGUI ()
 
 void UnitTestGUI::paint (Graphics &g)
 {
-    g.fillAll(Colours::white);
+    g.fillAll(Colours::darkgrey);
+    g.setColour(Colours::white);
     g.drawText("Unit Test", 0, 0, getWidth(), 50, Justification::centred);
 }
 void UnitTestGUI::resized ()
@@ -101,7 +104,10 @@ void UnitTestGUI::resized ()
     
     
     compList.setBounds(3, 43, getWidth() - 6, getHeight() - 200);
-    runTest1.setBounds(0, compList.getBottom(), 100, 30);
+    runTest1.setBounds(5, compList.getBottom() + 5, 100, 30);
+    const int dif = (getHeight() - runTest1.getBottom()) - 10;
+    
+    results.setBounds(5, runTest1.getBottom() + 5, getWidth() - 10, dif);
 }
 
 void UnitTestGUI::actionListenerCallback (const String& message)
@@ -115,13 +121,14 @@ void UnitTestGUI::actionListenerCallback (const String& message)
 //            currentTest->setColour(TextButton::ColourIds::buttonColourId, Colours::green);
 //        }
         unitTest->saveToFile();
-        
+        results.setText(unitTest->getErrors());
         
         TestSelector * selector = getSelectorForName(selectedTest);
         if (selector != nullptr) {
             selector->setState(unitTest->getResult());
         }
         unitTest = nullptr;
+        coms.reset();
     }
     if (message.startsWith("Selected:")) {
         String testName = message.fromFirstOccurrenceOf(":", false, false);
@@ -145,6 +152,8 @@ void UnitTestGUI::buttonClicked (Button* btn)
         return;
     }
     if (btn == &runTest1) {
+//        coms.reser
+        coms.reset();
         unitTest = AserveUnitTest::allocateForTest(selectedTest, coms);
         if (unitTest != nullptr) {
             unitTest->addActionListener(this);

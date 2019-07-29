@@ -9,7 +9,7 @@
 #include "AUTMtof.hpp"
 #include "AUTDrumSampler.hpp"
 #include "AUTTestTone.hpp"
-
+#include "AUChordMachine.hpp"
 
 const String AserveUnitTest::TEST_TIMEOUT = "Test Timeout - please check your code for excessive sleeps.\n";
 
@@ -105,6 +105,11 @@ StringArray AserveUnitTest::getCue (int timeout, int messagesToWaitFor, const in
         Thread::sleep(lagInMs);
         counter += lagInMs;
     } while (tt.size() < messagesToWaitFor && counter < timeout);
+    
+    if (!tt.size()) {
+        errorMessages += "No messages received test timed out!";
+    }
+    
     return tt;
 }
 
@@ -184,6 +189,8 @@ AserveUnitTest * AserveUnitTest::allocateForTest (String t, AserveComs & coms)
         case 1:
             return new AUTDrumSampler(coms);
             
+        case 2:
+            return new AUTChordMachine(coms);
         default:
             break;
     }

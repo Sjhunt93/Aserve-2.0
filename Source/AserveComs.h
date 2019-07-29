@@ -44,6 +44,7 @@ public:
     void enableLoggger (bool state);
     
     void setUniTestPtr (AserveUnitTest * test);
+    void reset ();
 private:
     void oscMessageReceived (const OSCMessage& message) override;
     void sendOsc (const int channel, const float frequency, const float amplitude, const int wavetype);
