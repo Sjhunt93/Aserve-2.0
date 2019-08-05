@@ -12,6 +12,7 @@
 #include "AUChordMachine.hpp"
 #include "AUTNoteoff.hpp"
 #include "AUTScaleQuantiser.hpp"
+#include "AUTHighFreqTest.hpp"
 
 const String AserveUnitTest::TEST_TIMEOUT = "Test Timeout - please check your code for excessive sleeps.\n";
 
@@ -201,16 +202,16 @@ AserveUnitTest * AserveUnitTest::allocateForTest (String t, AserveComs & coms)
     switch (index) {
         case 0:
             return new AUTMtof(coms);
-            
         case 1:
             return new AUTDrumSampler(coms);
-            
         case 2:
             return new AUTChordMachine(coms);
         case 3:
             return new AUTNoteoff(coms);
         case 4:
             return new AUTScaleQuantiser(coms);
+        case 5:
+            return new AUTHighFreqTest(coms);
         default:
             break;
     }
