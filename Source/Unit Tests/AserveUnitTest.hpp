@@ -89,13 +89,23 @@ private:
 
 };
 
-class AserveUnitTestUtilityClass {
-public:
+namespace AserveUnitTestUtilityClass {
+
     static float getFrequency (String inital)
     {
         const float freq = inital.fromFirstOccurrenceOf("|", false, false).fromFirstOccurrenceOf("|", false, false).upToFirstOccurrenceOf("|", false, false).getFloatValue();
         return freq;
 
+    }
+    static float getAmplitude (String inital)
+    {
+        /// osc | chan | freq | amp |
+        const float amp = inital.fromFirstOccurrenceOf("|", false, false).
+                                fromFirstOccurrenceOf("|", false, false).
+                                fromFirstOccurrenceOf("|", false, false).
+                                upToFirstOccurrenceOf("|", false, false).getFloatValue();
+        return amp;
+        
     }
     static int getChannel (String msg)
     {
@@ -107,6 +117,10 @@ public:
     {
         return 440.0 * pow(2.0, (note-69)/12.0);
     }
+    static bool compareFreq (float f1, float f2)
+    {
+        return ((int) f1) == ((int) f2);
+    }
     static std::vector<float> freqFromNoteSeq (std::vector<int> notes)
     {
         std::vector<float> freqs;
@@ -114,6 +128,15 @@ public:
             freqs.push_back(mtof(n));
         }
         return freqs;
+    }
+    //formatForExpectedValues
+    static String incorrectValueForNoteNumber (int noteNumber, String expected, String recived)
+    {
+        return "Incorrect value received for note number: " + String(noteNumber) + " value expected: " + expected + " value received: " + recived;
+    }
+    static String incorrectNumberOfMessages (String expected, String recived)
+    {
+        return "Incorrect number of messages received. Expected: " + expected + " received: " + recived;
     }
 };
 
