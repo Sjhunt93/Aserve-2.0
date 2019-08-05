@@ -132,11 +132,15 @@ namespace AserveUnitTestUtilityClass {
     //formatForExpectedValues
     static String incorrectValueForNoteNumber (int noteNumber, String expected, String recived)
     {
-        return "Incorrect value received for note number: " + String(noteNumber) + " value expected: " + expected + " value received: " + recived;
+        return "Incorrect value received for note number: " + String(noteNumber) + " value expected: " + expected + " value received: " + recived + "\n";
     }
     static String incorrectNumberOfMessages (String expected, String recived)
     {
-        return "Incorrect number of messages received. Expected: " + expected + " received: " + recived;
+        return "Incorrect number of messages received. Expected: " + expected + " received: " + recived + "\n";
+    }
+    static String incorrectMessageRecived (String expected, String recived)
+    {
+        return "Incorrect message received. Expected: " + expected + " received: " + recived + "\n";
     }
 };
 

@@ -50,6 +50,7 @@
 		47DECE6122EB536800946189 /* ComponentList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE6022EB536700946189 /* ComponentList.cpp */; };
 		47DECE6422EF4ED400946189 /* AUChordMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE6222EF4ED400946189 /* AUChordMachine.cpp */; };
 		47DECE6A22F83A9000946189 /* AUTNoteoff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE6822F83A9000946189 /* AUTNoteoff.cpp */; };
+		47DECE6D22F865E400946189 /* AUTScaleQuantiser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE6B22F865E400946189 /* AUTScaleQuantiser.cpp */; };
 		47DF3DA622BA51BE006DD7EA /* UnitTestUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DF3DA422BA51BE006DD7EA /* UnitTestUI.cpp */; };
 		4800F810AA6C51BEA2A4633D /* include_juce_video.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AA4C5675C61C61CCB6E330A /* include_juce_video.mm */; };
 		4E3625E9ACE0F69C7A3D465B /* include_juce_gui_basics.mm in Sources */ = {isa = PBXBuildFile; fileRef = D83AD2045330F6198B350DA8 /* include_juce_gui_basics.mm */; };
@@ -159,6 +160,8 @@
 		47DECE6322EF4ED400946189 /* AUChordMachine.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AUChordMachine.hpp; sourceTree = "<group>"; };
 		47DECE6822F83A9000946189 /* AUTNoteoff.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AUTNoteoff.cpp; sourceTree = "<group>"; };
 		47DECE6922F83A9000946189 /* AUTNoteoff.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AUTNoteoff.hpp; sourceTree = "<group>"; };
+		47DECE6B22F865E400946189 /* AUTScaleQuantiser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AUTScaleQuantiser.cpp; sourceTree = "<group>"; };
+		47DECE6C22F865E400946189 /* AUTScaleQuantiser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AUTScaleQuantiser.hpp; sourceTree = "<group>"; };
 		47DF3DA422BA51BE006DD7EA /* UnitTestUI.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UnitTestUI.cpp; sourceTree = "<group>"; };
 		47DF3DA522BA51BE006DD7EA /* UnitTestUI.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UnitTestUI.hpp; sourceTree = "<group>"; };
 		4A745CE13363691560632D19 /* JuceHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JuceHeader.h; path = ../../JuceLibraryCode/JuceHeader.h; sourceTree = SOURCE_ROOT; };
@@ -243,6 +246,8 @@
 				47DECE6222EF4ED400946189 /* AUChordMachine.cpp */,
 				47DECE6822F83A9000946189 /* AUTNoteoff.cpp */,
 				47DECE6922F83A9000946189 /* AUTNoteoff.hpp */,
+				47DECE6B22F865E400946189 /* AUTScaleQuantiser.cpp */,
+				47DECE6C22F865E400946189 /* AUTScaleQuantiser.hpp */,
 			);
 			name = "Unit Tests";
 			path = "../../Source/Unit Tests";
@@ -574,6 +579,7 @@
 				47DECE5522E88A3B00946189 /* OscillatorViewer.cpp in Sources */,
 				47DECE6A22F83A9000946189 /* AUTNoteoff.cpp in Sources */,
 				47561DBF215293AF0012BED1 /* AserveRootGUI.cpp in Sources */,
+				47DECE6D22F865E400946189 /* AUTScaleQuantiser.cpp in Sources */,
 				47561DC0215293AF0012BED1 /* BitVisualiser.cpp in Sources */,
 				47DECE6122EB536800946189 /* ComponentList.cpp in Sources */,
 				47DECE5822E890A700946189 /* SamplerStateViewer.cpp in Sources */,
