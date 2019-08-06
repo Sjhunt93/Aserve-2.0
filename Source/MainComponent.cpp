@@ -23,7 +23,7 @@
 #include "UnitTestUI.hpp"
 #include "OscillatorViewer.hpp"
 #include "SamplerStateViewer.hpp"
-
+#include "AUTBulkTester.hpp"
 #undef SHOW_CODE_INPUT
 
 //==============================================================================
@@ -47,7 +47,8 @@ public:
     impulse(aserveComs),
     aserveComs(audioMain),
     MIDIIO(aserveComs),
-    unitTestGUI(aserveComs)
+    unitTestGUI(aserveComs),
+    autBulk(aserveComs)
     {
         setAudioChannels (2, 2);
         
@@ -248,6 +249,7 @@ public:
         else if (topLevelMenuIndex == 3) // View
         {
             pmenu.addItem(1, "Unit test setup", true);
+            pmenu.addItem(2, "Run unit tests full", true);
         }
         return pmenu;
     }
@@ -295,22 +297,30 @@ public:
             repaint();
         }
         else if (topLevelMenuIndex == 3) {
-            //            AlertWindow window;
-            AlertWindow al("Unit Test Setup", "Only mess around here if you are having problems with your unit tests saving...", AlertWindow::QuestionIcon);
-            al.addTextBlock("Enter Your project path here:");
-            al.addTextEditor("Project Path", AserveUnitTest::projectPath);
-            al.addTextBlock("Enter Your solutions path here:");
-            al.addTextEditor("Solutions Path", AserveUnitTest::solutionsPath);
-            
-            al.addButton("Ok", 1);
-            al.addButton("Cancel", 2);
-            
-            const int value = al.runModalLoop();
-            if (value == 1) {
-                const String project = al.getTextEditor("Project Path")->getText();
-                const String solutions = al.getTextEditor("Solutions Path")->getText();
-            }
+            if (menuItemID == 1) {
+                //            AlertWindow window;
+                AlertWindow al("Unit Test Setup", "Only mess around here if you are having problems with your unit tests saving...", AlertWindow::QuestionIcon);
+                al.addTextBlock("Enter Your project path here:");
+                al.addTextEditor("Project Path", AserveUnitTest::projectPath);
+                al.addTextBlock("Enter Your solutions path here:");
+                al.addTextEditor("Solutions Path", AserveUnitTest::solutionsPath);
+                
+                al.addButton("Ok", 1);
+                al.addButton("Cancel", 2);
+                
+                const int value = al.runModalLoop();
+                if (value == 1) {
+                    const String project = al.getTextEditor("Project Path")->getText();
+                    const String solutions = al.getTextEditor("Solutions Path")->getText();
+                }
 
+            }
+            else if (menuItemID == 2) {
+                std::cout << "Runnning megatests \n";
+                autBulk.runBulkTest(File("/Users/sj4-hunt/Documents/Code/Aserve Unit Test Executer/Submissions/"));
+                
+            }
+            
         }
     }
     
@@ -352,7 +362,7 @@ private:
 
     // unit tester
     UnitTestGUI         unitTestGUI;
-    
+    AUTBulkTester       autBulk;
     // enable/disable logging of messages
     bool                logEnabled;
     

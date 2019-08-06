@@ -32,6 +32,7 @@ void AUTFileRead::runningUnitTest ()
         noteNumbers.push_back((arc4random() % 12) + 48);
     }
     {
+        coms.addUnitTestMessageToLog("Writing notes numbers to file..");
         FileOutputStream stream(file);
         if (stream.openedOk()) {
             for (int num : noteNumbers) {
@@ -39,8 +40,10 @@ void AUTFileRead::runningUnitTest ()
             }
             
         }
+        coms.addUnitTestMessageToLog("File saved..");
     }
     
+    coms.addUnitTestMessageToLog("waiting for note messages from project..");
     StringArray messages = getCue(60 * 1000, 15);
     if (messages.size() == 15) {
         int nInc = 0;
