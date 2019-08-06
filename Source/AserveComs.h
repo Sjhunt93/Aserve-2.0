@@ -45,6 +45,8 @@ public:
     
     void setUniTestPtr (AserveUnitTest * test);
     void reset ();
+    
+    void addUnitTestMessageToLog (String message);
 private:
     void oscMessageReceived (const OSCMessage& message) override;
     void sendOsc (const int channel, const float frequency, const float amplitude, const int wavetype);

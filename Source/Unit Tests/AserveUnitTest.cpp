@@ -13,6 +13,10 @@
 #include "AUTNoteoff.hpp"
 #include "AUTScaleQuantiser.hpp"
 #include "AUTHighFreqTest.hpp"
+#include "AUTVectorSequencer.hpp"
+#include "AUTFileRead.hpp"
+#include "AUFileWrite.hpp"
+
 
 const String AserveUnitTest::TEST_TIMEOUT = "Test Timeout - please check your code for excessive sleeps.\n";
 
@@ -101,7 +105,13 @@ StringArray AserveUnitTest::getAndClearMessageLog ()
 
 StringArray AserveUnitTest::getCue (int timeout, int messagesToWaitFor, const int lagInMs)
 {
+    
     StringArray tt;
+    
+    if (threadShouldExit()) {
+        return tt;
+    }
+    
     int counter = 0;
     const bool expectsMessages = messagesToWaitFor > 0;
     
@@ -118,7 +128,7 @@ StringArray AserveUnitTest::getCue (int timeout, int messagesToWaitFor, const in
         tt.addArray(getAndClearMessageLog());
         Thread::sleep(lagInMs);
         counter += lagInMs;
-    } while (ending());
+    } while (ending() && !threadShouldExit());
     
     
     
@@ -212,6 +222,12 @@ AserveUnitTest * AserveUnitTest::allocateForTest (String t, AserveComs & coms)
             return new AUTScaleQuantiser(coms);
         case 5:
             return new AUTHighFreqTest(coms);
+        case 6:
+            return new AUTVectorSequencer(coms);
+        case 7:
+            return new AUTFileRead(coms);
+        case 8:
+            return new AUTFileWrite(coms);
         default:
             break;
     }

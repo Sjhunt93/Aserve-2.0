@@ -9,7 +9,7 @@
 
 
 
-AUTHighFreqTest::AUTHighFreqTest (AserveComs & coms) : AserveUnitTest(coms, "Fix Noteoff", "unit test 4")
+AUTHighFreqTest::AUTHighFreqTest (AserveComs & coms) : AserveUnitTest(coms, "HF Test", "unit test 6")
 {
     
 }

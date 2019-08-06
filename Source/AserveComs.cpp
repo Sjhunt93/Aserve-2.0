@@ -78,6 +78,7 @@ void AserveComs::sendMidiMessageFromImpulse (MidiMessage midiMessage)
         message.addArgument(midiMessage.getVelocity());
         message.addArgument(midiMessage.getChannel());
         sender.send(message);
+        
     }
     else if (midiMessage.isController()) {
         const int cc = midiMessage.getControllerNumber();
@@ -108,6 +109,9 @@ void AserveComs::sendMidiMessageFromImpulse (MidiMessage midiMessage)
 
     //plus we allways send MIDI for the more advance stuff..
     
+    if (unitTest != nullptr) {
+        addMessageToLog(String("Unit Test -> Send: ") + midiMessage.getDescription());
+    }
 }
 
 bool AserveComs::checkAndClearRedraw ()
@@ -152,7 +156,7 @@ void AserveComs::addMessageToLog (String message)
             
             
         }
-        if (messageLog.size() == 30) {
+        if (messageLog.size() == 30 && unitTest != nullptr) {
             messageLog.add("ERROR! Message log overloaded!");
         }
         
@@ -533,4 +537,10 @@ void AserveComs::setUniTestPtr (AserveUnitTest * test)
 void AserveComs::reset ()
 {
     audio.reset();
+}
+
+void AserveComs::addUnitTestMessageToLog (String message)
+{
+    addMessageToLog(String("Unit Test -> Log: ") + message);
+
 }

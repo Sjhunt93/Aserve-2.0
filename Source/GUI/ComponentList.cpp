@@ -125,6 +125,7 @@ ComponentListViewport::ComponentListViewport () : cl(true)
 {
     addAndMakeVisible(viewport);
     viewport.setViewedComponent(&cl, false);
+    viewport.setScrollBarsShown(true, false);
 }
 ComponentListViewport::~ComponentListViewport ()
 {

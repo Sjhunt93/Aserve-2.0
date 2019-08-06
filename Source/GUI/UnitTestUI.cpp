@@ -97,7 +97,7 @@ void UnitTestGUI::paint (Graphics &g)
 {
     g.fillAll(Colours::darkgrey);
     g.setColour(Colours::white);
-    g.drawText("Unit Test", 0, 0, getWidth(), 50, Justification::centred);
+    g.drawText("Unit Tests", 0, 0, getWidth(), 50, Justification::centred);
 }
 void UnitTestGUI::resized ()
 {
@@ -129,6 +129,8 @@ void UnitTestGUI::actionListenerCallback (const String& message)
         }
         unitTest = nullptr;
         coms.reset();
+        runTest1.setButtonText("Run Selected Test");
+
     }
     if (message.startsWith("Selected:")) {
         String testName = message.fromFirstOccurrenceOf(":", false, false);
@@ -149,13 +151,31 @@ void UnitTestGUI::actionListenerCallback (const String& message)
 void UnitTestGUI::buttonClicked (Button* btn)
 {
     if (unitTest != nullptr) {
+        unitTest->signalThreadShouldExit();
+        while (unitTest->isThreadRunning()) {
+            Thread::sleep(10);
+        }
+        unitTest = nullptr;
+        coms.reset();
+        runTest1.setButtonText("Run Selected Test");
+        
+        TestSelector * selector = getSelectorForName(selectedTest);
+        if (selector != nullptr) {
+            selector->setState(AserveUnitTest::eNone);
+        }
+        results.setText("Test Stopped!");
         return;
+        
     }
     if (btn == &runTest1) {
 //        coms.reser
         coms.reset();
+        
         unitTest = AserveUnitTest::allocateForTest(selectedTest, coms);
         if (unitTest != nullptr) {
+            runTest1.setButtonText("Stop Test");
+            results.setText("");
+
             unitTest->addActionListener(this);
             unitTest->startUnitTest(1000);
             TestSelector * selector = getSelectorForName(selectedTest);

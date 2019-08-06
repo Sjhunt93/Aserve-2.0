@@ -119,6 +119,9 @@ public:
                 String finalString = (Time::getCurrentTime().toString(false, true) + " :: " + st + "\n");
                 
                 logText.setColour(TextEditor::ColourIds::textColourId , st.startsWith("ERROR") ? Colours::crimson : Colour(59, 252,52));
+                if (st.startsWith("Unit")) {
+                    logText.setColour( TextEditor::ColourIds::textColourId , st.contains("Log:") ? Colours::darkorange : Colours::blueviolet);
+                }
                 
                 logText.insertTextAtCaret(finalString);
             }
