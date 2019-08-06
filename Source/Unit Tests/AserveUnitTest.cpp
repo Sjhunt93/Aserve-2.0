@@ -16,7 +16,7 @@
 #include "AUTVectorSequencer.hpp"
 #include "AUTFileRead.hpp"
 #include "AUFileWrite.hpp"
-
+#include "AUTAlgorithms.hpp"
 
 const String AserveUnitTest::TEST_TIMEOUT = "Test Timeout - please check your code for excessive sleeps.\n";
 
@@ -228,6 +228,8 @@ AserveUnitTest * AserveUnitTest::allocateForTest (String t, AserveComs & coms)
             return new AUTFileRead(coms);
         case 8:
             return new AUTFileWrite(coms);
+        case 9:
+            return new AUTAlgorithms(coms);
         default:
             break;
     }
