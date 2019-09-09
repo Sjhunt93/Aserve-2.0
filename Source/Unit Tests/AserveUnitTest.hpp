@@ -107,20 +107,23 @@ namespace AserveUnitTestUtilityClass {
         return amp;
         
     }
+  
     static int getChannel (String msg)
     {
         return msg.fromFirstOccurrenceOf("|", false, false).upToFirstOccurrenceOf("|", false, false).getIntValue();
-        
-
+    
     }
+    
     static float mtof (int note)
     {
         return 440.0 * pow(2.0, (note-69)/12.0);
     }
+  
     static bool compareFreq (float f1, float f2)
     {
         return ((int) f1) == ((int) f2);
     }
+  
     static std::vector<float> freqFromNoteSeq (std::vector<int> notes)
     {
         std::vector<float> freqs;

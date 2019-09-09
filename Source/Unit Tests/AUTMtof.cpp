@@ -29,7 +29,9 @@ void AUTMtof::runningUnitTest ()
 
         const String inital = results[0];
         if (inital.startsWith("osc")) {
-            float testF = 440.0 * pow(2.0, (note-69)/12.0);
+        
+            float testF = AserveUnitTestUtilityClass::mtof(note); //440.0 * pow(2.0, (note-69)/12.0);
+          
             const float freq = inital.fromFirstOccurrenceOf("|", false, false).fromFirstOccurrenceOf("|", false, false).upToFirstOccurrenceOf("|", false, false).getFloatValue();
 
             if ((int)testF != (int)freq) {
