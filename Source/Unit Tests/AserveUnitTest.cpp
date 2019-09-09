@@ -21,8 +21,8 @@
 const String AserveUnitTest::TEST_TIMEOUT = "Test Timeout - please check your code for excessive sleeps.\n";
 
 #ifdef DEBUG
-    String AserveUnitTest::solutionsPath = "/Users/sj4-hunt/Downloads/IAP-2018-2019-master 6/Solutions/Unit Tests";
-    String AserveUnitTest::projectPath = "/Users/sj4-hunt/Downloads/IAP-2018-2019-master 6/iapProj/Source";
+    String AserveUnitTest::solutionsPath = "~/Desktop/IAP-2019-2020-master/Solutions/Unit Tests";
+    String AserveUnitTest::projectPath = "~/Desktop/IAP-2019-2020-master/iapProj/Source";
 #endif
 
 AserveUnitTest::AserveUnitTest (AserveComs & _coms, String unitTestName, String fn) : Thread("Unit Tester"), coms(_coms), testName(unitTestName), folderName(fn)
