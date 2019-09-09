@@ -17,7 +17,7 @@ namespace AUT
 {
     static const int nbrOfTests = 10;
     static const char * unitTestNames [nbrOfTests] = {
-        "Midi Notes to Frequencies ", "Drum Sampler", "Chord Machine", "Monophonic Synth", "Scale Quantisation", "High Frequency Loop ", "Music Sequencer", "Reading From a File", "Writing To a File", "Sorting"
+        "Midi Notes to Frequencies ", "Drum Sampler", "Chord Machine", "Fix NoteOff (MonoSynth)", "Scale Quantisation", "High Frequency Loop ", "Music Sequencer", "Reading From a File", "Writing To a File", "Sorting"
     };
 }
 

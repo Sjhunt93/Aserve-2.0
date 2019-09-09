@@ -82,10 +82,22 @@ void AUTNoteoff::runningUnitTest ()
         MidiMessage messageOn(0x90, testNoteA, 0);
         coms.sendMidiMessageFromImpulse(messageOn);
         StringArray results = getCue(1000, 0);
+      
         if (results.size() != 0) {
-            errorMessages += "ERROR: Oscillator state switched off. Oscillator should only be switched of when note off note number matches the oscillator playing\n";
-            errorMessages += "Oscillator playing note number: " + String(testNoteB) + " oscillator switched off by note off message with note number: " + String(testNoteA) + "\n";
-//            errorMessages += incorrectNumberOfMessages("0", String(results.size()));
+        
+          const String inital = results[0];
+          if ( inital.startsWith("osc") )
+          {
+            errorMessages += "ERROR: Oscillator state should only be updated when note off note number matches the oscillator playing\n";
+            
+            const float newAmp = inital.fromFirstOccurrenceOf("|", false, false).fromFirstOccurrenceOf("|", false, false).fromFirstOccurrenceOf("|", false, false).upToFirstOccurrenceOf("|", false, false).getFloatValue();
+          
+            if ( newAmp != 0 )
+              errorMessages += "ERROR: Oscillator amplitude should be zero when note off note number matches the oscillator playing\n";
+          }
+          
+          
+            //            errorMessages += incorrectNumberOfMessages("0", String(results.size()));
             currentState = eTestState::eEndedFail;
             return;
         }
