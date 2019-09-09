@@ -169,12 +169,25 @@ void AserveUnitTest::saveToFile ()
 {
     File root(solutionsPath);
     File fFolder = root.getChildFile(folderName);
-    if (!fFolder.exists() ) {
-        fFolder.createDirectory();
+
+    // do not mess with directory structure on disk
+    // the IAP github repository should contain all required directory stubs
+    if( File(solutionsPath).exists() == false )
+    {
+        String msg = "Invalid unit test solutions path ";
+               msg += solutionsPath;
+        coms.addUnitTestMessageToLog(msg);
     }
-    else if (fFolder.isDirectory()) {
-        //
-        
+  
+    if( File(projectPath).exists() == false )
+    {
+        String msg = "Invalid unit test project path ";
+               msg += projectPath;
+        coms.addUnitTestMessageToLog(msg);
+    }
+  
+    if ( fFolder.exists() && fFolder.isDirectory() ) {
+      
         File codeFolder = File(projectPath);
         File cpp = codeFolder.getChildFile("IAP.cpp");
         File h = codeFolder.getChildFile("IAP.h");

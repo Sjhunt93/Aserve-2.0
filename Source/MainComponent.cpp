@@ -317,8 +317,12 @@ public:
                 
                 const int value = al.runModalLoop();
                 if (value == 1) {
-                    const String project = al.getTextEditor("Project Path")->getText();
-                    const String solutions = al.getTextEditor("Solutions Path")->getText();
+                    //const String project = al.getTextEditor("Project Path")->getText();
+                    //const String solutions = al.getTextEditor("Solutions Path")->getText();
+                  
+                    // update the unit test paths
+                    AserveUnitTest::projectPath = al.getTextEditor("Project Path")->getText();
+                    AserveUnitTest::solutionsPath = al.getTextEditor("Solutions Path")->getText();
                 }
 
             }
