@@ -17,7 +17,7 @@ namespace AUT
 {
     static const int nbrOfTests = 10;
     static const char * unitTestNames [nbrOfTests] = {
-        "Midi Notes to Frequencies ", "Drum Sampler", "Chord Machine", "Monophonic Synth", "Scale Quantisation", "High Frequency Loop ", "Music Sequencer", "Reading From a File", "Writing To a File", "Sorting"
+        "Midi Notes to Frequencies ", "Drum Sampler", "Chord Machine", "Fix NoteOff (MonoSynth)", "Scale Quantisation", "High Frequency Loop ", "Music Sequencer", "Reading From a File", "Writing To a File", "Sorting"
     };
 }
 
@@ -107,20 +107,23 @@ namespace AserveUnitTestUtilityClass {
         return amp;
         
     }
+  
     static int getChannel (String msg)
     {
         return msg.fromFirstOccurrenceOf("|", false, false).upToFirstOccurrenceOf("|", false, false).getIntValue();
-        
-
+    
     }
+    
     static float mtof (int note)
     {
         return 440.0 * pow(2.0, (note-69)/12.0);
     }
+  
     static bool compareFreq (float f1, float f2)
     {
         return ((int) f1) == ((int) f2);
     }
+  
     static std::vector<float> freqFromNoteSeq (std::vector<int> notes)
     {
         std::vector<float> freqs;

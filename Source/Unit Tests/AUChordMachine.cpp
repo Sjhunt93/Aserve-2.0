@@ -46,17 +46,27 @@ void AUTChordMachine::runningUnitTest ()
         StringArray results =  getCue(2000, 3);
         std::vector<float> freqReceived;
         std::vector<int> channels;
-        for (String str : results) {
-            if (str.startsWith("osc")) {
-                channels.push_back( AserveUnitTestUtilityClass::getChannel(str) );
-                freqReceived.push_back(AserveUnitTestUtilityClass::getFrequency(str));
-            }
-            else {
-                errorMessages += "Test failed: incorrect message type recieved";
-                return;
-            }
+      
+        if ( results.size() ) // process each result
+        {
+          for (String str : results) {
+              if (str.startsWith("osc")) {
+                  channels.push_back( AserveUnitTestUtilityClass::getChannel(str) );
+                  freqReceived.push_back(AserveUnitTestUtilityClass::getFrequency(str));
+              }
+              else {
+                  currentState = eTestState::eEndedFail;
+                  errorMessages += "Test failed: incorrect message type recieved";
+                  return;
+              }
+          }
         }
-        
+        else  // no results, test fails with timeout
+        {
+          currentState = eTestState::eEndedFail;
+          return;
+        }
+      
         if (channels.size() == 3) {
             auto chan = channels;
             std::sort(chan.begin(), chan.end());
@@ -94,6 +104,7 @@ void AUTChordMachine::runningUnitTest ()
         Thread::sleep(500);
         
     }
+    
     if (currentState != eTestState::eEndedFail) {
         currentState = eTestState::eEndedPass;
         errorMessages = "ALL Passed";

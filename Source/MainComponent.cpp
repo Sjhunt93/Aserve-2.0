@@ -160,10 +160,10 @@ public:
         panelLeftInset = 0;
         panelRightInset = 0;
         panelBottomInset = 0;
-        
+      
         if (impulsePanelEnabled) {  panelBottomInset = 240; }
         if (oscPanelEnabled) {      panelLeftInset = 200; }
-        if (gridPanelEnabled) {     panelRightInset = 250; }
+        if (gridPanelEnabled || unitTestEnabled) { panelRightInset = 250; }
     }
     
     //=======================================================================
@@ -281,7 +281,10 @@ public:
             else if (menuItemID == 3) // Bit grid
             {
                 gridPanelEnabled = !gridPanelEnabled;
+                unitTestEnabled = false; // bit grid and unit test panel are mutually exclusive
+              
                 bitGrid.setVisible(gridPanelEnabled);
+                unitTestGUI.setVisible(unitTestEnabled);
             }
             else if (menuItemID == 4) // Impulse
             {
@@ -291,6 +294,10 @@ public:
             else if (menuItemID == 5)
             {
                 unitTestEnabled = !unitTestEnabled;
+                gridPanelEnabled = false; // bit grid and unit test panel are mutually exclusive
+              
+                bitGrid.setVisible(gridPanelEnabled);
+                unitTestGUI.setVisible(unitTestEnabled);
             }
             
             resized();
@@ -310,8 +317,12 @@ public:
                 
                 const int value = al.runModalLoop();
                 if (value == 1) {
-                    const String project = al.getTextEditor("Project Path")->getText();
-                    const String solutions = al.getTextEditor("Solutions Path")->getText();
+                    //const String project = al.getTextEditor("Project Path")->getText();
+                    //const String solutions = al.getTextEditor("Solutions Path")->getText();
+                  
+                    // update the unit test paths
+                    AserveUnitTest::projectPath = al.getTextEditor("Project Path")->getText();
+                    AserveUnitTest::solutionsPath = al.getTextEditor("Solutions Path")->getText();
                 }
 
             }

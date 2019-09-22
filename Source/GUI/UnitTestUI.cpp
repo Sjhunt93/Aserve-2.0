@@ -150,6 +150,7 @@ void UnitTestGUI::actionListenerCallback (const String& message)
 
 void UnitTestGUI::buttonClicked (Button* btn)
 {
+    // if a test is running
     if (unitTest != nullptr) {
         unitTest->signalThreadShouldExit();
         while (unitTest->isThreadRunning()) {
@@ -165,10 +166,9 @@ void UnitTestGUI::buttonClicked (Button* btn)
         }
         results.setText("Test Stopped!");
         return;
-        
     }
+  
     if (btn == &runTest1) {
-//        coms.reser
         coms.reset();
         
         unitTest = AserveUnitTest::allocateForTest(selectedTest, coms);
@@ -183,9 +183,10 @@ void UnitTestGUI::buttonClicked (Button* btn)
                 selector->setState(AserveUnitTest::eRunning);
             }
         }
-        
-        
-        
+        else
+        {
+          results.setText("ERROR - cannot start test");
+        }
     }
     
 

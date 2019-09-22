@@ -136,11 +136,11 @@ StringArray AserveComs::getAndClearMessageLog ()
 void AserveComs:: enableLoggger (bool state)
 {
     if (!state) {
-        addMessageToLog("Message Log Disabled");
+        addMessageToLog("Message Logging Disabled");
     }
     logEnabled.set(state);
     if (state) {
-        addMessageToLog("Message Log Enabled");
+        addMessageToLog("Message Logging Enabled");
     }
 }
 
