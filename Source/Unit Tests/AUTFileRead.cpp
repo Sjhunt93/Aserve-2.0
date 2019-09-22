@@ -44,7 +44,7 @@ void AUTFileRead::runningUnitTest ()
     }
     
     coms.addUnitTestMessageToLog("waiting for note messages from project..");
-    StringArray messages = getCue(60 * 1000, 15);
+    StringArray messages = getCue(20 * 1000, 15);
     if (messages.size() == 15) {
         int nInc = 0;
         
