@@ -40,6 +40,8 @@ namespace AserveOSC
     static const String mode = aserve + "mode";
     
     static const String pan = aserve + "pan";
+    
+    static const String fPath = aserve + "path";
 }
 
 
@@ -503,6 +505,23 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
                 addMessageToLog(message);
             }
             
+        }
+    }
+    else if (message.getAddressPattern().toString().startsWith(AserveOSC::fPath)) {
+        if (message.size() == 1) {
+            if (message[0].isString()) {
+                File fPath = message[0].getString();
+                if (fPath.exists()) {
+                    AserveUnitTest::projectPath = fPath.getFullPathName();
+                    File fSol = fPath.getParentDirectory().getParentDirectory();
+                    fSol = fSol.getChildFile("Solutions");
+                    fSol = fSol.getChildFile("Unit Tests");
+                    if (fPath.exists()) {
+                        AserveUnitTest::solutionsPath = fSol.getFullPathName();
+                    }
+                    
+                }
+            }
         }
     }
 

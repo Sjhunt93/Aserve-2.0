@@ -249,7 +249,10 @@ public:
         else if (topLevelMenuIndex == 3) // View
         {
             pmenu.addItem(1, "Unit test setup", true);
-            pmenu.addItem(2, "Run unit tests full", true);
+//#ifdef DEBUG
+#warning CHECK HERE WHEN MARKING
+//            pmenu.addItem(2, "Run unit tests full", true);
+//#endif
         }
         return pmenu;
     }
@@ -306,7 +309,7 @@ public:
         else if (topLevelMenuIndex == 3) {
             if (menuItemID == 1) {
                 //            AlertWindow window;
-                AlertWindow al("Unit Test Setup", "Only mess around here if you are having problems with your unit tests saving...", AlertWindow::QuestionIcon);
+                AlertWindow al("Unit Test Setup", "Speak to a member of staff before altering these settings!!", AlertWindow::QuestionIcon);
                 al.addTextBlock("Enter Your project path here:");
                 al.addTextEditor("Project Path", AserveUnitTest::projectPath);
                 al.addTextBlock("Enter Your solutions path here:");

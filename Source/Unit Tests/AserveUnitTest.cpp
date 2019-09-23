@@ -23,6 +23,9 @@ const String AserveUnitTest::TEST_TIMEOUT = "Test Timeout - please check your co
 #ifdef DEBUG
     String AserveUnitTest::solutionsPath = "~/Desktop/IAP-2019-2020-master/Solutions/Unit Tests";
     String AserveUnitTest::projectPath = "~/Desktop/IAP-2019-2020-master/iapProj/Source";
+#else
+    String AserveUnitTest::solutionsPath = "";
+    String AserveUnitTest::projectPath = "";
 #endif
 
 AserveUnitTest::AserveUnitTest (AserveComs & _coms, String unitTestName, String fn) : Thread("Unit Tester"), coms(_coms), testName(unitTestName), folderName(fn)
