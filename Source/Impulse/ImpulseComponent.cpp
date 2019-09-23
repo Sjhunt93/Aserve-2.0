@@ -42,6 +42,8 @@ ImpulseController::~ImpulseController()
 
 void ImpulseController::paint (Graphics& g)
 {
+    g.setColour(Colours::lightgrey);
+    g.fillAll();
     g.setColour (Colours::darkred);
     Path p;
     p.startNewSubPath ({30.0f, 0.0f});

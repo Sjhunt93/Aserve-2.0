@@ -38,10 +38,10 @@ void BitVisualiser::paint (Graphics & g)
 //    jassert(getWidth() == getHeight());
     
     float size = ((getWidth()-2) / 16);
-  
+  g.fillAll(Colours::darkgrey);
     g.setColour(Colours::white);
     g.drawText("Bit Grid", 0, 0, getWidth(), 30, Justification::centred);
-
+    
     for (int y = 0; y < 16; y++) {
         for (int x = 0; x < 16; x++) {
             if (pixelGrid[y] & 1 << (15-x)) {

@@ -12,6 +12,8 @@
 		31E3DBFE3689BA138EAFDCD3 /* include_juce_opengl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 471D2DA4F77738F73EDA55C1 /* include_juce_opengl.mm */; };
 		36CF46A3B95EEF538D119736 /* include_juce_audio_formats.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4E5894026300C039FDC5B510 /* include_juce_audio_formats.mm */; };
 		387444C9FF55F2EA154A9B1E /* include_juce_data_structures.mm in Sources */ = {isa = PBXBuildFile; fileRef = E92A5BFB7C91453118356E81 /* include_juce_data_structures.mm */; };
+		471BF7C82231361D00339211 /* AserveUnitTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 471BF7C62231361D00339211 /* AserveUnitTest.cpp */; };
+		471BF7CB22313B5B00339211 /* AUTMtof.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 471BF7C922313B5B00339211 /* AUTMtof.cpp */; };
 		47561DB8215293AF0012BED1 /* AserveComs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47561D8E215293AF0012BED1 /* AserveComs.cpp */; };
 		47561DBA215293AF0012BED1 /* AserveOscillators.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47561D93215293AF0012BED1 /* AserveOscillators.cpp */; };
 		47561DBB215293AF0012BED1 /* AudioFilePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47561D95215293AF0012BED1 /* AudioFilePlayer.cpp */; };
@@ -40,6 +42,22 @@
 		47561DDC215394A70012BED1 /* sd.WAV in Resources */ = {isa = PBXBuildFile; fileRef = 47561DD3215394A70012BED1 /* sd.WAV */; };
 		47561DDD215394A70012BED1 /* tapstretch.aif in Resources */ = {isa = PBXBuildFile; fileRef = 47561DD4215394A70012BED1 /* tapstretch.aif */; };
 		47561DE02154DF720012BED1 /* MIDIIO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47561DDE2154DF720012BED1 /* MIDIIO.cpp */; };
+		4794C2C222BA55EC008CCD7C /* AUTTestTone.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4794C2C022BA55EC008CCD7C /* AUTTestTone.cpp */; };
+		47DECE5522E88A3B00946189 /* OscillatorViewer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE5322E88A3B00946189 /* OscillatorViewer.cpp */; };
+		47DECE5822E890A700946189 /* SamplerStateViewer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE5622E890A700946189 /* SamplerStateViewer.cpp */; };
+		47DECE5B22E8B8D100946189 /* ConfigWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE5922E8B8D100946189 /* ConfigWindow.cpp */; };
+		47DECE5E22E8C9D700946189 /* AUTDrumSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE5C22E8C9D700946189 /* AUTDrumSampler.cpp */; };
+		47DECE6122EB536800946189 /* ComponentList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE6022EB536700946189 /* ComponentList.cpp */; };
+		47DECE6422EF4ED400946189 /* AUChordMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE6222EF4ED400946189 /* AUChordMachine.cpp */; };
+		47DECE6A22F83A9000946189 /* AUTNoteoff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE6822F83A9000946189 /* AUTNoteoff.cpp */; };
+		47DECE6D22F865E400946189 /* AUTScaleQuantiser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE6B22F865E400946189 /* AUTScaleQuantiser.cpp */; };
+		47DECE7022F8727500946189 /* AUTHighFreqTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE6E22F8727500946189 /* AUTHighFreqTest.cpp */; };
+		47DECE7322F87E5C00946189 /* AUTVectorSequencer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE7122F87E5C00946189 /* AUTVectorSequencer.cpp */; };
+		47DECE7622F8B03800946189 /* AUTFileRead.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE7422F8B03800946189 /* AUTFileRead.cpp */; };
+		47DECE7922F8BF0B00946189 /* AUFileWrite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE7722F8BF0B00946189 /* AUFileWrite.cpp */; };
+		47DECE7C22F9B18500946189 /* AUTAlgorithms.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE7A22F9B18500946189 /* AUTAlgorithms.cpp */; };
+		47DECE7F22F9D8BE00946189 /* AUTBulkTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DECE7D22F9D8BE00946189 /* AUTBulkTester.cpp */; };
+		47DF3DA622BA51BE006DD7EA /* UnitTestUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DF3DA422BA51BE006DD7EA /* UnitTestUI.cpp */; };
 		4800F810AA6C51BEA2A4633D /* include_juce_video.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AA4C5675C61C61CCB6E330A /* include_juce_video.mm */; };
 		4E3625E9ACE0F69C7A3D465B /* include_juce_gui_basics.mm in Sources */ = {isa = PBXBuildFile; fileRef = D83AD2045330F6198B350DA8 /* include_juce_gui_basics.mm */; };
 		4EB59B38753E02AB22389B70 /* include_juce_audio_basics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40429BA516AD5C39B1A08127 /* include_juce_audio_basics.mm */; };
@@ -80,6 +98,10 @@
 		3AB4A683E38D94301E136FC3 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		40429BA516AD5C39B1A08127 /* include_juce_audio_basics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_basics.mm; path = ../../JuceLibraryCode/include_juce_audio_basics.mm; sourceTree = SOURCE_ROOT; };
 		41935231D9A4459CBA7ECB4C /* juce_audio_devices */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_devices; path = ../../JuceLibraryCode/modules/juce_audio_devices; sourceTree = SOURCE_ROOT; };
+		471BF7C62231361D00339211 /* AserveUnitTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AserveUnitTest.cpp; sourceTree = "<group>"; };
+		471BF7C72231361D00339211 /* AserveUnitTest.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AserveUnitTest.hpp; sourceTree = "<group>"; };
+		471BF7C922313B5B00339211 /* AUTMtof.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AUTMtof.cpp; sourceTree = "<group>"; };
+		471BF7CA22313B5B00339211 /* AUTMtof.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AUTMtof.hpp; sourceTree = "<group>"; };
 		471D2DA4F77738F73EDA55C1 /* include_juce_opengl.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_opengl.mm; path = ../../JuceLibraryCode/include_juce_opengl.mm; sourceTree = SOURCE_ROOT; };
 		47561D8E215293AF0012BED1 /* AserveComs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AserveComs.cpp; path = ../../Source/AserveComs.cpp; sourceTree = "<group>"; };
 		47561D8F215293AF0012BED1 /* AserveComs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AserveComs.h; path = ../../Source/AserveComs.h; sourceTree = "<group>"; };
@@ -128,6 +150,38 @@
 		47561DD4215394A70012BED1 /* tapstretch.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = tapstretch.aif; sourceTree = "<group>"; };
 		47561DDE2154DF720012BED1 /* MIDIIO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MIDIIO.cpp; path = ../../Source/MIDIIO.cpp; sourceTree = "<group>"; };
 		47561DDF2154DF720012BED1 /* MIDIIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MIDIIO.h; path = ../../Source/MIDIIO.h; sourceTree = "<group>"; };
+		4794C2C022BA55EC008CCD7C /* AUTTestTone.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AUTTestTone.cpp; sourceTree = "<group>"; };
+		4794C2C122BA55EC008CCD7C /* AUTTestTone.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AUTTestTone.hpp; sourceTree = "<group>"; };
+		47DECE5322E88A3B00946189 /* OscillatorViewer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OscillatorViewer.cpp; sourceTree = "<group>"; };
+		47DECE5422E88A3B00946189 /* OscillatorViewer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OscillatorViewer.hpp; sourceTree = "<group>"; };
+		47DECE5622E890A700946189 /* SamplerStateViewer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SamplerStateViewer.cpp; sourceTree = "<group>"; };
+		47DECE5722E890A700946189 /* SamplerStateViewer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SamplerStateViewer.hpp; sourceTree = "<group>"; };
+		47DECE5922E8B8D100946189 /* ConfigWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigWindow.cpp; path = ../../Source/ConfigWindow.cpp; sourceTree = "<group>"; };
+		47DECE5A22E8B8D100946189 /* ConfigWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ConfigWindow.hpp; path = ../../Source/ConfigWindow.hpp; sourceTree = "<group>"; };
+		47DECE5C22E8C9D700946189 /* AUTDrumSampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AUTDrumSampler.cpp; sourceTree = "<group>"; };
+		47DECE5D22E8C9D700946189 /* AUTDrumSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AUTDrumSampler.hpp; sourceTree = "<group>"; };
+		47DECE5F22EB536700946189 /* ComponentList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentList.h; sourceTree = "<group>"; };
+		47DECE6022EB536700946189 /* ComponentList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComponentList.cpp; sourceTree = "<group>"; };
+		47DECE6222EF4ED400946189 /* AUChordMachine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AUChordMachine.cpp; sourceTree = "<group>"; };
+		47DECE6322EF4ED400946189 /* AUChordMachine.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AUChordMachine.hpp; sourceTree = "<group>"; };
+		47DECE6822F83A9000946189 /* AUTNoteoff.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AUTNoteoff.cpp; sourceTree = "<group>"; };
+		47DECE6922F83A9000946189 /* AUTNoteoff.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AUTNoteoff.hpp; sourceTree = "<group>"; };
+		47DECE6B22F865E400946189 /* AUTScaleQuantiser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AUTScaleQuantiser.cpp; sourceTree = "<group>"; };
+		47DECE6C22F865E400946189 /* AUTScaleQuantiser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AUTScaleQuantiser.hpp; sourceTree = "<group>"; };
+		47DECE6E22F8727500946189 /* AUTHighFreqTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AUTHighFreqTest.cpp; sourceTree = "<group>"; };
+		47DECE6F22F8727500946189 /* AUTHighFreqTest.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AUTHighFreqTest.hpp; sourceTree = "<group>"; };
+		47DECE7122F87E5C00946189 /* AUTVectorSequencer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AUTVectorSequencer.cpp; sourceTree = "<group>"; };
+		47DECE7222F87E5C00946189 /* AUTVectorSequencer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AUTVectorSequencer.hpp; sourceTree = "<group>"; };
+		47DECE7422F8B03800946189 /* AUTFileRead.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AUTFileRead.cpp; sourceTree = "<group>"; };
+		47DECE7522F8B03800946189 /* AUTFileRead.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AUTFileRead.hpp; sourceTree = "<group>"; };
+		47DECE7722F8BF0B00946189 /* AUFileWrite.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AUFileWrite.cpp; sourceTree = "<group>"; };
+		47DECE7822F8BF0B00946189 /* AUFileWrite.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AUFileWrite.hpp; sourceTree = "<group>"; };
+		47DECE7A22F9B18500946189 /* AUTAlgorithms.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AUTAlgorithms.cpp; sourceTree = "<group>"; };
+		47DECE7B22F9B18500946189 /* AUTAlgorithms.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AUTAlgorithms.hpp; sourceTree = "<group>"; };
+		47DECE7D22F9D8BE00946189 /* AUTBulkTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AUTBulkTester.cpp; sourceTree = "<group>"; };
+		47DECE7E22F9D8BE00946189 /* AUTBulkTester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AUTBulkTester.hpp; sourceTree = "<group>"; };
+		47DF3DA422BA51BE006DD7EA /* UnitTestUI.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UnitTestUI.cpp; sourceTree = "<group>"; };
+		47DF3DA522BA51BE006DD7EA /* UnitTestUI.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UnitTestUI.hpp; sourceTree = "<group>"; };
 		4A745CE13363691560632D19 /* JuceHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JuceHeader.h; path = ../../JuceLibraryCode/JuceHeader.h; sourceTree = SOURCE_ROOT; };
 		4B7D35183FCBBC0049660F3D /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4D5875B24C715915B01FF44A /* include_juce_audio_utils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_utils.mm; path = ../../JuceLibraryCode/include_juce_audio_utils.mm; sourceTree = SOURCE_ROOT; };
@@ -195,6 +249,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		471BF7C52231360E00339211 /* Unit Tests */ = {
+			isa = PBXGroup;
+			children = (
+				471BF7C72231361D00339211 /* AserveUnitTest.hpp */,
+				471BF7C62231361D00339211 /* AserveUnitTest.cpp */,
+				471BF7CA22313B5B00339211 /* AUTMtof.hpp */,
+				471BF7C922313B5B00339211 /* AUTMtof.cpp */,
+				47DECE5D22E8C9D700946189 /* AUTDrumSampler.hpp */,
+				47DECE5C22E8C9D700946189 /* AUTDrumSampler.cpp */,
+				4794C2C122BA55EC008CCD7C /* AUTTestTone.hpp */,
+				4794C2C022BA55EC008CCD7C /* AUTTestTone.cpp */,
+				47DECE6322EF4ED400946189 /* AUChordMachine.hpp */,
+				47DECE6222EF4ED400946189 /* AUChordMachine.cpp */,
+				47DECE6822F83A9000946189 /* AUTNoteoff.cpp */,
+				47DECE6922F83A9000946189 /* AUTNoteoff.hpp */,
+				47DECE6B22F865E400946189 /* AUTScaleQuantiser.cpp */,
+				47DECE6C22F865E400946189 /* AUTScaleQuantiser.hpp */,
+				47DECE6E22F8727500946189 /* AUTHighFreqTest.cpp */,
+				47DECE6F22F8727500946189 /* AUTHighFreqTest.hpp */,
+				47DECE7122F87E5C00946189 /* AUTVectorSequencer.cpp */,
+				47DECE7222F87E5C00946189 /* AUTVectorSequencer.hpp */,
+				47DECE7422F8B03800946189 /* AUTFileRead.cpp */,
+				47DECE7522F8B03800946189 /* AUTFileRead.hpp */,
+				47DECE7722F8BF0B00946189 /* AUFileWrite.cpp */,
+				47DECE7822F8BF0B00946189 /* AUFileWrite.hpp */,
+				47DECE7A22F9B18500946189 /* AUTAlgorithms.cpp */,
+				47DECE7B22F9B18500946189 /* AUTAlgorithms.hpp */,
+				47DECE7D22F9D8BE00946189 /* AUTBulkTester.cpp */,
+				47DECE7E22F9D8BE00946189 /* AUTBulkTester.hpp */,
+			);
+			name = "Unit Tests";
+			path = "../../Source/Unit Tests";
+			sourceTree = "<group>";
+		};
 		47561D90215293AF0012BED1 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
@@ -216,12 +304,20 @@
 		47561D9D215293AF0012BED1 /* GUI */ = {
 			isa = PBXGroup;
 			children = (
+				47DECE6022EB536700946189 /* ComponentList.cpp */,
+				47DECE5F22EB536700946189 /* ComponentList.h */,
+				47DF3DA422BA51BE006DD7EA /* UnitTestUI.cpp */,
+				47DF3DA522BA51BE006DD7EA /* UnitTestUI.hpp */,
 				47561D9E215293AF0012BED1 /* AserveRootGUI.cpp */,
 				47561D9F215293AF0012BED1 /* AserveRootGUI.h */,
 				47561DA0215293AF0012BED1 /* BitVisualiser.cpp */,
 				47561DA1215293AF0012BED1 /* BitVisualiser.h */,
 				47561DA2215293AF0012BED1 /* Scope.cpp */,
 				47561DA3215293AF0012BED1 /* Scope.h */,
+				47DECE5422E88A3B00946189 /* OscillatorViewer.hpp */,
+				47DECE5322E88A3B00946189 /* OscillatorViewer.cpp */,
+				47DECE5722E890A700946189 /* SamplerStateViewer.hpp */,
+				47DECE5622E890A700946189 /* SamplerStateViewer.cpp */,
 			);
 			name = GUI;
 			path = ../../Source/GUI;
@@ -386,12 +482,15 @@
 		FD4EE9A8313092A9C0FC52BB /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				471BF7C52231360E00339211 /* Unit Tests */,
 				071A31184D52419C1077D4C3 /* MainComponent.cpp */,
 				B69A02408C2C34BF6242AE66 /* Main.cpp */,
 				47561D8E215293AF0012BED1 /* AserveComs.cpp */,
 				47561D8F215293AF0012BED1 /* AserveComs.h */,
 				47561DDF2154DF720012BED1 /* MIDIIO.h */,
 				47561DDE2154DF720012BED1 /* MIDIIO.cpp */,
+				47DECE5922E8B8D100946189 /* ConfigWindow.cpp */,
+				47DECE5A22E8B8D100946189 /* ConfigWindow.hpp */,
 				47561D90215293AF0012BED1 /* Audio */,
 				47561D9D215293AF0012BED1 /* GUI */,
 				47561DA4215293AF0012BED1 /* Impulse */,
@@ -490,23 +589,37 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4794C2C222BA55EC008CCD7C /* AUTTestTone.cpp in Sources */,
 				5A743E5DA4A01E51DACABB72 /* MainComponent.cpp in Sources */,
 				F04C6826EEA37E4AE8A2802D /* Main.cpp in Sources */,
 				4EB59B38753E02AB22389B70 /* include_juce_audio_basics.mm in Sources */,
 				6BBFBCC71B5BC0D685089E34 /* include_juce_audio_devices.mm in Sources */,
+				471BF7CB22313B5B00339211 /* AUTMtof.cpp in Sources */,
+				47DECE6422EF4ED400946189 /* AUChordMachine.cpp in Sources */,
+				471BF7C82231361D00339211 /* AserveUnitTest.cpp in Sources */,
 				36CF46A3B95EEF538D119736 /* include_juce_audio_formats.mm in Sources */,
 				47561DB8215293AF0012BED1 /* AserveComs.cpp in Sources */,
 				47561DE02154DF720012BED1 /* MIDIIO.cpp in Sources */,
+				47DECE7F22F9D8BE00946189 /* AUTBulkTester.cpp in Sources */,
 				47561DC1215293AF0012BED1 /* Scope.cpp in Sources */,
 				AB49FB6533D32C0A0E22215F /* include_juce_audio_processors.mm in Sources */,
 				47561DC4215293AF0012BED1 /* MidiManager.cpp in Sources */,
+				47DECE5B22E8B8D100946189 /* ConfigWindow.cpp in Sources */,
 				47561DC7215293AF0012BED1 /* RotaryControlComponent.cpp in Sources */,
 				47561DC8215293AF0012BED1 /* SliderControlComponent.cpp in Sources */,
+				47DECE5522E88A3B00946189 /* OscillatorViewer.cpp in Sources */,
+				47DECE7022F8727500946189 /* AUTHighFreqTest.cpp in Sources */,
+				47DECE6A22F83A9000946189 /* AUTNoteoff.cpp in Sources */,
 				47561DBF215293AF0012BED1 /* AserveRootGUI.cpp in Sources */,
+				47DECE6D22F865E400946189 /* AUTScaleQuantiser.cpp in Sources */,
 				47561DC0215293AF0012BED1 /* BitVisualiser.cpp in Sources */,
+				47DECE6122EB536800946189 /* ComponentList.cpp in Sources */,
+				47DECE5822E890A700946189 /* SamplerStateViewer.cpp in Sources */,
+				47DF3DA622BA51BE006DD7EA /* UnitTestUI.cpp in Sources */,
 				47561DC9215293AF0012BED1 /* TransportButtonComponent.cpp in Sources */,
 				7EA01A676E429540E3F05CD2 /* include_juce_audio_utils.mm in Sources */,
 				A428B165B0546691A190B2F4 /* include_juce_core.mm in Sources */,
+				47DECE7322F87E5C00946189 /* AUTVectorSequencer.cpp in Sources */,
 				C9BA11471AFDA3208C2494F4 /* include_juce_cryptography.mm in Sources */,
 				47561DC5215293AF0012BED1 /* PitchModComponent.cpp in Sources */,
 				47561DC6215293AF0012BED1 /* ProgButtonComponent.cpp in Sources */,
@@ -514,16 +627,20 @@
 				47561DBC215293AF0012BED1 /* AudioFilePlayerManager.cpp in Sources */,
 				47561DCA215293AF0012BED1 /* LiveTextParser.cpp in Sources */,
 				47561DBA215293AF0012BED1 /* AserveOscillators.cpp in Sources */,
+				47DECE7922F8BF0B00946189 /* AUFileWrite.cpp in Sources */,
 				47561DBE215293AF0012BED1 /* OscillatorManager.cpp in Sources */,
+				47DECE7622F8B03800946189 /* AUTFileRead.cpp in Sources */,
 				47561DC2215293AF0012BED1 /* DrumPadComponent.cpp in Sources */,
 				95DC6AD16DC2D2BB37A1FAFC /* include_juce_events.mm in Sources */,
 				47561DBB215293AF0012BED1 /* AudioFilePlayer.cpp in Sources */,
+				47DECE7C22F9B18500946189 /* AUTAlgorithms.cpp in Sources */,
 				47561DBD215293AF0012BED1 /* AudioMain.cpp in Sources */,
 				670192CED42437948F514A9B /* include_juce_graphics.mm in Sources */,
 				4E3625E9ACE0F69C7A3D465B /* include_juce_gui_basics.mm in Sources */,
 				47561DC3215293AF0012BED1 /* ImpulseComponent.cpp in Sources */,
 				A9B4FC2E785724CC1BF9158E /* include_juce_gui_extra.mm in Sources */,
 				31E3DBFE3689BA138EAFDCD3 /* include_juce_opengl.mm in Sources */,
+				47DECE5E22E8C9D700946189 /* AUTDrumSampler.cpp in Sources */,
 				303F25750901AF396EF20ACD /* include_juce_osc.cpp in Sources */,
 				4800F810AA6C51BEA2A4633D /* include_juce_video.mm in Sources */,
 			);

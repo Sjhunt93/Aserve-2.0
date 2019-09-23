@@ -7,7 +7,7 @@
 //
 
 #include "AserveComs.h"
-
+#include "AserveUnitTest.hpp"
 
 namespace AserveOSC
 {
@@ -40,6 +40,8 @@ namespace AserveOSC
     static const String mode = aserve + "mode";
     
     static const String pan = aserve + "pan";
+    
+    static const String fPath = aserve + "path";
 }
 
 
@@ -63,6 +65,7 @@ AserveComs::AserveComs (AudioMain &_audio) : audio(_audio)
     
     isMessageLocked.set(false);
     logEnabled.set(true);
+    unitTest = nullptr;
 }
 AserveComs::~AserveComs ()
 {
@@ -77,6 +80,7 @@ void AserveComs::sendMidiMessageFromImpulse (MidiMessage midiMessage)
         message.addArgument(midiMessage.getVelocity());
         message.addArgument(midiMessage.getChannel());
         sender.send(message);
+        
     }
     else if (midiMessage.isController()) {
         const int cc = midiMessage.getControllerNumber();
@@ -107,6 +111,9 @@ void AserveComs::sendMidiMessageFromImpulse (MidiMessage midiMessage)
 
     //plus we allways send MIDI for the more advance stuff..
     
+    if (unitTest != nullptr) {
+        addMessageToLog(String("Unit Test -> Send: ") + midiMessage.getDescription());
+    }
 }
 
 bool AserveComs::checkAndClearRedraw ()
@@ -131,11 +138,11 @@ StringArray AserveComs::getAndClearMessageLog ()
 void AserveComs:: enableLoggger (bool state)
 {
     if (!state) {
-        addMessageToLog("Message Log Disabled");
+        addMessageToLog("Message Logging Disabled");
     }
     logEnabled.set(state);
     if (state) {
-        addMessageToLog("Message Log Enabled");
+        addMessageToLog("Message Logging Enabled");
     }
 }
 
@@ -151,7 +158,7 @@ void AserveComs::addMessageToLog (String message)
             
             
         }
-        if (messageLog.size() == 30) {
+        if (messageLog.size() == 30 && unitTest != nullptr) {
             messageLog.add("ERROR! Message log overloaded!");
         }
         
@@ -197,6 +204,11 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
                 }
                 String message = "aserveOscillator(" + String(c) + ", " + String(f) + ", " + String(a) + ", " + String(w) + ");";
                 addMessageToLog(message);
+                if (unitTest) {
+                    unitTest->testMessageReceived("osc", {String(c),String(f),String(a),String(w)});
+                }
+                
+                // send to 
             }
             
         }
@@ -318,6 +330,10 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
                 
                 String message = "aservePlaySample(" + String(index) + ", " + String(amp) +  ");";
                 addMessageToLog(message);
+                
+                if (unitTest) {
+                    unitTest->testMessageReceived("playSample", {String(index),String(amp)});
+                }
             }
 
         }
@@ -400,7 +416,7 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
         }
     }
     else if (message.getAddressPattern().toString().startsWith(AserveOSC::reset)) {
-        audio.reset();
+        reset();
 //        addMessageToLog("aserveReset()");
     }
     else if (message.getAddressPattern().toString().startsWith(AserveOSC::loadDefaultSounds)) {
@@ -491,6 +507,23 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
             
         }
     }
+    else if (message.getAddressPattern().toString().startsWith(AserveOSC::fPath)) {
+        if (message.size() == 1) {
+            if (message[0].isString()) {
+                File fPath = message[0].getString();
+                if (fPath.exists()) {
+                    AserveUnitTest::projectPath = fPath.getFullPathName();
+                    File fSol = fPath.getParentDirectory().getParentDirectory();
+                    fSol = fSol.getChildFile("Solutions");
+                    fSol = fSol.getChildFile("Unit Tests");
+                    if (fPath.exists()) {
+                        AserveUnitTest::solutionsPath = fSol.getFullPathName();
+                    }
+                    
+                }
+            }
+        }
+    }
 
     if (errorD.isNotEmpty()) {
         addMessageToLog(errorD);
@@ -513,4 +546,20 @@ void AserveComs::sendGridMessage (const int x, const int y)
 {
     OSCMessage message(AserveOSC::pixelGridClicked, x, y);
     sender.send(message);
+}
+
+void AserveComs::setUniTestPtr (AserveUnitTest * test)
+{
+    unitTest = test;
+}
+
+void AserveComs::reset ()
+{
+    audio.reset();
+}
+
+void AserveComs::addUnitTestMessageToLog (String message)
+{
+    addMessageToLog(String("Unit Test -> Log: ") + message);
+
 }
