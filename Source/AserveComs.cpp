@@ -519,8 +519,8 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
                     if (fPath.exists()) {
                         AserveUnitTest::solutionsPath = fSol.getFullPathName();
                     }
-                    
                 }
+                sendActionMessage("RELOAD_UNIT_TESTS");
             }
         }
     }

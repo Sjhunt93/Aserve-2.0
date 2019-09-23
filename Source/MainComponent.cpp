@@ -350,6 +350,9 @@ public:
             const int y = message.fromLastOccurrenceOf(",", false, false).getIntValue();
             aserveComs.sendGridMessage(x, y);
         }
+        if (message.startsWith("RELOAD_UNIT_TESTS")) {
+            unitTestGUI.checkTestsSavedToFile();
+        }
     }
     
     

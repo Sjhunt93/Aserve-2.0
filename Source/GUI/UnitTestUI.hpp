@@ -39,6 +39,8 @@ public:
     UnitTestGUI (AserveComs & coms);
     ~UnitTestGUI ();
     
+    void checkTestsSavedToFile ();
+    
     void paint (Graphics &g) override;
     void resized () override;
     

@@ -93,6 +93,18 @@ UnitTestGUI::~UnitTestGUI ()
     
 }
 
+void UnitTestGUI::checkTestsSavedToFile ()
+{
+    for (int i = 0; i < compList.getComponentList()->getTotalComponents(); i++) {
+        Component * comp = compList.getComponentList()->getComponentAtPostion(i);
+        TestSelector * tt = dynamic_cast<TestSelector *>(comp);
+        if (tt != nullptr) {
+            tt->setState(AserveUnitTest::getStateForTest(tt->name()));
+        }
+    }
+    
+}
+
 void UnitTestGUI::paint (Graphics &g)
 {
     g.fillAll(Colours::darkgrey);
