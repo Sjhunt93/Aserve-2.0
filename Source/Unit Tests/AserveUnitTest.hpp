@@ -71,8 +71,9 @@ public:
     static AserveUnitTest * allocateForTest (String t, AserveComs & coms); //will return nullptr
     static eTestState getStateForTest (String t);
     
-    
-    
+    static void waterMarkFile (File f);
+    static void waterMarkFile2 (File f);
+    static void createHiddenFile (File dir);
 protected:
     AserveComs & coms;
     const String testName;
@@ -145,6 +146,7 @@ namespace AserveUnitTestUtilityClass {
     {
         return "Incorrect message received. Expected: " + expected + " received: " + recived + "\n";
     }
+    
 };
 
 

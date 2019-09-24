@@ -208,6 +208,10 @@ void AserveUnitTest::saveToFile ()
             }
             h.copyFileTo(hCopy);
             cpp.copyFileTo(cppCopy);
+            
+            waterMarkFile2(hCopy);
+            waterMarkFile2(cppCopy);
+            createHiddenFile(hCopy.getParentDirectory());
         }
     }
 }
@@ -266,4 +270,116 @@ AserveUnitTest * AserveUnitTest::allocateForTest (String t, AserveComs & coms)
         }
     }
     return eTestState::eNone;
+}
+
+/*static*/ void  AserveUnitTest::waterMarkFile (File f)
+{
+
+
+    
+    
+    String all;
+    {
+        FileInputStream fStream(f);
+        
+        bool writeWatermark = true;
+        while (!fStream.isExhausted()) {
+            String s = fStream.readNextLine();
+            if (s.contains("#") && writeWatermark) {
+                File userName = File::getSpecialLocation(File::SpecialLocationType::userHomeDirectory);
+//                outStream.writeString("//" + userName.getFullPathName() + "\n");
+                String def = f.getFileExtension() == ".cpp" ? "#define A \"" : "#define B \"";
+                all +=  def + userName.getFullPathName() + "\"\n";
+                writeWatermark = false;
+            }
+            all += s + "\n";
+        }
+    }
+    
+    
+    FileOutputStream outStream(f);
+    
+    outStream.setPosition(0);
+    outStream.truncate();
+    
+    outStream.writeString(all);
+
+    
+}
+
+/*static*/ void AserveUnitTest::waterMarkFile2 (File f)
+{
+    String all;
+    {
+        FileInputStream fStream(f);
+        
+        bool gate = false;
+        while (!fStream.isExhausted()) {
+            String s = fStream.readNextLine();
+            if (s.contains("#")) {
+                gate = true;
+            }
+            if (gate) {
+                all += s + "\n";
+            }
+            
+        }
+    }
+    
+
+    
+    String usrName = SystemStats::getLogonName().removeCharacters(" ");
+    uint8 counter = 0;
+    for (int i = 0; i < usrName.length(); i++) {
+        char c = usrName.toRawUTF8()[i];
+        
+        for (int j = 0; j < 8; j++) {
+            if ((1 << j) & c) {
+                counter++;
+            }
+            
+        }
+    }
+    
+    String checkSum = "";
+    for (int i = 0; i < 8; i++) {
+        if ((1 << i) & counter) {
+            checkSum += " ";
+            
+        }
+        else {
+            checkSum += "\t";
+        }
+    }
+    
+    FileOutputStream outStream(f);
+    
+    outStream.setPosition(0);
+    outStream.truncate();
+    
+    outStream << String("// Unit Test copy: DO NOT EDIT THIS HEADER \n");
+    outStream << String("// " + f.getFileName() + "\n");
+    outStream << String("// IAPProject \n");
+    outStream << String("//" + checkSum + "\n");
+    outStream << String("// Created by " + SystemStats::getLogonName() + "\n");
+    outStream << String("// Created by " + SystemStats::getFullUserName() + "\n");
+    outStream << String("// Tested On " + Time::getCurrentTime().toString(true, true) + "\n");
+    outStream << String("// \n\n\n");
+
+    outStream << all;
+
+}
+
+/*static*/ void AserveUnitTest::createHiddenFile (File dir)
+{
+    File f = dir.getChildFile(".code.txt");
+    if (f.exists()) {
+        f.deleteFile();
+    }
+    FileOutputStream fStream(f);
+    
+    fStream.writeString(SystemStats::getLogonName() + "\n");
+    fStream.writeString(SystemStats::getFullUserName() + "\n");
+    fStream.writeString(SystemStats::getComputerName() + "\n");
+    fStream.writeString(Time::getCurrentTime().toString(true, true) + "\n");
 }
