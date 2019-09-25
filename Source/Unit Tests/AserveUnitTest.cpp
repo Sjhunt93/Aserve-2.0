@@ -272,40 +272,6 @@ AserveUnitTest * AserveUnitTest::allocateForTest (String t, AserveComs & coms)
     return eTestState::eNone;
 }
 
-/*static*/ void  AserveUnitTest::waterMarkFile (File f)
-{
-
-
-    
-    
-    String all;
-    {
-        FileInputStream fStream(f);
-        
-        bool writeWatermark = true;
-        while (!fStream.isExhausted()) {
-            String s = fStream.readNextLine();
-            if (s.contains("#") && writeWatermark) {
-                File userName = File::getSpecialLocation(File::SpecialLocationType::userHomeDirectory);
-//                outStream.writeString("//" + userName.getFullPathName() + "\n");
-                String def = f.getFileExtension() == ".cpp" ? "#define A \"" : "#define B \"";
-                all +=  def + userName.getFullPathName() + "\"\n";
-                writeWatermark = false;
-            }
-            all += s + "\n";
-        }
-    }
-    
-    
-    FileOutputStream outStream(f);
-    
-    outStream.setPosition(0);
-    outStream.truncate();
-    
-    outStream.writeString(all);
-
-    
-}
 
 /*static*/ void AserveUnitTest::waterMarkFile2 (File f)
 {
@@ -364,7 +330,7 @@ AserveUnitTest * AserveUnitTest::allocateForTest (String t, AserveComs & coms)
     outStream << String("// Created by " + SystemStats::getLogonName() + "\n");
     outStream << String("// Created by " + SystemStats::getFullUserName() + "\n");
     outStream << String("// Tested On " + Time::getCurrentTime().toString(true, true) + "\n");
-    outStream << String("// \n\n\n");
+    outStream << String("// End of Header;\n\n\n");
 
     outStream << all;
 
@@ -382,4 +348,46 @@ AserveUnitTest * AserveUnitTest::allocateForTest (String t, AserveComs & coms)
     fStream.writeString(SystemStats::getFullUserName() + "\n");
     fStream.writeString(SystemStats::getComputerName() + "\n");
     fStream.writeString(Time::getCurrentTime().toString(true, true) + "\n");
+}
+
+/*static*/ void AserveUnitTest::prepareSubmission (String sId, String email)
+{
+    File solPath(AserveUnitTest::solutionsPath);
+    //Source https://forum.juce.com/t/error-creating-zip-file-from-folder-w-subdirectories/10796/5
+    
+    {
+        File f = solPath.getChildFile(".sub.txt");
+        if (f.exists()) {
+            f.deleteFile();
+        }
+        FileOutputStream fStream(f);
+        fStream.writeString(SystemStats::getLogonName() + "\n");
+        fStream.writeString(SystemStats::getFullUserName() + "\n");
+        fStream.writeString(SystemStats::getComputerName() + "\n");
+        fStream.writeString(sId + "\n");
+        fStream.writeString(email + "\n");
+        fStream.writeString(Time::getCurrentTime().toString(true, true) + "\n");
+    }
+    
+    
+    ZipFile::Builder zipBuilder;
+    Array<File> tempFiles;
+    solPath.findChildFiles(tempFiles, File::findFiles, true, "*");
+    
+    for (int i = 0; i < tempFiles.size(); i++)
+    {
+        zipBuilder.addFile(tempFiles[i], 0, tempFiles[i].getRelativePathFrom(solPath));
+    }
+    
+    String pathName = sId + "_submission.zip";
+    //save our zip file
+    double *progress = nullptr;
+    
+    File outputZip = solPath.getParentDirectory().getChildFile(pathName);
+    if (outputZip.exists()) {
+        outputZip.deleteFile();
+    }
+    std::cout << outputZip.getFullPathName();
+    FileOutputStream os (outputZip);
+    zipBuilder.writeToStream(os, progress);
 }

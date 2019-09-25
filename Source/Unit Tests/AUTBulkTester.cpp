@@ -8,10 +8,14 @@
 #include "AUTBulkTester.hpp"
 
 
+/*static*/ String AUTBulkTester::sourceFolderPath = "/Users/sj4-hunt/Documents/Code/Aserve Unit Test Executer/IAP-2018-2019-master/iapProj/Source/";
+/*static*/ String AUTBulkTester::executablePath = "/Users/sj4-hunt/Documents/Code/Aserve Unit Test Executer/IAP-2018-2019-master/iapProj/Builds/MacOSX/build/Debug/iapProj";
+/*static*/ String AUTBulkTester::xcodeProjPath = "/Users/sj4-hunt/Documents/Code/Aserve Unit Test Executer/IAP-2018-2019-master/iapProj/Builds/MacOSX/";
+
 
 AUTBulkTester::AUTBulkTester (AserveComs & _coms) : coms(_coms), Thread("Bulk Test")
 {
-
+    revertOriginalSourceFiles = false;
 }
 AUTBulkTester::~AUTBulkTester ()
 {
@@ -55,7 +59,8 @@ void AUTBulkTester::actionListenerCallback (const String& message)
         }
         else {
             //test finished:
-            
+            int lastPass = 0;
+            int lastFail = 0;
             for (Student s : students) {
                 std::cout << "Score for : " << s.number << "\n";
                 int pass =0;
@@ -68,9 +73,40 @@ void AUTBulkTester::actionListenerCallback (const String& message)
                         fail--;
                     }
                 }
+                lastPass = pass;
+                lastFail = fail;
                 std::cout << "Passed: " << pass << " || Failed: " << fail << "\n";
             }
             
+            if (revertOriginalSourceFiles) {
+                File codeFolder = File(sourceFolderPath);
+                File cpp = codeFolder.getChildFile("_IAP.cpp");
+                File h = codeFolder.getChildFile("_IAP.h");
+                if (cpp.exists()) {
+                    File f = codeFolder.getChildFile("IAP.cpp");
+                    if (f.exists()) {
+                        f.deleteFile();
+                    }
+                    cpp.copyFileTo(f);
+                    cpp.deleteFile();
+                }
+                if (h.exists()) {
+                    File f = codeFolder.getChildFile("IAP.h");
+                    if (f.exists()) {
+                        f.deleteFile();
+                    }
+                    h.copyFileTo(f);
+                    h.deleteFile();
+                }
+                AlertWindow al("Results", "Your score is", AlertWindow::NoIcon);
+                for (int i = 0; i < 10; i++) {
+                    String text = String("Test ") + String(i+1) + String(" ") + String(AUT::unitTestNames[i]);
+                    text += (students[0].scores[i] == AserveUnitTest::eEndedPass) ? String(": Pass") : String(": Fail");
+                    al.addTextBlock(text);
+                }
+                int a = al.runModalLoop();
+                
+            }
         }
 
     }
@@ -100,7 +136,7 @@ void AUTBulkTester::nextTest ()
     
     if (fCpp.exists() && fH.exists()) {
 
-        File codeFolder = File("/Users/sj4-hunt/Documents/Code/Aserve Unit Test Executer/IAP-2018-2019-master/iapProj/Source/");
+        File codeFolder = File(sourceFolderPath);
 //        File cpp = codeFolder.getChildFile("IAP.cpp");
 //        File h = codeFolder.getChildFile("IAP.h");
         
@@ -118,16 +154,16 @@ void AUTBulkTester::nextTest ()
         fH.copyFileTo(h);
         
         //delete old executable..
-        File executable("/Users/sj4-hunt/Documents/Code/Aserve Unit Test Executer/IAP-2018-2019-master/iapProj/Builds/MacOSX/build/Debug/iapProj");
+        File executable(executablePath);
         if (executable.exists()) {
             executable.deleteFile();
         }
-        File fWd("/Users/sj4-hunt/Documents/Code/Aserve Unit Test Executer/IAP-2018-2019-master/iapProj/Builds/MacOSX/");
+        File fWd(xcodeProjPath);
         fWd.setAsCurrentWorkingDirectory();
         system("xcodebuild -scheme \"iapProj (ConsoleApp)\" build");
         
         executable.getParentDirectory().setAsCurrentWorkingDirectory(); //reset this for file path permissions..
-        system("killall iapProj");
+        system("killall iapProj"); //these system calls are not ideal but since this is not distrubuted and only used for learning i guess its ok!
         system("open iapProj");
         
         
@@ -171,4 +207,59 @@ void AUTBulkTester::runBulkTest (File fRoot)
     testIndex = 0;
 
     nextTest();
+}
+
+void AUTBulkTester::runFolderOfTest (File solutionsPath)
+{
+    
+    String projectPath = AserveUnitTest::projectPath;
+    sourceFolderPath = projectPath;
+//    Builds/MacOSX/build/Debug/iapProj
+    {
+        File ex = File(projectPath).getParentDirectory().getChildFile("Builds").getChildFile("MacOSX").getChildFile("build").getChildFile("Debug").getChildFile("iapProj");
+        if (ex.exists()) {
+            executablePath = ex.getFullPathName();
+        }
+        else {
+            return;
+        }
+    }
+    {
+        File proj = File(projectPath).getParentDirectory().getChildFile("Builds").getChildFile("MacOSX");
+        if (proj.exists()) {
+            xcodeProjPath = proj.getFullPathName();
+        }
+        else {
+            return;
+        }
+
+    }
+    system("killall iapProj"); //these system calls are not ideal but since this is not distrubuted and only used for learning i guess its ok!
+    revertOriginalSourceFiles = true;
+    
+    {
+        //copy original source files:
+        
+        File codeFolder = File(sourceFolderPath);
+        File cpp = codeFolder.getChildFile("IAP.cpp");
+        File h = codeFolder.getChildFile("IAP.h");
+        
+        h.copyFileTo(codeFolder.getChildFile("_IAP.h"));
+        cpp.copyFileTo(codeFolder.getChildFile("_IAP.cpp"));
+    }
+    
+    
+    
+    students.clear();
+    Student student;
+    student.fRoot = AserveUnitTest::solutionsPath;
+    student.number = File(AserveUnitTest::solutionsPath).getFileName();
+    students.push_back(student);
+    std::cout << student.number << " - " << student.fRoot.getFullPathName() << "\n";
+    
+    studentIndex = 0;
+    testIndex = 0;
+    
+    nextTest();
+
 }

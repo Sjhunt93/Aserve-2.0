@@ -45,8 +45,13 @@ public:
     void resetSelectors (int idSelect);
     
     void runBulkTest (File fPath);
+    void runFolderOfTest (File fPath);
     
     void run();
+    
+    static String sourceFolderPath;
+    static String executablePath;
+    static String xcodeProjPath;
 private:
     ScopedPointer<AserveUnitTest> unitTest;
     String selectedTest;
@@ -56,9 +61,9 @@ private:
     std::vector<Student> students;
     int studentIndex;
     int testIndex;
-
     
     void nextTest ();
+    bool revertOriginalSourceFiles;
 };
 
 

@@ -249,6 +249,9 @@ public:
         else if (topLevelMenuIndex == 3) // View
         {
             pmenu.addItem(1, "Unit test setup", true);
+            pmenu.addItem(2, "Run folder of tests", true);
+            pmenu.addItem(3, "Prepare submission", true);
+            
 //#ifdef DEBUG
 #warning CHECK HERE WHEN MARKING
 //            pmenu.addItem(2, "Run unit tests full", true);
@@ -320,16 +323,43 @@ public:
                 
                 const int value = al.runModalLoop();
                 if (value == 1) {
-                    //const String project = al.getTextEditor("Project Path")->getText();
-                    //const String solutions = al.getTextEditor("Solutions Path")->getText();
-                  
-                    // update the unit test paths
                     AserveUnitTest::projectPath = al.getTextEditor("Project Path")->getText();
                     AserveUnitTest::solutionsPath = al.getTextEditor("Solutions Path")->getText();
                 }
 
             }
             else if (menuItemID == 2) {
+                bool value = AlertWindow::showOkCancelBox(juce::AlertWindow::AlertIconType::WarningIcon, "Test folder", "Make sure you save a copy of your work before running this");
+                if (value) {
+                    autBulk.runFolderOfTest(AserveUnitTest::solutionsPath);
+                }
+                
+            }
+            else if (menuItemID == 3) {
+                
+                if (!File(AserveUnitTest::solutionsPath).exists()) {
+                    AlertWindow::showMessageBoxAsync(AlertWindow::AlertIconType::WarningIcon, "No Path Confingured", "Run the IAP project first to set the paths automatically");
+                }
+                else {
+                    AlertWindow al("Submissions", "Enter all fields carefully!", AlertWindow::QuestionIcon);
+                    al.addTextBlock("Student ID:");
+                    al.addTextEditor("ID", "");
+                    al.addTextBlock("Email Address:");
+                    al.addTextEditor("Email", "");
+                    al.addTextBlock("By hitting ok you declare that all the work you are submitting is your own.");
+                    al.addButton("Ok", 1);
+                    al.addButton("Cancel", 2);
+                    
+                    const int value = al.runModalLoop();
+                    if (value == 1) {
+                        String sId = al.getTextEditor("ID")->getText();
+                        String sEmail = al.getTextEditor("Email")->getText();
+                        AserveUnitTest::prepareSubmission(sId, sEmail);
+                    }
+                    
+                }
+            }
+            else if (menuItemID == 4) {
                 std::cout << "Runnning megatests \n";
                 autBulk.runBulkTest(File("/Users/sj4-hunt/Documents/Code/Aserve Unit Test Executer/Submissions/"));
                 
