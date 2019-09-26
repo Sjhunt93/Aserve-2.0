@@ -59,6 +59,15 @@ void AUTBulkTester::actionListenerCallback (const String& message)
         }
         else {
             //test finished:
+            
+            { //end the test
+                File executable(executablePath);
+                executable.getParentDirectory().setAsCurrentWorkingDirectory(); //reset this for file path permissions..
+                system("killall iapProj"); //these system calls are not ideal but since this is not distrubuted and only used for learning i guess its ok!
+                
+            }
+            
+            
             int lastPass = 0;
             int lastFail = 0;
             for (Student s : students) {
