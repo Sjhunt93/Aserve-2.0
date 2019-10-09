@@ -81,9 +81,6 @@ public:
         logEnabled = true;
         startTimer(50);
 
-		audioMain.getOscs().setAmplitude(0, 1.0);
-		audioMain.getOscs().setFrequency (0, 440.0);
-
     }
     
 
