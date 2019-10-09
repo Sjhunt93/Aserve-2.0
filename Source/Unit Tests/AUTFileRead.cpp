@@ -36,7 +36,8 @@ void AUTFileRead::runningUnitTest ()
         FileOutputStream stream(file);
         if (stream.openedOk()) {
             for (int num : noteNumbers) {
-                stream.writeText(String(num) + String("\n"), false, false);
+				//stream.writeText
+               stream.writeText(String(num) + String("\n"), false, false, nullptr);
             }
             
         }

@@ -21,14 +21,14 @@
 const String AserveUnitTest::TEST_TIMEOUT = "Test Timeout - please check your code for excessive sleeps.\n";
 
 #ifdef DEBUG
-    String AserveUnitTest::solutionsPath = "~/Desktop/IAP-2019-2020-master/Solutions/Unit Tests";
-    String AserveUnitTest::projectPath = "~/Desktop/IAP-2019-2020-master/iapProj/Source";
+String AserveUnitTest::solutionsPath = "";// "~/Desktop/IAP-2019-2020-master/Solutions/Unit Tests";
+String AserveUnitTest::projectPath = "";// "~/Desktop/IAP-2019-2020-master/iapProj/Source";
 #else
     String AserveUnitTest::solutionsPath = "";
     String AserveUnitTest::projectPath = "";
 #endif
 
-AserveUnitTest::AserveUnitTest (AserveComs & _coms, String unitTestName, String fn) : Thread("Unit Tester"), coms(_coms), testName(unitTestName), folderName(fn)
+AserveUnitTest::AserveUnitTest (AserveComs & _coms, String unitTestName, String fn) : Thread("Unit Tester"), coms(_coms), testName(unitTestName), folderName(fn), randomNumber(Time::currentTimeMillis())
 {
     timeout = 0;
     currentState = eNone;
@@ -161,8 +161,10 @@ String AserveUnitTest::getErrors ()
     const int index  = list.indexOf(name);
     if (index >= 0) {
         String name = "unit test " + String(index+1);
-        File fFolder = root.getChildFile(name);
-        return fFolder;
+		if (root.exists()) {
+			File fFolder = root.getChildFile(name);
+			return fFolder;
+		}
     }
     
     return File("");
@@ -171,6 +173,9 @@ String AserveUnitTest::getErrors ()
 void AserveUnitTest::saveToFile ()
 {
     File root(solutionsPath);
+	if (!root.exists()) {
+		return;
+	}
     File fFolder = root.getChildFile(folderName);
 
     // do not mess with directory structure on disk
@@ -390,4 +395,9 @@ AserveUnitTest * AserveUnitTest::allocateForTest (String t, AserveComs & coms)
     std::cout << outputZip.getFullPathName();
     FileOutputStream os (outputZip);
     zipBuilder.writeToStream(os, progress);
+}
+
+int AserveUnitTest::arc4random()
+{
+	return randomNumber.nextInt();
 }

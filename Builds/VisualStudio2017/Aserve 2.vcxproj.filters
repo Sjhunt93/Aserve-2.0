@@ -388,6 +388,9 @@
     <Filter Include="JUCE Library Code">
       <UniqueIdentifier>{7ED5A90E-41AF-A1EF-659B-37CEEAB9BA61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Aserve 2.0\Unit Test">
+      <UniqueIdentifier>{c767dfb0-5117-4be6-ba7d-899ddb93347a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\Audio\AserveAudio.cpp">
@@ -2180,6 +2183,57 @@
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_video.cpp">
       <Filter>JUCE Library Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Unit Tests\AserveUnitTest.cpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Unit Tests\AUChordMachine.cpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Unit Tests\AUFileWrite.cpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Unit Tests\AUTAlgorithms.cpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Unit Tests\AUTBulkTester.cpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Unit Tests\AUTDrumSampler.cpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Unit Tests\AUTFileRead.cpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Unit Tests\AUTHighFreqTest.cpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Unit Tests\AUTMtof.cpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Unit Tests\AUTNoteoff.cpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Unit Tests\AUTScaleQuantiser.cpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Unit Tests\AUTTestTone.cpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Unit Tests\AUTVectorSequencer.cpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI\UnitTestUI.cpp">
+      <Filter>Aserve 2.0\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI\ComponentList.cpp">
+      <Filter>Aserve 2.0\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI\OscillatorViewer.cpp">
+      <Filter>Aserve 2.0\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI\SamplerStateViewer.cpp">
+      <Filter>Aserve 2.0\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4180,6 +4234,57 @@
     </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h">
       <Filter>JUCE Library Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Unit Tests\AserveUnitTest.hpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Unit Tests\AUChordMachine.hpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Unit Tests\AUFileWrite.hpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Unit Tests\AUTAlgorithms.hpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Unit Tests\AUTBulkTester.hpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Unit Tests\AUTDrumSampler.hpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Unit Tests\AUTFileRead.hpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Unit Tests\AUTHighFreqTest.hpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Unit Tests\AUTMtof.hpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Unit Tests\AUTNoteoff.hpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Unit Tests\AUTScaleQuantiser.hpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Unit Tests\AUTTestTone.hpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Unit Tests\AUTVectorSequencer.hpp">
+      <Filter>Aserve 2.0\Unit Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI\UnitTestUI.hpp">
+      <Filter>Aserve 2.0\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI\ComponentList.h">
+      <Filter>Aserve 2.0\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI\OscillatorViewer.hpp">
+      <Filter>Aserve 2.0\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI\SamplerStateViewer.hpp">
+      <Filter>Aserve 2.0\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

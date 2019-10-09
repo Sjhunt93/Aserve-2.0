@@ -254,7 +254,6 @@ public:
             pmenu.addItem(3, "Prepare submission", true);
             
 //#ifdef DEBUG
-#warning CHECK HERE WHEN MARKING
 //            pmenu.addItem(2, "Run unit tests full", true);
 //#endif
         }

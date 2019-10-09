@@ -75,6 +75,10 @@ public:
     static void waterMarkFile2 (File f);
     static void createHiddenFile (File dir);
     static void prepareSubmission (String sId, String email);
+
+#ifdef JUCE_WINDOWS
+	int arc4random();
+#endif
 protected:
     AserveComs & coms;
     const String testName;
@@ -87,7 +91,7 @@ protected:
 private:
     StringArray messageQue;
     Atomic<int> simpleMutex; //used a simple thread safe thingy..
-    
+	Random randomNumber;
 
 };
 
