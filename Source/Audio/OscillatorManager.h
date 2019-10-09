@@ -23,7 +23,12 @@ public:
     enum OscillatorManagerConstants 
     {
         NumOscillators = 24,
-        NumWaveforms = WaveOscillator::NumWaveforms
+        NumWaveforms = WaveOscillator::eNumWaveforms
+    };
+    enum eOscillatorMode
+    {
+      eNormal = 0,
+        eFm8,
     };
     /** 
      Constructor 
@@ -60,6 +65,11 @@ public:
      */
     void stop(const int oscillatorNumber);
 	
+    /*
+     
+     */
+    void setPanning (const int oscillatorNumber, const float left, const float right);
+    
 
     //AudioSouce Callbacks
     virtual void prepareToPlay (int samplesPerBlockExpected, double sampleRate);
@@ -69,9 +79,16 @@ public:
     String getState (const int oscillatorNumber);
     bool isActive (const int oscillatorNumber);
     bool isOutOfRange (const int oscillatorNumber);
-private:
-    OwnedArray<WaveOscillator> oscillators;
     
+    //oscillator routing
+    void setOscillatorRoutingMode (const eOscillatorMode mode);
+    eOscillatorMode getOscillatorRoutingMode ();
+    
+private:
+    OwnedArray<WaveOscillator>  oscillators;
+    float                       coreFreq[24];
+    float                       coreAmp[24];
+    eOscillatorMode             oscillatorMode;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OscillatorManager)
 };  
 

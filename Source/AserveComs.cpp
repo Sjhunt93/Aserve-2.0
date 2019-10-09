@@ -7,7 +7,7 @@
 //
 
 #include "AserveComs.h"
-
+#include "AserveUnitTest.hpp"
 
 namespace AserveOSC
 {
@@ -37,6 +37,11 @@ namespace AserveOSC
     static const String loadDefaultSounds = aserve + "loaddefaults";
     static const String reset = aserve + "reset";
 
+    static const String mode = aserve + "mode";
+    
+    static const String pan = aserve + "pan";
+    
+    static const String fPath = aserve + "path";
 }
 
 
@@ -60,6 +65,7 @@ AserveComs::AserveComs (AudioMain &_audio) : audio(_audio)
     
     isMessageLocked.set(false);
     logEnabled.set(true);
+    unitTest = nullptr;
 }
 AserveComs::~AserveComs ()
 {
@@ -74,6 +80,7 @@ void AserveComs::sendMidiMessageFromImpulse (MidiMessage midiMessage)
         message.addArgument(midiMessage.getVelocity());
         message.addArgument(midiMessage.getChannel());
         sender.send(message);
+        
     }
     else if (midiMessage.isController()) {
         const int cc = midiMessage.getControllerNumber();
@@ -104,6 +111,9 @@ void AserveComs::sendMidiMessageFromImpulse (MidiMessage midiMessage)
 
     //plus we allways send MIDI for the more advance stuff..
     
+    if (unitTest != nullptr) {
+        addMessageToLog(String("Unit Test -> Send: ") + midiMessage.getDescription());
+    }
 }
 
 bool AserveComs::checkAndClearRedraw ()
@@ -128,11 +138,11 @@ StringArray AserveComs::getAndClearMessageLog ()
 void AserveComs:: enableLoggger (bool state)
 {
     if (!state) {
-        addMessageToLog("Message Log Disabled");
+        addMessageToLog("Message Logging Disabled");
     }
     logEnabled.set(state);
     if (state) {
-        addMessageToLog("Message Log Enabled");
+        addMessageToLog("Message Logging Enabled");
     }
 }
 
@@ -148,7 +158,7 @@ void AserveComs::addMessageToLog (String message)
             
             
         }
-        if (messageLog.size() == 30) {
+        if (messageLog.size() == 30 && unitTest != nullptr) {
             messageLog.add("ERROR! Message log overloaded!");
         }
         
@@ -195,6 +205,11 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
                 }
                 String message = "aserveOscillator(" + String(c) + ", " + String(f) + ", " + String(a) + ", " + String(w) + ");";
                 addMessageToLog(message);
+                if (unitTest) {
+                    unitTest->testMessageReceived("osc", {String(c),String(f),String(a),String(w)});
+                }
+                
+                // send to 
             }
             
         }
@@ -316,6 +331,10 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
                 
                 String message = "aservePlaySample(" + String(index) + ", " + String(amp) +  ");";
                 addMessageToLog(message);
+                
+                if (unitTest) {
+                    unitTest->testMessageReceived("playSample", {String(index),String(amp)});
+                }
             }
 
         }
@@ -398,7 +417,7 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
         }
     }
     else if (message.getAddressPattern().toString().startsWith(AserveOSC::reset)) {
-        audio.reset();
+        reset();
 //        addMessageToLog("aserveReset()");
     }
     else if (message.getAddressPattern().toString().startsWith(AserveOSC::loadDefaultSounds)) {
@@ -445,7 +464,72 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
             }
         }
     }
-    
+    else if (message.getAddressPattern().toString().startsWith(AserveOSC::mode)) {
+        if (message.size() == 1) {
+            if (message[0].isInt32()) {
+                const int mode = message[0].getInt32();
+                if (mode >= OscillatorManager::eOscillatorMode::eNormal) {
+                    switch (mode) {
+                        case OscillatorManager::eOscillatorMode::eNormal:
+                            audio.getOscs().setOscillatorRoutingMode(OscillatorManager::eOscillatorMode::eNormal);
+                            break;
+                        case OscillatorManager::eOscillatorMode::eFm8:
+                            audio.getOscs().setOscillatorRoutingMode(OscillatorManager::eOscillatorMode::eFm8);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else {
+                    errorA = "ERROR! Incorrect Mode Operation: " + String(mode);
+                }
+                String message = "aserveOscillatorMode(" + String(mode) + ");";
+                addMessageToLog(message);
+            }
+        }
+    }
+    else if (message.getAddressPattern().toString().startsWith(AserveOSC::pan)) {
+        if (message.size() == 3) {
+            //we have to do loads of error checking, dont want asserts being thrown...
+            if (message[0].isInt32() && message[1].isFloat32() && message[2].isFloat32()) {
+                const int c = message[0].getInt32();
+                const float l = message[1].getFloat32();
+                const float r = message[2].getFloat32();
+            
+                
+                if (c >= 0 && c < OscillatorManager::NumOscillators) {
+                    audio.getOscs().setPanning(c, l, r);
+
+                    if (fabs(l) > 1.0 || fabs(r) > 1.0) {
+                        errorA = "ERROR! PAN: " + String(c) + " configured with out of range values";
+                    }
+                }
+                else {
+                    errorB = "ERROR! PAN: " + String(c) + " is not a valid oscillator index";
+                }
+                String message = "aservePanOscillator(" + String(c) + ", " + String(l) + ", " + String(r) + ");";
+                addMessageToLog(message);
+            }
+            
+        }
+    }
+    else if (message.getAddressPattern().toString().startsWith(AserveOSC::fPath)) {
+        if (message.size() == 1) {
+            if (message[0].isString()) {
+                File fPath = message[0].getString();
+                if (fPath.exists()) {
+                    AserveUnitTest::projectPath = fPath.getFullPathName();
+                    File fSol = fPath.getParentDirectory().getParentDirectory();
+                    fSol = fSol.getChildFile("Solutions");
+                    fSol = fSol.getChildFile("Unit Tests");
+                    if (fPath.exists()) {
+                        AserveUnitTest::solutionsPath = fSol.getFullPathName();
+                    }
+                }
+                sendActionMessage("RELOAD_UNIT_TESTS");
+            }
+        }
+    }
 
     if (errorD.isNotEmpty()) {
         addMessageToLog(errorD);
@@ -468,4 +552,20 @@ void AserveComs::sendGridMessage (const int x, const int y)
 {
     OSCMessage message(AserveOSC::pixelGridClicked, x, y);
     sender.send(message);
+}
+
+void AserveComs::setUniTestPtr (AserveUnitTest * test)
+{
+    unitTest = test;
+}
+
+void AserveComs::reset ()
+{
+    audio.reset();
+}
+
+void AserveComs::addUnitTestMessageToLog (String message)
+{
+    addMessageToLog(String("Unit Test -> Log: ") + message);
+
 }

@@ -28,8 +28,7 @@ MIDIIO::MIDIIO(AserveComs & _aserveComs) : aserveComs(_aserveComs)
 
 void MIDIIO::sendMessage (MidiMessage& message)
 {
-//    midiOutput->sendBlockOfMessages (MidiBuffer (message), Time::getMillisecondCounter(), 44100);
-//    aserveComs.sendMidiMessageFromImpulse(message);
+
 }
 
 void MIDIIO::connectMidiAll ()
@@ -77,7 +76,6 @@ void MIDIIO::handleIncomingMidiMessage (MidiInput* source, const MidiMessage& me
     if (impulse) {
         impulse->handleIncomingMidiMessage(nullptr, message);
     }
-    //need to feed this to virtual impulse
 }
 
 StringArray MIDIIO::getMidiNames ()

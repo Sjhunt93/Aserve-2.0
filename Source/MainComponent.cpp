@@ -1,10 +1,10 @@
 /*
-  ==============================================================================
-
-    This file was auto-generated!
-
-  ==============================================================================
-*/
+ ==============================================================================
+ 
+ This file was auto-generated!
+ 
+ ==============================================================================
+ */
 
 #ifndef MAINCOMPONENT_H_INCLUDED
 #define MAINCOMPONENT_H_INCLUDED
@@ -19,15 +19,18 @@
 #include "ImpulseComponent.h"
 #include "BitVisualiser.h"
 #include "AserveComs.h"
-
-
+#include "AUTMtof.hpp"
+#include "UnitTestUI.hpp"
+#include "OscillatorViewer.hpp"
+#include "SamplerStateViewer.hpp"
+#include "AUTBulkTester.hpp"
 #undef SHOW_CODE_INPUT
 
 //==============================================================================
 /*
-    This component lives inside our window, and this is where you should put all
-    your controls and content.
-*/
+ This component lives inside our window, and this is where you should put all
+ your controls and content.
+ */
 class MainContentComponent   :
 public AudioAppComponent,
 public TextEditor::Listener,
@@ -39,35 +42,33 @@ public ActionListener
 public:
     
     //==============================================================================
-    MainContentComponent() : aserveComs(audioMain), MIDIIO(aserveComs), impulse(aserveComs)
+    MainContentComponent() :
+    oscViewer (audioMain),
+    samplerViewer (audioMain),
+    impulse(aserveComs),
+    aserveComs(audioMain),
+    MIDIIO(aserveComs),
+    unitTestGUI(aserveComs),
+    autBulk(aserveComs)
     {
-        setSize (1000, 840);
-
-        // specify the number of input and output channels that we want to open
-        setAudioChannels (0, 2);
+        setAudioChannels (2, 2);
         
-#ifdef SHOW_CODE_INPUT
-        addAndMakeVisible(entryLabel);
-#endif
+        oscPanelEnabled = scopeLogPanelEnabled = gridPanelEnabled = impulsePanelEnabled = logEnabled = true;
+        unitTestEnabled = false;
+        
         addAndMakeVisible(logText);
         
         logText.setReadOnly(true);
-        entryLabel.setMultiLine(false);
         logText.setMultiLine(true);
-        entryLabel.addListener(this);
         
         
         logText.setColour(TextEditor::ColourIds::backgroundColourId , Colour(25, 25, 25));
-        entryLabel.setColour(TextEditor::ColourIds::backgroundColourId , Colour(25, 25, 25));
-        
-        entryLabel.setColour(TextEditor::ColourIds::textColourId , Colour(59, 252,52));
         logText.setColour(TextEditor::ColourIds::textColourId , Colour(59, 252,52));
-
-        entryLabel.setColour(TextEditor::ColourIds::highlightedTextColourId , Colour(59, 252,52));
-        entryLabel.setColour(TextEditor::ColourIds::highlightColourId , Colour(59, 252,52).withAlpha((Byte)120));
+        
         
         addAndMakeVisible(audioScope);
-        
+        addAndMakeVisible(oscViewer);
+        addAndMakeVisible(samplerViewer);
         addAndMakeVisible(impulse);
         addAndMakeVisible(bitGrid);
         
@@ -78,11 +79,13 @@ public:
         aserveComs.addActionListener(this);
         bitGrid.addActionListener(this);
         
-        logEnabled = true;
+        setSize (1000, 700);
+        
         startTimer(50);
-
+        
+        addAndMakeVisible(unitTestGUI);
+        
     }
-    
 
     ~MainContentComponent()
     {
@@ -96,11 +99,10 @@ public:
     }
     void timerCallback() override
     {
-
+        
         if (aserveComs.checkAndClearRedraw()) {
             repaint();
         }
-        
         {
             
             StringArray totalStrings = aserveComs.getAndClearMessageLog();
@@ -108,30 +110,7 @@ public:
                 return;
             }
             
-#if 0
-            String final;
-            bool setRed = false;
-            for (String st : totalStrings) {
-                final += (Time::getCurrentTime().toString(false, true) + " :: " + st + "\n");
-                if (st.startsWith("ERROR")) {
-                    setRed = true;
-                }
-            }
             
-            String lastStr = logText.getText();
-            if (lastStr.length() > 1000) {
-                lastStr = lastStr.substring(lastStr.length() - 1000, lastStr.length());
-                lastStr = lastStr.fromFirstOccurrenceOf("\n", false, false);
-            }
-            
-            logText.setText( lastStr);
-            logText.setCaretPosition(logText.getText().length());
-            
-            logText.setColour(TextEditor::ColourIds::textColourId , setRed ? Colours::crimson : Colour(59, 252,52));
-            
-            logText.insertTextAtCaret(final);
-#else
-
             if (logText.getTotalNumChars() > 10000) {
                 logText.clear();
             }
@@ -139,202 +118,114 @@ public:
             String total = "";
             
             for (String st : totalStrings) {
-                String final = (Time::getCurrentTime().toString(false, true) + " :: " + st + "\n");
+                String finalString = (Time::getCurrentTime().toString(false, true) + " :: " + st + "\n");
                 
-             //   logText.setCaretPosition(logText.getText().length());
-
                 logText.setColour(TextEditor::ColourIds::textColourId , st.startsWith("ERROR") ? Colours::crimson : Colour(59, 252,52));
+                if (st.startsWith("Unit")) {
+                    logText.setColour( TextEditor::ColourIds::textColourId , st.contains("Log:") ? Colours::darkorange : Colours::blueviolet);
+                }
                 
-                logText.insertTextAtCaret(final);
+                logText.insertTextAtCaret(finalString);
             }
             logText.setCaretPosition(logText.getText().length());
-#endif
         }
-
+        
     }
-
+    
     //=======================================================================
     void prepareToPlay (int samplesPerBlockExpected, double sampleRate) override
     {
-        // This function will be called when the audio device is started, or when
-        // its settings (i.e. sample rate, block size, etc) are changed.
-
-        // You can use this function to initialise any resources you might need,
-        // but be careful - it will be called on the audio thread, not the GUI thread.
-
-        // For more details, see the help for AudioProcessor::prepareToPlay()
-
         audioMain.prepareToPlay(samplesPerBlockExpected, sampleRate);
     }
-
+    
     void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill) override
     {
-        // Your audio-processing code goes here!
-
-        // For more details, see the help for AudioProcessor::getNextAudioBlock()
-
-        // Right now we are not producing any data, in which case we need to clear the buffer
-        // (to prevent the output of random noise)
-        
         bufferToFill.clearActiveBufferRegion();
         
         audioMain.getNextAudioBlock(bufferToFill);
-
-        audioScope.render(bufferToFill);
         
+        if (scopeLogPanelEnabled) {
+            audioScope.render(bufferToFill);
+        }
     }
-
+    
     void releaseResources() override
     {
-        // This will be called when the audio device stops, or when it is being
-        // restarted due to a setting change.
-
-        // For more details, see the help for AudioProcessor::releaseResources()
         audioMain.releaseResources();
+        MIDIIO.clearAllMidiInputs();
     }
-
+    
+    void setPanelInsets()
+    {
+        // insets depend on visibility of bit grid / sampler state / impulse panel
+        panelLeftInset = 0;
+        panelRightInset = 0;
+        panelBottomInset = 0;
+      
+        if (impulsePanelEnabled) {  panelBottomInset = 240; }
+        if (oscPanelEnabled) {      panelLeftInset = 200; }
+        if (gridPanelEnabled || unitTestEnabled) { panelRightInset = 250; }
+    }
+    
     //=======================================================================
     void paint (Graphics& g) override
     {
-        // (Our component is opaque, so we must completely fill the background with a solid colour)
-        
-        const int leftInset = 200;
-        const int rightInset = 250;
-//        const int bottomDiv = (getHeight() - 240) * 0.6;
-//        const int mid = getWidth() - (leftInset + rightInset);
+        setPanelInsets(); // 'inset' parameters depend on visibility of various panels
         
         g.fillAll (Colours::black);
         
+        // left and right panels
         g.setColour(Colours::darkgrey);
-        g.fillRect(0,0, (int) leftInset, getHeight());
+        g.fillRect(0,0, (int) panelLeftInset, getHeight());
+        g.fillRect(getWidth() - panelRightInset, 0, panelRightInset, getHeight());
         
-        g.fillRect(getWidth() - rightInset, 0, rightInset, getHeight());
-        
-        
-        
-        g.setColour(Colours::white);
-        g.drawText("Oscillator State", 5, 5, leftInset-10, 30, Justification::centred);
-        
-        float startPoint = 40.0;
-        
-        float height = ((getHeight() - 240) - startPoint) / ((float)OscillatorManager::OscillatorManagerConstants::NumOscillators);
-        
+        // bottom panel
         g.setColour(Colours::darkgrey.darker());
-        g.fillRect(0, getHeight() - 240, getWidth(), 240);
         
-        Colour offCol = Colours::white.withAlpha(0.2f);
+        g.fillRect(0, getHeight() - panelBottomInset, getWidth(), panelBottomInset);
         
-        for (int i = 0; i < OscillatorManager::OscillatorManagerConstants::NumOscillators; i++) {
-            g.setColour(Colours::black);
-            g.drawLine(0, startPoint, leftInset, startPoint);
-            
-            g.setColour( audioMain.getOscs().isActive(i) ? (  audioMain.getOscs().isOutOfRange(i) ? Colours::red : Colours::white )  : offCol );
-            
-            g.drawText(/*String("Oscillator: ") +*/ String(i) + " | " + audioMain.getOscs().getState(i) , 5, startPoint, leftInset, height, Justification::left);
-            
-            startPoint += height;
-            
-        }
-        
-        {
-            g.setColour(Colours::white);
-            g.drawText("Sampler State", getWidth()-rightInset, 5, rightInset , 30, Justification::centred);
-            
-            float startPoint = 40.0;
-
-            
-            for (int i = 0; i < AudioMain::eMaxFileTracks; i++) {
-                g.setColour(Colours::black);
-                g.drawLine(getWidth() - rightInset, startPoint, getWidth(), startPoint);
-                
-                g.setColour(audioMain.getAudioFileNames()[i] != "Empty" ? Colours::white : Colours::white.withAlpha(0.2f));
-                
-                g.drawText(/*"Sampler: " +*/ String(i) + " | " + audioMain.getAudioFileNames()[i]
-                           , (getWidth()-rightInset) + 5, startPoint, rightInset-10, height, Justification::left);
-                
-                startPoint += height;
-
-                
-            }
-            g.setColour(Colours::black);
-            g.drawLine(getWidth() - rightInset, startPoint, getWidth(), startPoint, 3.0);
-
-            g.setColour(Colours::white);
-            g.drawText("Pitched Sampler State: ", (getWidth()-rightInset) + 5, startPoint, rightInset-10, 30, Justification::centred);
-            g.drawText("Bit Gird", (getWidth()-rightInset) + 5, bitGrid.getY() - 38, rightInset-10, 30, Justification::centred);
-            
-            startPoint += 30;
-
-            for (int i = 0; i < AudioMain::eMaxSamplerTracks; i++) {
-                g.setColour(Colours::black);
-                g.drawLine(getWidth() - rightInset, startPoint, getWidth(), startPoint);
-                
-                g.setColour(audioMain.getResampledNames()[i] != "Empty" ? Colours::white : Colours::white.withAlpha(0.2f));
-                
-                g.drawText(/*"Sampler: " +*/ String(i) + " | " + audioMain.getResampledNames()[i]
-                           , (getWidth()-rightInset) + 5, startPoint, rightInset-10, height, Justification::left);
-                
-                startPoint += height;
-                
-                
-            }
-            g.setColour(Colours::black);
-            g.drawLine(getWidth() - rightInset, startPoint, getWidth(), startPoint, 3.0);
-            
-        }
-    }
-    void paintOverChildren (Graphics& g) override
-    {
-        g.setColour(Colours::lightgrey);
-        g.setFont(10);
-        g.drawText("Version: " + String(ProjectInfo::versionString), audioScope.getX() + 5, audioScope.getBottom() - 20, 100, 20, Justification::left);
-    }
-    void resized() override
-    {
-
-        const int leftInset = 200;
-        const int rightInset = 250;
-        const int bottomDiv = (getHeight() - 240) * 0.6;
-        const int mid = getWidth() - (leftInset + rightInset);
-        const int bottomRemained  = getHeight() - bottomDiv;
-        
-        
-#ifdef SHOW_CODE_INPUT
-        entryLabel.setBounds(leftInset + 3, bottomDiv, mid - 6, 40.0);
-        logText.setBounds(entryLabel.getX(), entryLabel.getBottom() + 5, entryLabel.getWidth(), (getHeight() - 240) - (entryLabel.getBottom() + 10));
-#else
-//        logText.setBounds(leftInset+3, bottomDiv+5, mid-6, (getHeight() - 240));
-        logText.setBounds(leftInset + 3, bottomDiv, mid - 6, (getHeight() - 240) - (bottomDiv));
-  
-#endif
-        
-        audioScope.setBounds(leftInset + 3, 5, mid - 6, bottomDiv - 6);
-        
-        impulse.setBounds(100, getHeight() - 240, 800, 240);
-        bitGrid.setBounds((getWidth() - rightInset) + 20, bottomDiv + 10, 210, 210);
-        
-        clearButton.setBounds(leftInset + 5, 5, 50, 25);
     }
     
-    void textEditorReturnKeyPressed (TextEditor& txt) override
+    void resized() override
     {
+        setPanelInsets();
         
-            
-     
-  
+        const int bottomDiv = (getHeight() - panelBottomInset) * 0.6;
+        const int mid = getWidth() - (panelLeftInset + panelRightInset);
+        
+        
+        logText.setBounds(panelLeftInset + 3, bottomDiv, mid - 6, (getHeight() - panelBottomInset) - (bottomDiv));
+        
+        
+        audioScope.setBounds(panelLeftInset + 3, 5, mid - 6, bottomDiv - 6);
+        clearButton.setBounds(panelLeftInset + 5, 5, 50, 25);
+        
+        impulse.setBounds(100, getHeight() - panelBottomInset, 800, 240);
+        
+        
+        oscViewer.setBounds(0, 0, panelLeftInset, getHeight() - panelBottomInset);
+        samplerViewer.setBounds(getWidth() - panelRightInset, 0, panelRightInset, 200);
+        // now set in paint() to use startPoint offset
+        bitGrid.setBounds(samplerViewer.getX() + ((samplerViewer.getWidth() - 210) * 0.5), samplerViewer.getBottom() + 10, 210, 210);
+        
+        
+        unitTestGUI.setBounds(getWidth() - panelRightInset, 0, unitTestEnabled ? panelRightInset : 0, getHeight() - panelBottomInset);
+        
     }
+    
     
     
     StringArray getMenuBarNames() override
     {
-        return {"MIDI", "Log"};
+        return {"MIDI", "Log", "View", "Settings"};
     }
     
     PopupMenu getMenuForIndex (int topLevelMenuIndex, const String& menuName) override
     {
         //we can assume the following code as there is only 1 menu..
         PopupMenu pmenu;
-        if (topLevelMenuIndex == 0) {
+        if (topLevelMenuIndex == 0) // MIDI
+        {
             StringArray inputs = MIDIIO.getMidiNames();
             if (!inputs.size()) {
                 pmenu.addItem(1, "no inputs available", false, false);
@@ -344,25 +235,140 @@ public:
                 pmenu.addItem(i+1, inputs[i], true, state);
             }
         }
-        else {
+        else if (topLevelMenuIndex == 1) // Log
+        {
             pmenu.addItem(1, "log enabled", true, logEnabled);
         }
-        
-
+        else if (topLevelMenuIndex == 2) // View
+        {
+            pmenu.addItem(1, "Oscillators", true, oscPanelEnabled);
+            pmenu.addItem(2, "Scope & Log", true, scopeLogPanelEnabled);
+            pmenu.addItem(3, "Bit grid & Samplers", true, gridPanelEnabled);
+            pmenu.addItem(4, "Impulse", true, impulsePanelEnabled);
+            pmenu.addItem(5, "Unit Tests", true, unitTestEnabled);
+        }
+        else if (topLevelMenuIndex == 3) // View
+        {
+            pmenu.addItem(1, "Unit test setup", true);
+            pmenu.addItem(2, "Run folder of tests", true);
+            pmenu.addItem(3, "Prepare submission", true);
+            
+//#ifdef DEBUG
+#warning CHECK HERE WHEN MARKING
+//            pmenu.addItem(2, "Run unit tests full", true);
+//#endif
+        }
         return pmenu;
     }
+    
     void menuItemSelected (int menuItemID, int topLevelMenuIndex) override
     {
-        if (topLevelMenuIndex == 0) {
+        if (topLevelMenuIndex == 0) // MIDI
+        {
             MIDIIO.setState(menuItemID-1, !MIDIIO.getState(menuItemID-1));
-            printf("Clicked %i \n", MIDIIO.getState(menuItemID-1));
         }
-        else if (topLevelMenuIndex == 1) {
-            
+        else if (topLevelMenuIndex == 1) // Log
+        {
             logEnabled = !logEnabled;
             aserveComs.enableLoggger(logEnabled);
         }
+        else if (topLevelMenuIndex == 2) // View
+        {
+            if (menuItemID == 1) // Oscillators
+            {
+                oscPanelEnabled = !oscPanelEnabled;
+            }
+            else if (menuItemID == 2) // Scope
+            {
+                scopeLogPanelEnabled = !scopeLogPanelEnabled;
+                clearButton.setVisible(scopeLogPanelEnabled);
+                audioScope.setVisible(scopeLogPanelEnabled);
+                logText.setVisible(scopeLogPanelEnabled);
+            }
+            else if (menuItemID == 3) // Bit grid
+            {
+                gridPanelEnabled = !gridPanelEnabled;
+                unitTestEnabled = false; // bit grid and unit test panel are mutually exclusive
+              
+                bitGrid.setVisible(gridPanelEnabled);
+                unitTestGUI.setVisible(unitTestEnabled);
+            }
+            else if (menuItemID == 4) // Impulse
+            {
+                impulsePanelEnabled = !impulsePanelEnabled;
+                impulse.setVisible(impulsePanelEnabled);
+            }
+            else if (menuItemID == 5)
+            {
+                unitTestEnabled = !unitTestEnabled;
+                gridPanelEnabled = false; // bit grid and unit test panel are mutually exclusive
+              
+                bitGrid.setVisible(gridPanelEnabled);
+                unitTestGUI.setVisible(unitTestEnabled);
+            }
+            
+            resized();
+            repaint();
+        }
+        else if (topLevelMenuIndex == 3) {
+            if (menuItemID == 1) {
+                //            AlertWindow window;
+                AlertWindow al("Unit Test Setup", "Speak to a member of staff before altering these settings!!", AlertWindow::QuestionIcon);
+                al.addTextBlock("Enter Your project path here:");
+                al.addTextEditor("Project Path", AserveUnitTest::projectPath);
+                al.addTextBlock("Enter Your solutions path here:");
+                al.addTextEditor("Solutions Path", AserveUnitTest::solutionsPath);
+                
+                al.addButton("Ok", 1);
+                al.addButton("Cancel", 2);
+                
+                const int value = al.runModalLoop();
+                if (value == 1) {
+                    AserveUnitTest::projectPath = al.getTextEditor("Project Path")->getText();
+                    AserveUnitTest::solutionsPath = al.getTextEditor("Solutions Path")->getText();
+                }
+
+            }
+            else if (menuItemID == 2) {
+                bool value = AlertWindow::showOkCancelBox(juce::AlertWindow::AlertIconType::WarningIcon, "Test folder", "Make sure you save a copy of your work before running this");
+                if (value) {
+                    autBulk.runFolderOfTest(AserveUnitTest::solutionsPath);
+                }
+                
+            }
+            else if (menuItemID == 3) {
+                
+                if (!File(AserveUnitTest::solutionsPath).exists()) {
+                    AlertWindow::showMessageBoxAsync(AlertWindow::AlertIconType::WarningIcon, "No Path Confingured", "Run the IAP project first to set the paths automatically");
+                }
+                else {
+                    AlertWindow al("Submissions", "Enter all fields carefully!", AlertWindow::QuestionIcon);
+                    al.addTextBlock("Student ID:");
+                    al.addTextEditor("ID", "");
+                    al.addTextBlock("Email Address:");
+                    al.addTextEditor("Email", "");
+                    al.addTextBlock("By hitting ok you declare that all the work you are submitting is your own.");
+                    al.addButton("Ok", 1);
+                    al.addButton("Cancel", 2);
+                    
+                    const int value = al.runModalLoop();
+                    if (value == 1) {
+                        String sId = al.getTextEditor("ID")->getText();
+                        String sEmail = al.getTextEditor("Email")->getText();
+                        AserveUnitTest::prepareSubmission(sId, sEmail);
+                    }
+                    
+                }
+            }
+            else if (menuItemID == 4) {
+                std::cout << "Runnning megatests \n";
+                autBulk.runBulkTest(File("/Users/sj4-hunt/Documents/Code/Aserve Unit Test Executer/Submissions/"));
+                
+            }
+            
+        }
     }
+    
     void actionListenerCallback (const String& message) override
     {
         if (message.startsWith("PIXEL")) {
@@ -375,30 +381,43 @@ public:
             const int y = message.fromLastOccurrenceOf(",", false, false).getIntValue();
             aserveComs.sendGridMessage(x, y);
         }
+        if (message.startsWith("RELOAD_UNIT_TESTS")) {
+            unitTestGUI.checkTestsSavedToFile();
+        }
     }
     
-
+    
 private:
     //==============================================================================
-
-    // Your private member variables go here...
     
-    TextEditor          entryLabel;
-    TextEditor          logText;
-    TextButton          clearButton;
+    
     
     AudioMain           audioMain;
-    Scope               audioScope;
-
-    BitVisualiser       bitGrid;
     
-    AserveComs          aserveComs;
-    MIDIIO              MIDIIO;
+    //Visualiser components
+    Scope               audioScope;
+    OscillatorViewer    oscViewer;
+    SamplerStateViewer  samplerViewer;
+    BitVisualiser       bitGrid;
     ImpulseController   impulse;
     
+    // MIDI OSC coms
+    AserveComs          aserveComs;
+    MIDIIO              MIDIIO;
     
-    std::vector<int>    midi;
+    TextEditor          logText;
+    TextButton          clearButton;
+
+    // unit tester
+    UnitTestGUI         unitTestGUI;
+    AUTBulkTester       autBulk;
+    // enable/disable logging of messages
     bool                logEnabled;
+    
+    // show and enable / hide and disable GUI panels
+    int                 panelRightInset, panelLeftInset, panelBottomInset;
+    bool                oscPanelEnabled, scopeLogPanelEnabled, gridPanelEnabled, impulsePanelEnabled, unitTestEnabled;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
     
 };
@@ -409,3 +428,4 @@ Component* createMainContentComponent()     { return new MainContentComponent();
 
 
 #endif  // MAINCOMPONENT_H_INCLUDED
+

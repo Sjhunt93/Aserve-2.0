@@ -14,7 +14,6 @@ BitVisualiser::BitVisualiser ()
 {
     for (int i = 0; i < 16; i++) {
         pixelGrid[i] = 0;
-           // pixelGrid[i] = arc4random() % 65536;
     }
 
     
@@ -36,17 +35,17 @@ BitVisualiser::~BitVisualiser ()
 
 void BitVisualiser::paint (Graphics & g)
 {
-    jassert(getWidth() == getHeight());
+//    jassert(getWidth() == getHeight());
     
     float size = ((getWidth()-2) / 16);
-    
-  //  g.fillAll(Colours::black);
-    
+  g.fillAll(Colours::darkgrey);
     g.setColour(Colours::white);
+    g.drawText("Bit Grid", 0, 0, getWidth(), 30, Justification::centred);
+    
     for (int y = 0; y < 16; y++) {
         for (int x = 0; x < 16; x++) {
             if (pixelGrid[y] & 1 << (15-x)) {
-                g.fillRect(1+ x*size, 1 + y*size, size - 1, size - 1);
+                g.fillRect(1+ x*size, 30 + y*size, size - 1, size - 1);
             }
         }
     }
@@ -54,9 +53,9 @@ void BitVisualiser::paint (Graphics & g)
     g.setColour(Colours::black);
     for (int i = 0; i < 15; i++) {
 
-        g.drawLine(size*i + size, 0, size *i + size, getHeight());
+        g.drawLine(size*i + size, 30, size *i + size, getHeight());
         
-        g.drawLine(0, size*i + size, getWidth(), size*i + size);
+        g.drawLine(0, 30 + (size*i + size), getWidth(), 30 + (size*i + size));
     }
     
 }
@@ -72,7 +71,13 @@ void BitVisualiser::mouseDown (const MouseEvent& event)
 {
     float size = ((getWidth()-2) / 16);
     
-    const int x = event.x / size;
-    const int y = event.y / size;
+    int x = event.x / size;
+    int y = ( event.y-30) / size;
+    if (x > 15) {
+        x = 15;
+    }
+    if (y > 15) {
+        y = 15;
+    }
     sendActionMessage("GRID:" + String(x) + "," + String(y));
 }

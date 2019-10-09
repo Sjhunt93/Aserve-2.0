@@ -98,12 +98,12 @@ public:
     void stopAll();
     
     //AudioSouce Callbacks
-    virtual void prepareToPlay (int samplesPerBlockExpected, double sampleRate);
-    virtual void releaseResources();
-    virtual void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill);
+    virtual void prepareToPlay (int samplesPerBlockExpected, double sampleRate) override;
+    virtual void releaseResources() override;
+    virtual void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill) override;
     
     //FilePlayer callback
-    virtual void audioFileNameChanged(const AudioFilePlayer *player, const String &path);
+    virtual void audioFileNameChanged(const AudioFilePlayer *player, const String &path) override;
     virtual void audioFilePlayStateChanged(const AudioFilePlayer *player, const AudioFilePlayer::PlayState state) override;
 private:
     OwnedArray<AudioFilePlayer> players;
