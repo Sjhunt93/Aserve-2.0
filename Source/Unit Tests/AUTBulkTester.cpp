@@ -38,8 +38,7 @@ void AUTBulkTester::actionListenerCallback (const String& message)
     if (message.startsWith("finished")) {
         if (unitTest != nullptr) {
             std::cout << unitTest->getErrors() << " : Unit result: " << unitTest->getResult() << "\n";
-            AserveUnitTest::eTestState state = unitTest->getResult();
-     
+        
             students[studentIndex].scores[testIndex] = unitTest->getResult();
                    unitTest = nullptr;
         }

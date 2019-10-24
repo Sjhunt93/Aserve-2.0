@@ -38,7 +38,7 @@ void Scope::calculateScopeBuffers(void)
 		{
 			double currentPixelAcumulator = 0.0;
 			int previousPixel = -1;
-			float minVal, maxVal;
+			float minVal = 0, maxVal = 0;
 			ScopedLock sl(bufferAccess);
 			for(int sampleNum = 0; sampleNum < bufferSize; sampleNum++, currentPixelAcumulator += pixPerSamp)
 			{

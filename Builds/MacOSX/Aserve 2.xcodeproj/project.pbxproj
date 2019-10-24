@@ -12,6 +12,7 @@
 		31E3DBFE3689BA138EAFDCD3 /* include_juce_opengl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 471D2DA4F77738F73EDA55C1 /* include_juce_opengl.mm */; };
 		36CF46A3B95EEF538D119736 /* include_juce_audio_formats.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4E5894026300C039FDC5B510 /* include_juce_audio_formats.mm */; };
 		387444C9FF55F2EA154A9B1E /* include_juce_data_structures.mm in Sources */ = {isa = PBXBuildFile; fileRef = E92A5BFB7C91453118356E81 /* include_juce_data_structures.mm */; };
+		4707D7972360EE6B00F2579D /* Oscillator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4707D7952360EE6B00F2579D /* Oscillator.cpp */; };
 		471BF7C82231361D00339211 /* AserveUnitTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 471BF7C62231361D00339211 /* AserveUnitTest.cpp */; };
 		471BF7CB22313B5B00339211 /* AUTMtof.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 471BF7C922313B5B00339211 /* AUTMtof.cpp */; };
 		47561DB8215293AF0012BED1 /* AserveComs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47561D8E215293AF0012BED1 /* AserveComs.cpp */; };
@@ -98,6 +99,8 @@
 		3AB4A683E38D94301E136FC3 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		40429BA516AD5C39B1A08127 /* include_juce_audio_basics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_basics.mm; path = ../../JuceLibraryCode/include_juce_audio_basics.mm; sourceTree = SOURCE_ROOT; };
 		41935231D9A4459CBA7ECB4C /* juce_audio_devices */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_devices; path = ../../JuceLibraryCode/modules/juce_audio_devices; sourceTree = SOURCE_ROOT; };
+		4707D7952360EE6B00F2579D /* Oscillator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Oscillator.cpp; sourceTree = "<group>"; };
+		4707D7962360EE6B00F2579D /* Oscillator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Oscillator.hpp; sourceTree = "<group>"; };
 		471BF7C62231361D00339211 /* AserveUnitTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AserveUnitTest.cpp; sourceTree = "<group>"; };
 		471BF7C72231361D00339211 /* AserveUnitTest.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AserveUnitTest.hpp; sourceTree = "<group>"; };
 		471BF7C922313B5B00339211 /* AUTMtof.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AUTMtof.cpp; sourceTree = "<group>"; };
@@ -249,6 +252,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4707D7942360EE4000F2579D /* Oscillators */ = {
+			isa = PBXGroup;
+			children = (
+				4707D7952360EE6B00F2579D /* Oscillator.cpp */,
+				4707D7962360EE6B00F2579D /* Oscillator.hpp */,
+			);
+			path = Oscillators;
+			sourceTree = "<group>";
+		};
 		471BF7C52231360E00339211 /* Unit Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -286,6 +298,7 @@
 		47561D90215293AF0012BED1 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				4707D7942360EE4000F2579D /* Oscillators */,
 				47561D93215293AF0012BED1 /* AserveOscillators.cpp */,
 				47561D94215293AF0012BED1 /* AserveOscillators.h */,
 				47561D95215293AF0012BED1 /* AudioFilePlayer.cpp */,
@@ -615,6 +628,7 @@
 				47561DC0215293AF0012BED1 /* BitVisualiser.cpp in Sources */,
 				47DECE6122EB536800946189 /* ComponentList.cpp in Sources */,
 				47DECE5822E890A700946189 /* SamplerStateViewer.cpp in Sources */,
+				4707D7972360EE6B00F2579D /* Oscillator.cpp in Sources */,
 				47DF3DA622BA51BE006DD7EA /* UnitTestUI.cpp in Sources */,
 				47561DC9215293AF0012BED1 /* TransportButtonComponent.cpp in Sources */,
 				7EA01A676E429540E3F05CD2 /* include_juce_audio_utils.mm in Sources */,

@@ -38,7 +38,6 @@ void ComponentList::resized ()
     }
     addNew.setBounds(getWidth() * 0.5 - (objectHeight * 0.5), runningY, objectHeight, objectHeight);
     
-    const int h = getHeight();
 }
 
 
