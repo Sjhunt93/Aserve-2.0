@@ -2235,6 +2235,9 @@
     <ClCompile Include="..\..\Source\GUI\SamplerStateViewer.cpp">
       <Filter>Aserve 2.0\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Audio\Oscillators\Oscillator.cpp">
+      <Filter>Aserve 2.0\Audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\Audio\AserveAudio.h">
@@ -4285,6 +4288,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\GUI\SamplerStateViewer.hpp">
       <Filter>Aserve 2.0\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Audio\Oscillators\Oscillator.hpp">
+      <Filter>Aserve 2.0\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
