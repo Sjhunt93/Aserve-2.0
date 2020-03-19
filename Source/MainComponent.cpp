@@ -24,7 +24,7 @@
 #include "OscillatorViewer.hpp"
 #include "SamplerStateViewer.hpp"
 #include "AUTBulkTester.hpp"
-#include "TheftChecker.hpp"
+//#include "TheftChecker.hpp"
 #undef SHOW_CODE_INPUT
 
 //==============================================================================
@@ -394,7 +394,7 @@ public:
             else if (menuItemID == 5) {
                 std::cout << "Runnning theft checker \n";
 //                autBulk.runBulkTest(File("/Users/sj4-hunt/Documents/Code/Aserve Unit Test Executer/Submissions/"));
-                TheftChecker::doTest();
+//                TheftChecker::doTest();
                 
                 
             }
