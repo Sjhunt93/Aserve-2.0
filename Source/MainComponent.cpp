@@ -24,6 +24,7 @@
 #include "OscillatorViewer.hpp"
 #include "SamplerStateViewer.hpp"
 #include "AUTBulkTester.hpp"
+#include "TheftChecker.hpp"
 #undef SHOW_CODE_INPUT
 
 //==============================================================================
@@ -78,7 +79,7 @@ public:
         aserveComs.addActionListener(this);
         bitGrid.addActionListener(this);
         
-        setSize (1000, 700);
+        setSize (1000, 730);
         
         startTimer(50);
         
@@ -205,7 +206,7 @@ public:
         oscViewer.setBounds(0, 0, panelLeftInset, getHeight() - panelBottomInset);
         samplerViewer.setBounds(getWidth() - panelRightInset, 0, panelRightInset, 200);
         // now set in paint() to use startPoint offset
-        bitGrid.setBounds(samplerViewer.getX() + ((samplerViewer.getWidth() - 210) * 0.5), samplerViewer.getBottom() + 10, 210, 210);
+        bitGrid.setBounds(samplerViewer.getX() + ((samplerViewer.getWidth() - 210) * 0.5), samplerViewer.getBottom() + 10, 210, 210+30);
         
         
         unitTestGUI.setBounds(getWidth() - panelRightInset, 0, unitTestEnabled ? panelRightInset : 0, getHeight() - panelBottomInset);
@@ -254,7 +255,8 @@ public:
             
 //#ifdef DEBUG
 #warning CHECK HERE WHEN MARKING
-//            pmenu.addItem(2, "Run unit tests full", true);
+            pmenu.addItem(4, "Run unit tests full", true);
+            pmenu.addItem(5, "Run theft checker!", true);
 //#endif
         }
         return pmenu;
@@ -361,10 +363,17 @@ public:
             }
             else if (menuItemID == 4) {
                 std::cout << "Runnning megatests \n";
+                audioMain.masterGain = 0.0;
                 autBulk.runBulkTest(File("/Users/sj4-hunt/Documents/Code/Aserve Unit Test Executer/Submissions/"));
                 
             }
-            
+            else if (menuItemID == 5) {
+                std::cout << "Runnning theft checker \n";
+//                autBulk.runBulkTest(File("/Users/sj4-hunt/Documents/Code/Aserve Unit Test Executer/Submissions/"));
+                TheftChecker::doTest();
+                
+                
+            }
         }
     }
     

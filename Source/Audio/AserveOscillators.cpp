@@ -11,7 +11,7 @@
 #include "../JuceLibraryCode/JuceHeader.h" // this is just for the juce PI and maths stuff
 
 #include <limits>
-
+#include <cfloat>
 
 
 //-------------------------------------------
@@ -367,6 +367,9 @@ void WaveOscillator::setFrequency(const double val)
     frequencyOutOfRange = val > 44100 / 2 || val < 0;
     if (frequencyOutOfRange) {
 
+    }
+    if (std::isinf(val) || std::isnan(val)) {
+        return;
     }
     for (Oscillator * osc : oscs) {
         osc->setFrequency(val);

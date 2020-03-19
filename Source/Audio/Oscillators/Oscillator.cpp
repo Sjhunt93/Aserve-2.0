@@ -77,12 +77,12 @@ double Oscillator::nextSample(void)
             sample = amplitude * (float) renderWaveShape() * tailOff;
             tailOff *= 0.99;
             
-            if (tailOff <= 0.005) {
+            if (tailOff <= 0.001) {
                 this->reset();
             }
         }
         else {
-            tailOn *= 0.98;
+            tailOn *= 0.999;
             if (tailOn <= 0.005) {
                 tailOn = 0.0;
             }

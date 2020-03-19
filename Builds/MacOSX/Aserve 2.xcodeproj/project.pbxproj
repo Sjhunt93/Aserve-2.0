@@ -15,6 +15,7 @@
 		4707D7972360EE6B00F2579D /* Oscillator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4707D7952360EE6B00F2579D /* Oscillator.cpp */; };
 		471BF7C82231361D00339211 /* AserveUnitTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 471BF7C62231361D00339211 /* AserveUnitTest.cpp */; };
 		471BF7CB22313B5B00339211 /* AUTMtof.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 471BF7C922313B5B00339211 /* AUTMtof.cpp */; };
+		474C3BB723968B7B002204B5 /* TheftChecker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 474C3BB523968B7B002204B5 /* TheftChecker.cpp */; };
 		47561DB8215293AF0012BED1 /* AserveComs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47561D8E215293AF0012BED1 /* AserveComs.cpp */; };
 		47561DBA215293AF0012BED1 /* AserveOscillators.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47561D93215293AF0012BED1 /* AserveOscillators.cpp */; };
 		47561DBB215293AF0012BED1 /* AudioFilePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47561D95215293AF0012BED1 /* AudioFilePlayer.cpp */; };
@@ -106,6 +107,8 @@
 		471BF7C922313B5B00339211 /* AUTMtof.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AUTMtof.cpp; sourceTree = "<group>"; };
 		471BF7CA22313B5B00339211 /* AUTMtof.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AUTMtof.hpp; sourceTree = "<group>"; };
 		471D2DA4F77738F73EDA55C1 /* include_juce_opengl.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_opengl.mm; path = ../../JuceLibraryCode/include_juce_opengl.mm; sourceTree = SOURCE_ROOT; };
+		474C3BB523968B7B002204B5 /* TheftChecker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TheftChecker.cpp; path = ../../Source/TheftChecker.cpp; sourceTree = "<group>"; };
+		474C3BB623968B7B002204B5 /* TheftChecker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TheftChecker.hpp; path = ../../Source/TheftChecker.hpp; sourceTree = "<group>"; };
 		47561D8E215293AF0012BED1 /* AserveComs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AserveComs.cpp; path = ../../Source/AserveComs.cpp; sourceTree = "<group>"; };
 		47561D8F215293AF0012BED1 /* AserveComs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AserveComs.h; path = ../../Source/AserveComs.h; sourceTree = "<group>"; };
 		47561D93215293AF0012BED1 /* AserveOscillators.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AserveOscillators.cpp; sourceTree = "<group>"; };
@@ -504,6 +507,8 @@
 				47561DDE2154DF720012BED1 /* MIDIIO.cpp */,
 				47DECE5922E8B8D100946189 /* ConfigWindow.cpp */,
 				47DECE5A22E8B8D100946189 /* ConfigWindow.hpp */,
+				474C3BB523968B7B002204B5 /* TheftChecker.cpp */,
+				474C3BB623968B7B002204B5 /* TheftChecker.hpp */,
 				47561D90215293AF0012BED1 /* Audio */,
 				47561D9D215293AF0012BED1 /* GUI */,
 				47561DA4215293AF0012BED1 /* Impulse */,
@@ -627,6 +632,7 @@
 				47DECE6D22F865E400946189 /* AUTScaleQuantiser.cpp in Sources */,
 				47561DC0215293AF0012BED1 /* BitVisualiser.cpp in Sources */,
 				47DECE6122EB536800946189 /* ComponentList.cpp in Sources */,
+				474C3BB723968B7B002204B5 /* TheftChecker.cpp in Sources */,
 				47DECE5822E890A700946189 /* SamplerStateViewer.cpp in Sources */,
 				4707D7972360EE6B00F2579D /* Oscillator.cpp in Sources */,
 				47DF3DA622BA51BE006DD7EA /* UnitTestUI.cpp in Sources */,

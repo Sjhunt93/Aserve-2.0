@@ -75,6 +75,8 @@ public:
     static void waterMarkFile2 (File f);
     static void createHiddenFile (File dir);
     static void prepareSubmission (String sId, String email);
+    
+    static String getCheckSum (String input);
 protected:
     AserveComs & coms;
     const String testName;

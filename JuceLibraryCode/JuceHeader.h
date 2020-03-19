@@ -41,7 +41,7 @@
 namespace ProjectInfo
 {
     const char* const  projectName    = "Aserve 2.0";
-    const char* const  versionString  = "2.0.9";
+    const char* const  versionString  = "2.1.0";
     const int          versionNumber  = 0x20900;
 }
 #endif

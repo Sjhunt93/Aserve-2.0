@@ -97,6 +97,8 @@ void AudioMain::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
             *bufferToFill.buffer->getWritePointer(chan, i) =
             (filter[4+chan].processSingleSampleRaw(*bufferToFill.buffer->getReadPointer(chan, i)) * prevHBGain) +
             *bufferToFill.buffer->getReadPointer(chan, i);
+            
+            *bufferToFill.buffer->getWritePointer(chan, i) = *bufferToFill.buffer->getWritePointer(chan, i) * masterGain;//
         }
     }
     
