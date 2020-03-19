@@ -43,6 +43,7 @@ public:
     
     //==============================================================================
     MainContentComponent() :
+    deviceSelector(deviceManager, 0, 0, 2,2, false, false, true, true),
     oscViewer (audioMain),
     samplerViewer (audioMain),
     impulse(aserveComs),
@@ -51,6 +52,9 @@ public:
     unitTestGUI(aserveComs),
     autBulk(aserveComs)
     {
+        
+        
+        
         setAudioChannels (2, 2);
         
         oscPanelEnabled = scopeLogPanelEnabled = gridPanelEnabled = impulsePanelEnabled = logEnabled = true;
@@ -84,6 +88,10 @@ public:
         startTimer(50);
         
         addAndMakeVisible(unitTestGUI);
+     
+//        addAndMakeVisible(audiode);
+        
+        
         
     }
 
@@ -217,7 +225,7 @@ public:
     
     StringArray getMenuBarNames() override
     {
-        return {"MIDI", "Log", "View", "Settings"};
+        return {"Audio & MIDI", "Log", "View", "Settings"};
     }
     
     PopupMenu getMenuForIndex (int topLevelMenuIndex, const String& menuName) override
@@ -226,14 +234,23 @@ public:
         PopupMenu pmenu;
         if (topLevelMenuIndex == 0) // MIDI
         {
+            pmenu.addSectionHeader("Audio");
+            pmenu.addItem(1, "Show Audio Settings", true, false);
+            pmenu.addSeparator();
+            
+            pmenu.addSectionHeader("MIDI");
+            
             StringArray inputs = MIDIIO.getMidiNames();
             if (!inputs.size()) {
-                pmenu.addItem(1, "no inputs available", false, false);
+                pmenu.addItem(2, "no inputs available", false, false);
             }
             for (int i = 0; i < inputs.size(); i++) {
                 bool state = MIDIIO.getState(i);
-                pmenu.addItem(i+1, inputs[i], true, state);
+                pmenu.addItem(i+2, inputs[i], true, state);
             }
+            
+            
+            
         }
         else if (topLevelMenuIndex == 1) // Log
         {
@@ -255,8 +272,8 @@ public:
             
 //#ifdef DEBUG
 #warning CHECK HERE WHEN MARKING
-            pmenu.addItem(4, "Run unit tests full", true);
-            pmenu.addItem(5, "Run theft checker!", true);
+//            pmenu.addItem(4, "Run unit tests full", true);
+//            pmenu.addItem(5, "Run theft checker!", true);
 //#endif
         }
         return pmenu;
@@ -266,10 +283,17 @@ public:
     {
         if (topLevelMenuIndex == 0) // MIDI
         {
-            MIDIIO.setState(menuItemID-1, !MIDIIO.getState(menuItemID-1));
+            if (menuItemID == 1) {
+                deviceSelector.setBounds(0, 0, 500, 500);
+                DialogWindow::showModalDialog("Audio Settings", &deviceSelector, this, Colours::darkgrey, true);
+            }
+            else {
+                MIDIIO.setState(menuItemID-1, !MIDIIO.getState(menuItemID-1));
+            }
         }
         else if (topLevelMenuIndex == 1) // Log
         {
+            
             logEnabled = !logEnabled;
             aserveComs.enableLoggger(logEnabled);
         }
@@ -401,7 +425,7 @@ private:
     
     
     AudioMain           audioMain;
-    
+    AudioDeviceSelectorComponent  deviceSelector;
     //Visualiser components
     Scope               audioScope;
     OscillatorViewer    oscViewer;
