@@ -11,88 +11,8 @@
 #include "../JuceLibraryCode/JuceHeader.h" // this is just for the juce PI and maths stuff
 
 #include <limits>
+#include <cfloat>
 
-//-------------------------------------------
-// Oscillator base class
-Oscillator::Oscillator() 
-:		frequency (1000.0),
-        amplitude (0.0f),
-		sampleRate (44100.0),
-		tailOff(0.0)
-{
-	
-}
-Oscillator::~Oscillator()
-{
-	
-}
-
-void Oscillator::prepare(double sampleRate_)
-{
-    sampleRate = sampleRate_;
-	this->reset();
-}
-
-void Oscillator :: reset()
-{
-	amplitude = 0.0;		//must reset amplitude to prevent rendering when == 0
-}
-
-void Oscillator::setFrequency(const double val)
-{
-	frequency = val;
-}
-
-void Oscillator::setAmplitude(const float val)
-{
-	amplitude = val;
-	tailOff = 0.0;
-}
-
-//use this to fade out setAmplitude(0) for instintanious holdup!
-void Oscillator::stop(void)
-{
-	if (tailOff == 0.0)//only need to begin a tailoff if it has not already begun
-		tailOff = 1.0;
-}
-
-
-double Oscillator::nextSample(void)
-{
-	double sample = 0.0;
-	
-	
-	if(amplitude > 0.0)//don't calculate anything unless necessary
-	{	
-		
-		
-		if (tailOff > 0)			//if fading out incorporate the fade
-		{
-			sample = amplitude * (float) renderWaveShape() * tailOff;
-			tailOff *= 0.99;
-			
-			if (tailOff <= 0.005)
-			{
-				this->reset();
-			}
-		}
-		else
-		{
-			sample = amplitude * (float) renderWaveShape();
-		}
-	}
-	return sample;
-}
-
-double Oscillator::getFrequency ()
-{
-    return frequency;
-}
-
-String Oscillator::getStates ()
-{
-    return String(frequency) + " " + String(amplitude);
-}
 
 //-------------------------------------------
 //Sinusoidal Oscilator - Not Necessary 
@@ -447,6 +367,9 @@ void WaveOscillator::setFrequency(const double val)
     frequencyOutOfRange = val > 44100 / 2 || val < 0;
     if (frequencyOutOfRange) {
 
+    }
+    if (std::isinf(val) || std::isnan(val)) {
+        return;
     }
     for (Oscillator * osc : oscs) {
         osc->setFrequency(val);

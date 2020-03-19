@@ -61,7 +61,7 @@ public:
     
     StringArray getAudioFileNames ();
     StringArray getResampledNames ();
-    
+    float masterGain = 1.0;
 private:
     AudioFormatManager formatManager;
     OscillatorManager oscs;

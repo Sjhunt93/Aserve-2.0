@@ -85,7 +85,7 @@ StringArray MIDIIO::getMidiNames ()
 
 void MIDIIO::setImpulseComponent (ImpulseController * _impulse)
 {
-    _impulse = impulse;
+    impulse = _impulse;
 }
 
 void MIDIIO::sendMIDI (MidiMessage message)

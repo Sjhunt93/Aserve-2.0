@@ -24,7 +24,16 @@ class AUTBulkTester : public Component, public ActionListener, public Thread {
 public:
     
     struct Student {
+        Student ()
+        {
+            for (int i = 0; i < 10;i++)
+            {
+                scores[i] = 0;
+            }
+        }
         File fRoot;
+        String name;
+        String email;
         int testsPassed;
         int testsFailed;
         int testsNotAttempted;

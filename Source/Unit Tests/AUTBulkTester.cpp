@@ -38,8 +38,7 @@ void AUTBulkTester::actionListenerCallback (const String& message)
     if (message.startsWith("finished")) {
         if (unitTest != nullptr) {
             std::cout << unitTest->getErrors() << " : Unit result: " << unitTest->getResult() << "\n";
-            AserveUnitTest::eTestState state = unitTest->getResult();
-     
+        
             students[studentIndex].scores[testIndex] = unitTest->getResult();
                    unitTest = nullptr;
         }
@@ -71,7 +70,7 @@ void AUTBulkTester::actionListenerCallback (const String& message)
             int lastPass = 0;
             int lastFail = 0;
             for (Student s : students) {
-                std::cout << "Score for : " << s.number << "\n";
+//                std::cout << "Score for : " << s.number << "\n";
                 int pass =0;
                 int fail = 0;
                 for (int i = 0; i < 10; i++) {
@@ -84,8 +83,15 @@ void AUTBulkTester::actionListenerCallback (const String& message)
                 }
                 lastPass = pass;
                 lastFail = fail;
-                std::cout << "Passed: " << pass << " || Failed: " << fail << "\n";
+//                std::cout << "Passed: " << pass << " || Failed: " << fail << "\n";
+                std::cout << s.number << "," << s.name << "," << s.email << "," ;// << pass << ",";
+                for (int i = 0; i < 10; i++) {
+                    std::cout << s.scores[i] << ",";
+                }
+                std::cout << "\n";
+                
             }
+            
             
             if (revertOriginalSourceFiles) {
                 File codeFolder = File(sourceFolderPath);
@@ -210,6 +216,26 @@ void AUTBulkTester::runBulkTest (File fRoot)
         student.number = f.getFileName();
         students.push_back(student);
         std::cout << student.number << " - " << student.fRoot.getFullPathName() << "\n";
+        
+        File hiddenFile = f.getChildFile(".sub.txt");
+        
+        
+        if (!hiddenFile.exists()) {
+            continue;
+            
+        }
+        
+        FileInputStream fStream(hiddenFile);
+        
+        String logonName = fStream.readString();
+        String getFullUserName = fStream.readString();
+        String CPUName = fStream.readString();
+        String sId = fStream.readString();
+        String email = fStream.readString();
+        
+        students[students.size()-1].name = getFullUserName.removeCharacters("\n");
+        students[students.size()-1].email = email.removeCharacters("\n");
+        
     }
     
     studentIndex = 0;

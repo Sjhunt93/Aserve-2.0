@@ -79,6 +79,8 @@ public:
 #ifdef JUCE_WINDOWS
 	int arc4random();
 #endif
+    
+    static String getCheckSum (String input);
 protected:
     AserveComs & coms;
     const String testName;

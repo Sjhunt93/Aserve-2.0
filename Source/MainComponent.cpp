@@ -24,6 +24,7 @@
 #include "OscillatorViewer.hpp"
 #include "SamplerStateViewer.hpp"
 #include "AUTBulkTester.hpp"
+#include "TheftChecker.hpp"
 #undef SHOW_CODE_INPUT
 
 //==============================================================================
@@ -43,6 +44,7 @@ public:
     
     //==============================================================================
     MainContentComponent() :
+    deviceSelector(deviceManager, 0, 0, 2,2, false, false, true, true),
     oscViewer (audioMain),
     samplerViewer (audioMain),
     impulse(aserveComs),
@@ -51,6 +53,9 @@ public:
     unitTestGUI(aserveComs),
     autBulk(aserveComs)
     {
+        
+        
+        
         setAudioChannels (2, 2);
         
         oscPanelEnabled = scopeLogPanelEnabled = gridPanelEnabled = impulsePanelEnabled = logEnabled = true;
@@ -79,11 +84,15 @@ public:
         aserveComs.addActionListener(this);
         bitGrid.addActionListener(this);
         
-        setSize (1000, 700);
+        setSize (1000, 730);
         
         startTimer(50);
         
         addAndMakeVisible(unitTestGUI);
+     
+//        addAndMakeVisible(audiode);
+        
+        
         
     }
 
@@ -206,7 +215,7 @@ public:
         oscViewer.setBounds(0, 0, panelLeftInset, getHeight() - panelBottomInset);
         samplerViewer.setBounds(getWidth() - panelRightInset, 0, panelRightInset, 200);
         // now set in paint() to use startPoint offset
-        bitGrid.setBounds(samplerViewer.getX() + ((samplerViewer.getWidth() - 210) * 0.5), samplerViewer.getBottom() + 10, 210, 210);
+        bitGrid.setBounds(samplerViewer.getX() + ((samplerViewer.getWidth() - 210) * 0.5), samplerViewer.getBottom() + 10, 210, 210+30);
         
         
         unitTestGUI.setBounds(getWidth() - panelRightInset, 0, unitTestEnabled ? panelRightInset : 0, getHeight() - panelBottomInset);
@@ -217,7 +226,7 @@ public:
     
     StringArray getMenuBarNames() override
     {
-        return {"MIDI", "Log", "View", "Settings"};
+        return {"Audio & MIDI", "Log", "View", "Settings"};
     }
     
     PopupMenu getMenuForIndex (int topLevelMenuIndex, const String& menuName) override
@@ -226,14 +235,23 @@ public:
         PopupMenu pmenu;
         if (topLevelMenuIndex == 0) // MIDI
         {
+            pmenu.addSectionHeader("Audio");
+            pmenu.addItem(1, "Show Audio Settings", true, false);
+            pmenu.addSeparator();
+            
+            pmenu.addSectionHeader("MIDI");
+            
             StringArray inputs = MIDIIO.getMidiNames();
             if (!inputs.size()) {
-                pmenu.addItem(1, "no inputs available", false, false);
+                pmenu.addItem(2, "no inputs available", false, false);
             }
             for (int i = 0; i < inputs.size(); i++) {
                 bool state = MIDIIO.getState(i);
-                pmenu.addItem(i+1, inputs[i], true, state);
+                pmenu.addItem(i+2, inputs[i], true, state);
             }
+            
+            
+            
         }
         else if (topLevelMenuIndex == 1) // Log
         {
@@ -264,10 +282,17 @@ public:
     {
         if (topLevelMenuIndex == 0) // MIDI
         {
-            MIDIIO.setState(menuItemID-1, !MIDIIO.getState(menuItemID-1));
+            if (menuItemID == 1) {
+                deviceSelector.setBounds(0, 0, 500, 500);
+                DialogWindow::showModalDialog("Audio Settings", &deviceSelector, this, Colours::darkgrey, true);
+            }
+            else {
+                MIDIIO.setState(menuItemID-1, !MIDIIO.getState(menuItemID-1));
+            }
         }
         else if (topLevelMenuIndex == 1) // Log
         {
+            
             logEnabled = !logEnabled;
             aserveComs.enableLoggger(logEnabled);
         }
@@ -361,10 +386,17 @@ public:
             }
             else if (menuItemID == 4) {
                 std::cout << "Runnning megatests \n";
+                audioMain.masterGain = 0.0;
                 autBulk.runBulkTest(File("/Users/sj4-hunt/Documents/Code/Aserve Unit Test Executer/Submissions/"));
                 
             }
-            
+            else if (menuItemID == 5) {
+                std::cout << "Runnning theft checker \n";
+//                autBulk.runBulkTest(File("/Users/sj4-hunt/Documents/Code/Aserve Unit Test Executer/Submissions/"));
+                TheftChecker::doTest();
+                
+                
+            }
         }
     }
     
@@ -392,7 +424,7 @@ private:
     
     
     AudioMain           audioMain;
-    
+    AudioDeviceSelectorComponent  deviceSelector;
     //Visualiser components
     Scope               audioScope;
     OscillatorViewer    oscViewer;

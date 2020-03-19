@@ -300,9 +300,31 @@ AserveUnitTest * AserveUnitTest::allocateForTest (String t, AserveComs & coms)
 
     
     String usrName = SystemStats::getLogonName().removeCharacters(" ");
+    String checkSum = getCheckSum(usrName);
+    FileOutputStream outStream(f);
+    
+    outStream.setPosition(0);
+    outStream.truncate();
+    
+    outStream << String("// Unit Test copy: DO NOT EDIT THIS HEADER \n");
+    outStream << String("// " + f.getFileName() + "\n");
+    outStream << String("// IAPProject \n");
+    outStream << String("//" + checkSum + "\n");
+    outStream << String("// Created by " + SystemStats::getLogonName() + "\n");
+    outStream << String("// Created by " + SystemStats::getFullUserName() + "\n");
+    outStream << String("// Tested On " + Time::getCurrentTime().toString(true, true) + "\n");
+    outStream << String("// End of Header;\n\n\n");
+
+    outStream << all;
+
+}
+
+/*static*/ String  AserveUnitTest::getCheckSum (String input)
+{
+    
     uint8 counter = 0;
-    for (int i = 0; i < usrName.length(); i++) {
-        char c = usrName.toRawUTF8()[i];
+    for (int i = 0; i < input.length(); i++) {
+        char c = input.toRawUTF8()[i];
         
         for (int j = 0; j < 8; j++) {
             if ((1 << j) & c) {
@@ -322,23 +344,7 @@ AserveUnitTest * AserveUnitTest::allocateForTest (String t, AserveComs & coms)
             checkSum += "\t";
         }
     }
-    
-    FileOutputStream outStream(f);
-    
-    outStream.setPosition(0);
-    outStream.truncate();
-    
-    outStream << String("// Unit Test copy: DO NOT EDIT THIS HEADER \n");
-    outStream << String("// " + f.getFileName() + "\n");
-    outStream << String("// IAPProject \n");
-    outStream << String("//" + checkSum + "\n");
-    outStream << String("// Created by " + SystemStats::getLogonName() + "\n");
-    outStream << String("// Created by " + SystemStats::getFullUserName() + "\n");
-    outStream << String("// Tested On " + Time::getCurrentTime().toString(true, true) + "\n");
-    outStream << String("// End of Header;\n\n\n");
-
-    outStream << all;
-
+    return checkSum;
 }
 
 /*static*/ void AserveUnitTest::createHiddenFile (File dir)
