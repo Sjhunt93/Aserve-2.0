@@ -272,7 +272,7 @@ public:
             
 //#ifdef DEBUG
 #warning CHECK HERE WHEN MARKING
-//            pmenu.addItem(4, "Run unit tests full", true);
+            pmenu.addItem(4, "Run unit tests full", true);
 //            pmenu.addItem(5, "Run theft checker!", true);
 //#endif
         }
