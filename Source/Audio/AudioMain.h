@@ -62,6 +62,11 @@ public:
     StringArray getAudioFileNames ();
     StringArray getResampledNames ();
     float masterGain = 1.0;
+    
+    const float prevHBCuttoff() {return prevHBCuttoff_;}
+    const float prevHBQ () {return prevHBQ_;}
+    const float prevHBGain () {return prevHBGain_;}
+    
 private:
     AudioFormatManager formatManager;
     OscillatorManager oscs;
@@ -73,7 +78,7 @@ private:
     Synthesiser     resampleSynth[eMaxSamplerTracks];
     MidiMessageCollector messageCollector[eMaxSamplerTracks];
 
-    float prevHBCuttoff, prevHBQ, prevHBGain;
+    float prevHBCuttoff_, prevHBQ_, prevHBGain_;
     
     float lpfCuttoff;
     float hpfCuttoff;

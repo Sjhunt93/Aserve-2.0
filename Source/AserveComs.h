@@ -47,6 +47,8 @@ public:
     void reset ();
     
     void addUnitTestMessageToLog (String message);
+    
+    void parseRegisterMessage (int aRegister, float value);
 private:
     void oscMessageReceived (const OSCMessage& message) override;
     void sendOsc (const int channel, const float frequency, const float amplitude, const int wavetype);

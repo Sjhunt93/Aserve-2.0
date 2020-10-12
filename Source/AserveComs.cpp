@@ -8,6 +8,7 @@
 
 #include "AserveComs.h"
 #include "AserveUnitTest.hpp"
+#include "OscillatorManager.h"
 
 namespace AserveOSC
 {
@@ -42,9 +43,61 @@ namespace AserveOSC
     static const String pan = aserve + "pan";
     
     static const String fPath = aserve + "path";
+    
+    static const String aSetRegister = aserve + "register";
 }
 
+namespace AserveRegisterMap {
 
+    //registers start at 0x0
+    typedef const int aRegister;
+    
+    static const int step = OscillatorManager::OscillatorManagerConstants::NumOscillators;
+    
+    //  --------
+    //  address             property
+    //
+    //  0x00 - 0x0F         resets and reserved messages
+    //  0x10 - 0x2F         oscillator pitches
+    //  0x30 - 0x4F         oscillator amplitude
+    //  0x50 - 0x6F         oscillator waveforms
+    //  0x70 - 0x8F         oscillator pan
+    //  0x90 - 0xAF          oscillator attack
+    //  0xB0 - 0xCF         oscillator release
+    
+    aRegister masterRest            = 0x0;
+    //Oscillators
+    aRegister oscillatorPitch       = 0x10;
+    aRegister oscillatorAmp         = 0x30;
+    aRegister oscillatorWave        = 0x50;
+    aRegister oscillatorPan         = 0x70;
+    aRegister oscillatorAttack      = 0x90;
+    aRegister oscillatorRelease     = 0xB0;
+    
+    aRegister lpfCutoff             = 0x100;
+    aRegister hpfCutoff             = 0x101;
+    
+    aRegister bpfCutoff             = 0x102;
+    aRegister bpfQ                  = 0x103;
+    aRegister bpfGain               = 0x104;
+    
+    aRegister brfCutoff             = 0x105;
+    aRegister brfQ                  = 0x106;
+    aRegister brfGain               = 0x107;
+    
+    
+    
+    
+    
+    // filters
+    
+    // pixel grid
+    
+    // pan
+    
+    // mode
+    
+}
 
 AserveComs::AserveComs (AudioMain &_audio) : audio(_audio)
 {
@@ -524,7 +577,16 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
             }
         }
     }
+    else if (message.getAddressPattern().toString().startsWith(AserveOSC::aSetRegister)) {
+        if (message.size() == 2) {
+            //we have to do loads of error checking, dont want asserts being thrown...
+            if (message[0].isInt32() && message[1].isFloat32()) {
+                parseRegisterMessage(message[0].getInt32(), message[1].getFloat32());
+            }
+        }
 
+    }
+    
     if (errorD.isNotEmpty()) {
         addMessageToLog(errorD);
     }
@@ -562,4 +624,87 @@ void AserveComs::addUnitTestMessageToLog (String message)
 {
     addMessageToLog(String("Unit Test -> Log: ") + message);
 
+}
+
+void AserveComs::parseRegisterMessage (int aRegister, float value)
+{
+    std::cout << "Reg: " << aRegister << " value: " << value << "\n";
+    // ------
+    // format is a <= val > b
+    auto isInRange = [](int val, int a, int b) -> bool
+    {
+        return (val >= a && val < b);
+    };
+    using namespace AserveRegisterMap;
+    
+    if (isInRange(aRegister, oscillatorPitch, oscillatorAmp)) {
+        const int logical = aRegister-oscillatorPitch;
+        audio.getOscs().setFrequency(logical, value);
+    }
+    if (isInRange(aRegister, oscillatorAmp, oscillatorWave)) {
+        const int logical = aRegister-oscillatorAmp;
+        audio.getOscs().setAmplitude(logical, value);
+    }
+    
+    if (isInRange(aRegister, oscillatorWave, oscillatorPan)) {
+        const int logical = aRegister-oscillatorWave;
+        audio.getOscs().setWaveform(logical, value);
+    }
+    
+    if (isInRange(aRegister, oscillatorPan, oscillatorAttack)) {
+        const int logical = aRegister-oscillatorPan;
+        // ranage should be -1 (left) to +1 (right) but we clip anyway to avoid clipping in the audio domain.
+        //
+        value = value > 1.0 ? 1.0 : ((value < -1.0) ? - 1.0 : value); // first clip to range -1.0 to plus 1.0
+        value = (value + 1.0);
+        
+        //implement L/R stereo cross fade, avoiding a dipped centre
+        float l = 1.0;
+        float r = 1.0;
+        if (value > 1.0) {
+            l = 2.0-value;
+        }
+        if (value < 1.0) {
+            r = value;
+        }
+        
+        audio.getOscs().setPanning(logical, l, r);
+    }
+    
+    if (isInRange(aRegister, oscillatorAttack, oscillatorRelease)) {
+        const int logical = aRegister-oscillatorAttack;
+        audio.getOscs().setAttackIncrement(logical, value);
+    }
+    if (isInRange(aRegister, oscillatorRelease, oscillatorRelease+0x20)) {
+        const int logical = aRegister-oscillatorRelease;
+        audio.getOscs().setReleaseIncrement(logical, value);
+    }
+    if (aRegister == lpfCutoff) {
+        audio.setLPF(value);
+    }
+    if (aRegister == hpfCutoff) {
+        audio.setHPF(value);
+    }
+    
+    if (aRegister == bpfCutoff) {
+        audio.setHighBand(value, audio.prevHBQ(), audio.prevHBGain());
+    }
+    if (aRegister == bpfQ) {
+        audio.setHighBand(audio.prevHBCuttoff(), value, audio.prevHBGain());
+    }
+    if (aRegister == bpfGain) {
+        audio.setHighBand(audio.prevHBCuttoff(), audio.prevHBQ(), value);
+    }
+    
+    
+    
+    
+//    aRegister bpfCutoff             = 0x102;
+//    aRegister bpfQ                  = 0x103;
+//    aRegister bpfGain               = 0x104;
+//    
+//    aRegister brfCutoff             = 0x105;
+//    aRegister brfQ                  = 0x106;
+//    aRegister brfGain               = 0x107;
+    
 }

@@ -31,7 +31,7 @@ AudioMain::AudioMain ()
     formatManager.registerBasicFormats();
 
 //    setResampleSynthSound(0, "/Users/sj4-hunt/Documents/pianoSample.wav", 60, 0, 0);
-    prevHBCuttoff = prevHBQ = prevHBGain = 0;
+    prevHBCuttoff_ = prevHBQ_ = prevHBGain_ = 0;
     lpfCuttoff = lastLpf = 21000;
     hpfCuttoff = lastHpf = 20;
     
@@ -95,7 +95,7 @@ void AudioMain::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
     for (int i = 0; i < bufferToFill.buffer->getNumSamples(); i++) {
         for (int chan = 0; chan < bufferToFill.buffer->getNumChannels(); chan++) {
             *bufferToFill.buffer->getWritePointer(chan, i) =
-            (filter[4+chan].processSingleSampleRaw(*bufferToFill.buffer->getReadPointer(chan, i)) * prevHBGain) +
+            (filter[4+chan].processSingleSampleRaw(*bufferToFill.buffer->getReadPointer(chan, i)) * prevHBGain_) +
             *bufferToFill.buffer->getReadPointer(chan, i);
             
             *bufferToFill.buffer->getWritePointer(chan, i) = *bufferToFill.buffer->getWritePointer(chan, i) * masterGain;//
@@ -127,16 +127,16 @@ void AudioMain::setHPF (const int cuttoff)
 }
 void AudioMain::setHighBand (const float cuttoff, const float q, const float gain)
 {
-    if ( !(cuttoff == prevHBCuttoff && q == prevHBQ)) { //dont update
+    if ( !(cuttoff == prevHBCuttoff_ && q == prevHBQ_)) { //dont update
         if (cuttoff * 2 < sampleRate && q > 0.0  ) {
             filter[4].setCoefficients(IIRCoefficients::makeBandPass(sampleRate, cuttoff, q));
             filter[5].setCoefficients(IIRCoefficients::makeBandPass(sampleRate, cuttoff, q));
         }
     }
     
-    prevHBQ = q;
-    prevHBGain = gain;
-    prevHBCuttoff = cuttoff;
+    prevHBQ_ = q;
+    prevHBGain_ = gain;
+    prevHBCuttoff_ = cuttoff;
 
 }
 void AudioMain::setHighBandGain (const float gain)
@@ -218,9 +218,14 @@ void AudioMain::triggerSampledNote (const int index, const int note, const int v
 void AudioMain::reset ()
 {
     stopAll();
-    prevHBCuttoff = prevHBQ = prevHBGain = 0;
+    
+    prevHBCuttoff_ = prevHBQ_ = prevHBGain_ = 0;
     lpfCuttoff = 21000;
     hpfCuttoff = 20;
+    
+    for (int i = 0; i < 8; i++) {
+        filter[i].reset();
+    }
 }
 
 StringArray AudioMain::getAudioFileNames ()

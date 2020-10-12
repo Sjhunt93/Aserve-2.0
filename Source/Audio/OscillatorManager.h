@@ -70,6 +70,11 @@ public:
      */
     void setPanning (const int oscillatorNumber, const float left, const float right);
     
+    /*
+     
+     */
+    void setAttackIncrement (const int oscillatorNumber, const double attack);
+    void setReleaseIncrement (const int oscillatorNumber, const double release);
 
     //AudioSouce Callbacks
     virtual void prepareToPlay (int samplesPerBlockExpected, double sampleRate);
