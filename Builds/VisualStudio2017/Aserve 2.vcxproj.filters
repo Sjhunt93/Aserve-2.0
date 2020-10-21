@@ -391,6 +391,9 @@
     <Filter Include="Aserve 2.0\Unit Test">
       <UniqueIdentifier>{c767dfb0-5117-4be6-ba7d-899ddb93347a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Aserve 2.0\Audio\Oscillators">
+      <UniqueIdentifier>{fc425738-5801-4e84-a24a-6232bbbfc304}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\Audio\AserveAudio.cpp">
@@ -2237,6 +2240,18 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\Audio\Oscillators\Oscillator.cpp">
       <Filter>Aserve 2.0\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Audio\Oscillators\SquareOsc.cpp">
+      <Filter>Aserve 2.0\Audio\Oscillators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Audio\Oscillators\TriOsc.cpp">
+      <Filter>Aserve 2.0\Audio\Oscillators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Audio\Oscillators\SawOsc.cpp">
+      <Filter>Aserve 2.0\Audio\Oscillators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Audio\Oscillators\SineOsc.cpp">
+      <Filter>Aserve 2.0\Audio\Oscillators</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4291,6 +4306,18 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Audio\Oscillators\Oscillator.hpp">
       <Filter>Aserve 2.0\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Audio\Oscillators\SquareOsc.hpp">
+      <Filter>Aserve 2.0\Audio\Oscillators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Audio\Oscillators\TriOsc.hpp">
+      <Filter>Aserve 2.0\Audio\Oscillators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Audio\Oscillators\SawOsc.hpp">
+      <Filter>Aserve 2.0\Audio\Oscillators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Audio\Oscillators\SineOsc.hpp">
+      <Filter>Aserve 2.0\Audio\Oscillators</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

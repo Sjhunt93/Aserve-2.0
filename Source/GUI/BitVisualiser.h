@@ -10,7 +10,7 @@
 #define __Aserve_2__BitVisualiser__
 
 #include "../../JuceLibraryCode/JuceHeader.h"
-
+#include <mutex>
 
 static const uint32_t new_piskel_data[1][256] = {
     {
@@ -41,11 +41,11 @@ public:
 
     void paint (Graphics & g);
     //basic calls can use this if calling from the message thread.
-    void set (UInt16 pixelRow, int row);
+    void set (uint16 pixelRow, int row);
     
     
     //Otherwise use these to call directly from any thread (namely aserve coms)
-    void setThreadSafe (UInt16 pixelRow, int row);
+    void setThreadSafe (uint16 pixelRow, int row);
     void updateThreadSafe (int x, int y, bool state);
     void setThreadSafe (const int index, const int red, const int green, const int blue);
     Colour getThreadSafe (int x, int y);
@@ -59,7 +59,7 @@ public:
 private:
     bool paintUpdate = false;
     std::mutex mutexLock;
-    UInt16 pixelGrid[16];
+	uint16 pixelGrid[16];
     Colour overloadedColours[16 * 16];
 };
 

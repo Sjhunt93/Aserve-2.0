@@ -161,7 +161,7 @@ void BitVisualiser::updateThreadSafe (int x, int y, bool state)
     
 }
 
-void BitVisualiser::setThreadSafe (UInt16 pixelRow, int row)
+void BitVisualiser::setThreadSafe (uint16 pixelRow, int row)
 {
     mutexLock.lock();
     pixelGrid[row] = pixelRow;

@@ -148,6 +148,10 @@
     <ClCompile Include="..\..\Source\Audio\AudioMain.cpp" />
     <ClCompile Include="..\..\Source\Audio\OscillatorManager.cpp" />
     <ClCompile Include="..\..\Source\Audio\Oscillators\Oscillator.cpp" />
+    <ClCompile Include="..\..\Source\Audio\Oscillators\SawOsc.cpp" />
+    <ClCompile Include="..\..\Source\Audio\Oscillators\SineOsc.cpp" />
+    <ClCompile Include="..\..\Source\Audio\Oscillators\SquareOsc.cpp" />
+    <ClCompile Include="..\..\Source\Audio\Oscillators\TriOsc.cpp" />
     <ClCompile Include="..\..\Source\GUI\AserveRootGUI.cpp" />
     <ClCompile Include="..\..\Source\GUI\BitVisualiser.cpp" />
     <ClCompile Include="..\..\Source\GUI\ComponentList.cpp" />
@@ -1885,6 +1889,10 @@
     <ClInclude Include="..\..\Source\Audio\AudioMain.h" />
     <ClInclude Include="..\..\Source\Audio\OscillatorManager.h" />
     <ClInclude Include="..\..\Source\Audio\Oscillators\Oscillator.hpp" />
+    <ClInclude Include="..\..\Source\Audio\Oscillators\SawOsc.hpp" />
+    <ClInclude Include="..\..\Source\Audio\Oscillators\SineOsc.hpp" />
+    <ClInclude Include="..\..\Source\Audio\Oscillators\SquareOsc.hpp" />
+    <ClInclude Include="..\..\Source\Audio\Oscillators\TriOsc.hpp" />
     <ClInclude Include="..\..\Source\GUI\AserveRootGUI.h" />
     <ClInclude Include="..\..\Source\GUI\BitVisualiser.h" />
     <ClInclude Include="..\..\Source\GUI\ComponentList.h" />
