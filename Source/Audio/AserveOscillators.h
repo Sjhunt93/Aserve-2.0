@@ -9,70 +9,14 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 
 #include "Oscillator.hpp"
+#include "SineOsc.hpp"
+#include "SquareOsc.hpp"
+#include "SawOsc.hpp"
+#include "TriOsc.hpp"
 
 
-class SineOscillator : public Oscillator
-{
-private:
-    double currentAngle, angleDelta;
-    
-public:
-    SineOscillator();
-    virtual ~SineOscillator();
-    void reset(void);
-    void setFrequency(const double val);
-    double renderWaveShape(void);
-};
 
-class SquareOscillator : public Oscillator
-{
-private:
-    void updateHarmonics( void );
-    
-    unsigned int nHarmonics_, m_;
-    double rate_, phase_;
-    double p_,a_;
-    double lastBlitOutput_, dcbState_, lastOutput_;
-    
-public:
-    SquareOscillator();
-    virtual ~SquareOscillator();
-    
-    void reset(void);
-    void prepare(double sampleRate_);
-    void setFrequency(const double val);
-    double renderWaveShape(void);
-};
-
-class SawOscillator : public Oscillator
-{
-private:
-    void updateHarmonics( void );
-    
-    unsigned int nHarmonics_, m_;
-    double rate_, phase_;
-    double p_,a_,C2_;
-    double state_, lastOutput_;
-    
-public:
-    SawOscillator();
-    ~SawOscillator();
-    
-    void reset(void);
-    void setFrequency(const double val);
-    void prepare(double sampleRate_);
-    double renderWaveShape(void);
-};
-
-class InverseSaw : public SawOscillator {
-public:
-    InverseSaw () : SawOscillator() {}
-    double renderWaveShape(void) {
-        return SawOscillator::renderWaveShape() * -1;
-    }
-    
-};
-
+//noise is so simple it can just stay here...
 class Noise : public Oscillator {
 public:
     double renderWaveShape(void)
@@ -82,24 +26,6 @@ public:
     
 };
 
-class TriOscillator : public Oscillator
-{
-private:
-    void updateHarmonics( void );
-    
-    
-    SineOscillator sineOscs[10];
-    
-    
-public:
-    TriOscillator();
-    ~TriOscillator();
-    
-    void reset(void);
-    void setFrequency(const double val);
-    void prepare(double sampleRate_);
-    double renderWaveShape(void);
-};
 
 class WaveOscillator
 {
@@ -133,6 +59,9 @@ public:
     void setPan (float left, float right);
     float getLPan ();
     float getRPan ();
+    
+    void setAttack (float val);
+    void setRelease (float val);
     
     bool frequencyOutOfRange;
     bool ampOutOfRange;

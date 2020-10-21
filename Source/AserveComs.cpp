@@ -8,43 +8,9 @@
 
 #include "AserveComs.h"
 #include "AserveUnitTest.hpp"
-
-namespace AserveOSC
-{
-    
-    static const String aserve = "/aserve/";
-    
-    static const String note = aserve + "note";
-    static const String control = aserve + "control";
-    static const String mod = aserve + "modwheel";
-    static const String pitchBend = aserve + "pitchbend";
-    static const String aftertouch = aserve + "aftertouch";
-    static const String pressure = aserve + "channelpressure";
-    static const String MIDI = aserve + "midi";
-    
-    static const String oscilator = "/aserve/osc";
-    static const String sample = "/aserve/sample";
-    static const String pitchedSample = "/aserve/samplepitch";
-    static const String setPixelGrid = "/aserve/pixelgrid";
-    static const String pixelGridClicked = aserve + "clickedpixelgrid";
-    static const String loadsample = aserve + "loadsample";
-    static const String loadPitchedSample = aserve + "loadpitchedsample";
-    static const String lpf = aserve + "lpf";
-    static const String hpf = aserve + "hpf";
-    static const String bpf = aserve + "bpf";
-    static const String brf = aserve + "brf";
-    
-    static const String loadDefaultSounds = aserve + "loaddefaults";
-    static const String reset = aserve + "reset";
-
-    static const String mode = aserve + "mode";
-    
-    static const String pan = aserve + "pan";
-    
-    static const String fPath = aserve + "path";
-}
-
-
+#include "OscillatorManager.h"
+#include "AserveHeader.h"
+#include "BitVisualiser.h"
 
 AserveComs::AserveComs (AudioMain &_audio) : audio(_audio)
 {
@@ -66,6 +32,7 @@ AserveComs::AserveComs (AudioMain &_audio) : audio(_audio)
     isMessageLocked.set(false);
     logEnabled.set(true);
     unitTest = nullptr;
+    bitVisualiser = nullptr;
 }
 AserveComs::~AserveComs ()
 {
@@ -170,11 +137,13 @@ void AserveComs::addMessageToLog (String message)
 
 void AserveComs::oscMessageReceived (const OSCMessage& message)
 {
-
-	redrawNeeded.set(true);
-    //std::cout << message.getAddressPattern().toString() << "\n";
+    redrawNeeded.set(true);
     
     //this could probably be refactored with string arrays etc..
+    /*
+     This is a little unwieldy because of all the error checking that needs to happen
+     
+     */
     
     
     String errorA = "";
@@ -218,9 +187,6 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
         
         if (message.size() == 2) {
             if (message[0].isInt32() && message[1].isString()) {
-                
-                
-
                 
                 const int index = message[0].getInt32();
                 const String path = message[1].getString();
@@ -435,7 +401,7 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
         audio.loadFile(2, froot.getChildFile("chh.wav").getFullPathName());
         audio.loadFile(3, froot.getChildFile("ohh.wav").getFullPathName());
         
-        //double attack, double release)
+    
         audio.setResampleSynthSound(0, froot.getChildFile("pianoSample.wav").getFullPathName(), 60, 0.01, 0.3);
         
         addMessageToLog("aserveLoadDefaultSounds();");
@@ -449,7 +415,7 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
                 //send midi
                 const MidiMessage m(s, d1, d2);
                 sendActionMessage("MIDI:" + String(s) + "," + String(d1) + "," + String(d2));
-                
+
             }
 
         }
@@ -530,7 +496,20 @@ void AserveComs::oscMessageReceived (const OSCMessage& message)
             }
         }
     }
+    else if (message.getAddressPattern().toString().startsWith(AserveOSC::aSetRegister)) {
+        if (message.size() == 2) {
+            //we have to do loads of error checking, dont want asserts being thrown...
+            if (message[0].isInt32() && message[1].isFloat32()) {
+                const int reg = message[0].getInt32();
+                const float val = message[1].getFloat32();
+                parseRegisterMessage(reg, val);
+                String message = "aserveSetRegister(" + String(reg) + ", " + String(val) + ");";
+                addMessageToLog(message);
+            }
+        }
 
+    }
+    
     if (errorD.isNotEmpty()) {
         addMessageToLog(errorD);
     }
@@ -559,6 +538,11 @@ void AserveComs::setUniTestPtr (AserveUnitTest * test)
     unitTest = test;
 }
 
+void AserveComs::setBitVisualiserPointer (BitVisualiser * vis)
+{
+    bitVisualiser = vis;
+}
+
 void AserveComs::reset ()
 {
     audio.reset();
@@ -568,4 +552,113 @@ void AserveComs::addUnitTestMessageToLog (String message)
 {
     addMessageToLog(String("Unit Test -> Log: ") + message);
 
+}
+
+void AserveComs::parseRegisterMessage (int aRegister, float value)
+{
+    std::cout << "Reg: " << aRegister << " value: " << value << "\n";
+    // ------
+    // format is a <= val > b
+    auto isInRange = [](int val, int a, int b) -> bool
+    {
+        return (val >= a && val < b);
+    };
+    using namespace AserveRegisterMap;
+    
+    if (aRegister == masterRest) {
+        audio.reset();
+        if (bitVisualiser != nullptr) {
+            bitVisualiser->reset();
+        }
+    }
+    else if (isInRange(aRegister, oscillatorPitch, oscillatorAmp)) {
+        const int logical = aRegister-oscillatorPitch;
+        audio.getOscs().setFrequency(logical, value);
+    }
+    else if (isInRange(aRegister, oscillatorAmp, oscillatorWave)) {
+        const int logical = aRegister-oscillatorAmp;
+        audio.getOscs().setAmplitude(logical, value);
+    }
+    else if (isInRange(aRegister, oscillatorWave, oscillatorPan)) {
+        const int logical = aRegister-oscillatorWave;
+        audio.getOscs().setWaveform(logical, value);
+    }
+    else if (isInRange(aRegister, oscillatorPan, oscillatorAttack)) {
+        const int logical = aRegister-oscillatorPan;
+        // ranage should be -1 (left) to +1 (right) but we clip anyway to avoid clipping in the audio domain.
+        //
+        value = value > 1.0 ? 1.0 : ((value < -1.0) ? - 1.0 : value); // first clip to range -1.0 to plus 1.0
+        value = (value + 1.0);
+        
+        //implement L/R stereo cross fade, avoiding a dipped centre
+        float l = 1.0;
+        float r = 1.0;
+        if (value > 1.0) {
+            l = 2.0-value;
+        }
+        if (value < 1.0) {
+            r = value;
+        }
+        std::cout << l << " : " << r << "\n";
+        
+        audio.getOscs().setPanning(logical, l, r);
+    }
+    else if (isInRange(aRegister, oscillatorAttack, oscillatorRelease)) {
+        const int logical = aRegister-oscillatorAttack;
+        
+        double attack = 1.0 / (((1.0 - value) * audio.sampleRate()) + 0.00001);
+        audio.getOscs().setAttackIncrement(logical, attack);
+    }
+    else if (isInRange(aRegister, oscillatorRelease, oscillatorRelease+0x20)) {
+        const int logical = aRegister-oscillatorRelease;
+        double release = 1.0 / (((1.0 - value) * audio.sampleRate()) + 0.00001);
+        
+        audio.getOscs().setReleaseIncrement(logical, release);
+    }
+    else if (aRegister == lpfCutoff) {
+        audio.setLPF(value);
+    }
+    else if (aRegister == hpfCutoff) {
+        audio.setHPF(value);
+    }
+    else if (aRegister == bpfCutoff) {
+        audio.setHighBand(value, audio.prevHBQ(), audio.prevHBGain());
+    }
+    else if (aRegister == bpfQ) {
+        audio.setHighBand(audio.prevHBCuttoff(), value, audio.prevHBGain());
+    }
+    else if (aRegister == bpfGain) {
+        audio.setHighBand(audio.prevHBCuttoff(), audio.prevHBQ(), value);
+    }
+    else if (aRegister == brfCutoff) {
+        
+    }
+    else if (aRegister == brfGain) {
+        
+    }
+    else if (aRegister == brfQ) {
+        
+    }
+    else if (isInRange(aRegister, bitGridStates, bitGridRedValues) && bitVisualiser != nullptr) {
+//        sendActionMessage("PIXEL:" + String(a) + "," + String(b));
+//        bitVisualiser->setThreadSafe(value, aRegister-bitGridStates);
+        const int index = aRegister-bitGridStates;
+        bitVisualiser->updateThreadSafe(index%16, index/16, value > 0.5); // the value of > 0.5 is a kind of fuzzy logic.
+        
+    }
+    else if (isInRange(aRegister, bitGridRedValues, bitGridGreenValues) && bitVisualiser != nullptr) {
+        bitVisualiser->setThreadSafe(aRegister-bitGridRedValues, value, -1, -1);
+    }
+    else if (isInRange(aRegister, bitGridGreenValues, bitGridBlueValues) && bitVisualiser != nullptr) {
+        bitVisualiser->setThreadSafe(aRegister-bitGridGreenValues, -1, value, -1);
+    }
+    else if (isInRange(aRegister, bitGridBlueValues, bitGridBlueValues+0x100) && bitVisualiser != nullptr) {
+        bitVisualiser->setThreadSafe(aRegister-bitGridBlueValues, -1, -1, value);
+    }
+    
+
+    
+    //  0x300 - 0x3FF       bit grid visualiser colours     red values
+    //  0x400 - 0x4FF       bit grid visualiser colours     green values
+    //  0x500 - 0x5FF       bit grid visualiser colours     blue values
 }

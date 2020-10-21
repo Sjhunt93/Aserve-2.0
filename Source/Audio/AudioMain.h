@@ -62,18 +62,23 @@ public:
     StringArray getAudioFileNames ();
     StringArray getResampledNames ();
     float masterGain = 1.0;
+    
+    const float prevHBCuttoff() {return prevHBCuttoff_;}
+    const float prevHBQ () {return prevHBQ_;}
+    const float prevHBGain () {return prevHBGain_;}
+    const double sampleRate () {return sampleRate_;}
 private:
     AudioFormatManager formatManager;
     OscillatorManager oscs;
     IIRFilter filter[8];
-    double sampleRate;
+    double sampleRate_;
     ScopedPointer <AudioFilePlayerManager> audioFiles;  //audio file playback
     MixerAudioSource mixerSource;           //all audio objects will be mixed into this
     
     Synthesiser     resampleSynth[eMaxSamplerTracks];
     MidiMessageCollector messageCollector[eMaxSamplerTracks];
 
-    float prevHBCuttoff, prevHBQ, prevHBGain;
+    float prevHBCuttoff_, prevHBQ_, prevHBGain_;
     
     float lpfCuttoff;
     float hpfCuttoff;

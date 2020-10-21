@@ -16,7 +16,8 @@ amplitude (0.0f),
 sampleRate (44100.0),
 tailOff(0.0)
 {
-    
+    attackT     = 0.0001;
+    releaseT    = 0.0001;
 }
 Oscillator::~Oscillator()
 {
@@ -75,14 +76,14 @@ double Oscillator::nextSample(void)
         if (tailOff > 0) {          //if fading out incorporate the fade
         
             sample = amplitude * (float) renderWaveShape() * tailOff;
-            tailOff *= 0.99;
+            tailOff -= releaseT;
             
             if (tailOff <= 0.001) {
                 this->reset();
             }
         }
         else {
-            tailOn *= 0.999;
+            tailOn -= attackT;
             if (tailOn <= 0.005) {
                 tailOn = 0.0;
             }
@@ -101,4 +102,17 @@ double Oscillator::getFrequency ()
 String Oscillator::getStates ()
 {
     return String(frequency) + " " + String(amplitude);
+}
+
+void Oscillator::setAttack (const double val)
+{
+    
+    
+    attackT = fabs(val) >= 1.0 ? 1.0 : fabs(val);
+    
+}
+void Oscillator::setRelease (const double val)
+{
+    releaseT = fabs(val) >= 1.0 ? 1.0 : fabs(val);
+    
 }

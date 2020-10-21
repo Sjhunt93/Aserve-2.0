@@ -59,7 +59,7 @@ void ComponentList::addNewComponet (Component * cmp)
 }
 const int ComponentList::getTotalComponents ()
 {
-    return components.size();
+    return (int)components.size();
 }
 Component * ComponentList::getComponentAtPostion (const int index)
 {

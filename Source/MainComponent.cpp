@@ -44,6 +44,8 @@ public:
     
     //==============================================================================
     MainContentComponent() :
+    audioScopeL(0),
+    audioScopeR(1),
     deviceSelector(deviceManager, 0, 0, 2,2, false, false, true, true),
     oscViewer (audioMain),
     samplerViewer (audioMain),
@@ -71,7 +73,8 @@ public:
         logText.setColour(TextEditor::ColourIds::textColourId , Colour(59, 252,52));
         
         
-        addAndMakeVisible(audioScope);
+        addAndMakeVisible(audioScopeL);
+        addAndMakeVisible(audioScopeR);
         addAndMakeVisible(oscViewer);
         addAndMakeVisible(samplerViewer);
         addAndMakeVisible(impulse);
@@ -83,6 +86,7 @@ public:
         
         aserveComs.addActionListener(this);
         bitGrid.addActionListener(this);
+        aserveComs.setBitVisualiserPointer(&bitGrid);
         
         setSize (1000, 730);
         
@@ -104,6 +108,7 @@ public:
     {
         if (btn == &clearButton) {
             audioMain.reset();
+            bitGrid.reset();
         }
     }
     void timerCallback() override
@@ -154,7 +159,8 @@ public:
         audioMain.getNextAudioBlock(bufferToFill);
         
         if (scopeLogPanelEnabled) {
-            audioScope.render(bufferToFill);
+            audioScopeL.render(bufferToFill);
+            audioScopeR.render(bufferToFill);
         }
     }
     
@@ -206,7 +212,9 @@ public:
         logText.setBounds(panelLeftInset + 3, bottomDiv, mid - 6, (getHeight() - panelBottomInset) - (bottomDiv));
         
         
-        audioScope.setBounds(panelLeftInset + 3, 5, mid - 6, bottomDiv - 6);
+        const int totalHightForScopes = bottomDiv-6;
+        audioScopeL.setBounds(panelLeftInset + 3, 5, mid - 6,totalHightForScopes * 0.5);
+        audioScopeR.setBounds(audioScopeL.getX(), audioScopeL.getBottom(), audioScopeL.getWidth(), audioScopeL.getHeight());
         clearButton.setBounds(panelLeftInset + 5, 5, 50, 25);
         
         impulse.setBounds(100, getHeight() - panelBottomInset, 800, 240);
@@ -313,7 +321,8 @@ public:
             {
                 scopeLogPanelEnabled = !scopeLogPanelEnabled;
                 clearButton.setVisible(scopeLogPanelEnabled);
-                audioScope.setVisible(scopeLogPanelEnabled);
+                audioScopeL.setVisible(scopeLogPanelEnabled);
+                audioScopeR.setVisible(scopeLogPanelEnabled);
                 logText.setVisible(scopeLogPanelEnabled);
             }
             else if (menuItemID == 3) // Bit grid
@@ -433,7 +442,8 @@ private:
     AudioMain           audioMain;
     AudioDeviceSelectorComponent  deviceSelector;
     //Visualiser components
-    Scope               audioScope;
+    Scope               audioScopeL;
+    Scope               audioScopeR;
     OscillatorViewer    oscViewer;
     SamplerStateViewer  samplerViewer;
     BitVisualiser       bitGrid;

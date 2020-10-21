@@ -30,6 +30,7 @@ public:
       eNormal = 0,
         eFm8,
     };
+    static constexpr float defaultAttackInc = 0.01;
     /** 
      Constructor 
      */
@@ -70,6 +71,11 @@ public:
      */
     void setPanning (const int oscillatorNumber, const float left, const float right);
     
+    /*
+     
+     */
+    void setAttackIncrement (const int oscillatorNumber, const double attack);
+    void setReleaseIncrement (const int oscillatorNumber, const double release);
 
     //AudioSouce Callbacks
     virtual void prepareToPlay (int samplesPerBlockExpected, double sampleRate);
@@ -84,6 +90,7 @@ public:
     void setOscillatorRoutingMode (const eOscillatorMode mode);
     eOscillatorMode getOscillatorRoutingMode ();
     
+    void reset();
 private:
     OwnedArray<WaveOscillator>  oscillators;
     float                       coreFreq[24];
