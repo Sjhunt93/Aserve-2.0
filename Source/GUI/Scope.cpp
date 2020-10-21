@@ -9,7 +9,7 @@
 
 #include "Scope.h"
 
-Scope::Scope()
+Scope::Scope(const int _channel) : channel(_channel)
 {
 	bufferPos = 0;
 	bufferSize = 2048;
@@ -115,7 +115,7 @@ void Scope::render (const AudioSourceChannelInfo& info)
     
 	for (int j = 0; j < info.numSamples; ++j)
 	{
-		float inMax = info.buffer->getReadPointer(0)[j];
+		float inMax = info.buffer->getReadPointer(channel)[j];
 //		for (int i = 0; i <  info.; ++i)
 //		{
 //			if(fabs(outAudio [i][j]) > inMax)

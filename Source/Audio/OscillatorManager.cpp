@@ -28,6 +28,8 @@ OscillatorManager::~OscillatorManager()
 //==============================================================================
 void OscillatorManager::setAmplitude (const int oscillatorIndex, const float newAmplitude)
 {
+    if (oscillatorIndex >= 0 && oscillatorIndex < NumOscillators) {
+
     coreAmp[oscillatorIndex] = newAmplitude;
     if (oscillatorMode == eFm8) {
         if (oscillatorIndex >= 16) {
@@ -36,7 +38,7 @@ void OscillatorManager::setAmplitude (const int oscillatorIndex, const float new
         }
     }
     oscillators[oscillatorIndex]->setAmplitude(newAmplitude);
-
+    }
 }
 
 void OscillatorManager::stop (const int oscillatorIndex)
@@ -46,24 +48,33 @@ void OscillatorManager::stop (const int oscillatorIndex)
 
 void OscillatorManager::stopAll (void)
 {
-	for (int oscillatorIndex = NumOscillators; --oscillatorIndex >= 0;)
+    for (int oscillatorIndex = NumOscillators; --oscillatorIndex >= 0;) {
 		oscillators[oscillatorIndex]->stop();
+    }
 }
 
 void OscillatorManager::setFrequency (const int oscillatorIndex, const double newFrequencyHz)
 {
-    oscillators[oscillatorIndex]->setFrequency(newFrequencyHz);
-    coreFreq[oscillatorIndex] = newFrequencyHz; //used in the FM/AM mode
+    if (oscillatorIndex >= 0 && oscillatorIndex < NumOscillators) {
+        oscillators[oscillatorIndex]->setFrequency(newFrequencyHz);
+        coreFreq[oscillatorIndex] = newFrequencyHz; //used in the FM/AM mode
+    }
+    
 }
 
 void OscillatorManager::setWaveform (const int oscillatorIndex, const int wave)
 {
-    oscillators[oscillatorIndex]->setWave(wave);
+    if (oscillatorIndex >= 0 && oscillatorIndex < NumOscillators) {
+        oscillators[oscillatorIndex]->setWave(wave);
+    }
+    
 }
 
 void OscillatorManager::setPanning (const int oscillatorIndex, const float left, const float right)
 {
-    oscillators[oscillatorIndex]->setPan(left, right);
+    if (oscillatorIndex >= 0 && oscillatorIndex < NumOscillators) {
+        oscillators[oscillatorIndex]->setPan(left, right);
+    }
 }
 
 //==============================================================================
@@ -136,4 +147,29 @@ void OscillatorManager::setOscillatorRoutingMode (const eOscillatorMode mode)
 OscillatorManager::eOscillatorMode OscillatorManager::getOscillatorRoutingMode ()
 {
     return oscillatorMode;
+}
+
+void OscillatorManager::setAttackIncrement (const int oscillatorIndex, const double attack)
+{
+    if (oscillatorIndex >= 0 && oscillatorIndex < NumOscillators) {
+        oscillators[oscillatorIndex]->setAttack(attack);
+    }
+}
+void OscillatorManager::setReleaseIncrement (const int oscillatorIndex, const double release)
+{
+    if (oscillatorIndex >= 0 && oscillatorIndex < NumOscillators) {
+        oscillators[oscillatorIndex]->setRelease(release);
+    }
+}
+
+void OscillatorManager::reset ()
+{
+    for (int oscillatorIndex = NumOscillators; --oscillatorIndex >= 0;)
+    {
+        oscillators[oscillatorIndex]->setAttack(defaultAttackInc);
+        oscillators[oscillatorIndex]->setRelease(defaultAttackInc);
+        oscillators[oscillatorIndex]->setPan(1.0, 1.0);
+        oscillators[oscillatorIndex]->setAmplitude(0);
+        oscillators[oscillatorIndex]->setFrequency(0);
+    }
 }

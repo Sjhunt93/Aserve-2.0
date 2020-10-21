@@ -26,8 +26,11 @@ public:
     double getFrequency ();
     String getStates ();
     
+    void setAttack (const double val);
+    void setRelease (const double val);
 protected:
     double frequency, amplitude, sampleRate, tailOff, tailOn; //used by derrived classes
+    double attackT, releaseT; //by defaults this are fixed but can be hacked by a register..
 };
 
 #endif /* Oscillator_hpp */

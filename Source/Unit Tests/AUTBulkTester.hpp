@@ -56,7 +56,7 @@ public:
     void runBulkTest (File fPath);
     void runFolderOfTest (File fPath);
     
-    void run();
+    void run() override;
     
     static String sourceFolderPath;
     static String executablePath;
