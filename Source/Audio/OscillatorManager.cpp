@@ -48,8 +48,9 @@ void OscillatorManager::stop (const int oscillatorIndex)
 
 void OscillatorManager::stopAll (void)
 {
-	for (int oscillatorIndex = NumOscillators; --oscillatorIndex >= 0;)
+    for (int oscillatorIndex = NumOscillators; --oscillatorIndex >= 0;) {
 		oscillators[oscillatorIndex]->stop();
+    }
 }
 
 void OscillatorManager::setFrequency (const int oscillatorIndex, const double newFrequencyHz)
@@ -158,5 +159,17 @@ void OscillatorManager::setReleaseIncrement (const int oscillatorIndex, const do
 {
     if (oscillatorIndex >= 0 && oscillatorIndex < NumOscillators) {
         oscillators[oscillatorIndex]->setRelease(release);
+    }
+}
+
+void OscillatorManager::reset ()
+{
+    for (int oscillatorIndex = NumOscillators; --oscillatorIndex >= 0;)
+    {
+        oscillators[oscillatorIndex]->setAttack(defaultAttackInc);
+        oscillators[oscillatorIndex]->setRelease(defaultAttackInc);
+        oscillators[oscillatorIndex]->setPan(1.0, 1.0);
+        oscillators[oscillatorIndex]->setAmplitude(0);
+        oscillators[oscillatorIndex]->setFrequency(0);
     }
 }

@@ -30,6 +30,7 @@ public:
       eNormal = 0,
         eFm8,
     };
+    static constexpr float defaultAttackInc = 0.01;
     /** 
      Constructor 
      */
@@ -89,6 +90,7 @@ public:
     void setOscillatorRoutingMode (const eOscillatorMode mode);
     eOscillatorMode getOscillatorRoutingMode ();
     
+    void reset();
 private:
     OwnedArray<WaveOscillator>  oscillators;
     float                       coreFreq[24];

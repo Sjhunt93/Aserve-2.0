@@ -66,12 +66,12 @@ public:
     const float prevHBCuttoff() {return prevHBCuttoff_;}
     const float prevHBQ () {return prevHBQ_;}
     const float prevHBGain () {return prevHBGain_;}
-    
+    const double sampleRate () {return sampleRate_;}
 private:
     AudioFormatManager formatManager;
     OscillatorManager oscs;
     IIRFilter filter[8];
-    double sampleRate;
+    double sampleRate_;
     ScopedPointer <AudioFilePlayerManager> audioFiles;  //audio file playback
     MixerAudioSource mixerSource;           //all audio objects will be mixed into this
     

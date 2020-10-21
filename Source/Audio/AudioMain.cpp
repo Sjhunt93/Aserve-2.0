@@ -30,7 +30,6 @@ AudioMain::AudioMain ()
     }
     formatManager.registerBasicFormats();
 
-//    setResampleSynthSound(0, "/Users/sj4-hunt/Documents/pianoSample.wav", 60, 0, 0);
     prevHBCuttoff_ = prevHBQ_ = prevHBGain_ = 0;
     lpfCuttoff = lastLpf = 21000;
     hpfCuttoff = lastHpf = 20;
@@ -47,34 +46,33 @@ AudioMain::~AudioMain ()
     
 }
 
-void AudioMain::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
+void AudioMain::prepareToPlay (int samplesPerBlockExpected, double sr)
 {
-    oscs.prepareToPlay(samplesPerBlockExpected, sampleRate);
-    audioFiles->prepareToPlay(samplesPerBlockExpected, sampleRate);
-    this->sampleRate = sampleRate;
+    oscs.prepareToPlay(samplesPerBlockExpected, sr);
+    audioFiles->prepareToPlay(samplesPerBlockExpected, sr);
+    this->sampleRate_ = sr;
     
     for (int i = 0; i < eSizes::eMaxSamplerTracks; i++) {
-        messageCollector[i].reset(sampleRate);
-        resampleSynth[i].setCurrentPlaybackSampleRate(sampleRate);
+        messageCollector[i].reset(sr);
+        resampleSynth[i].setCurrentPlaybackSampleRate(sr);
     }
     
 }
 
 void AudioMain::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
 {
-//    oscs.getNextAudioBlock(bufferToFill);
+
     mixerSource.getNextAudioBlock(bufferToFill);
-//    audioFiles->getNextAudioBlock(bufferToFill);
     
     if (lastLpf != lpfCuttoff) {
         lastLpf = lpfCuttoff;
-        filter[0].setCoefficients(IIRCoefficients::makeLowPass(sampleRate, lpfCuttoff));
-        filter[1].setCoefficients(IIRCoefficients::makeLowPass(sampleRate, lpfCuttoff));
+        filter[0].setCoefficients(IIRCoefficients::makeLowPass(sampleRate_, lpfCuttoff));
+        filter[1].setCoefficients(IIRCoefficients::makeLowPass(sampleRate_, lpfCuttoff));
     }
     if (lastHpf != hpfCuttoff) {
         lastHpf = hpfCuttoff;
-        filter[2].setCoefficients(IIRCoefficients::makeHighPass(sampleRate, hpfCuttoff));
-        filter[3].setCoefficients(IIRCoefficients::makeHighPass(sampleRate, hpfCuttoff));
+        filter[2].setCoefficients(IIRCoefficients::makeHighPass(sampleRate_, hpfCuttoff));
+        filter[3].setCoefficients(IIRCoefficients::makeHighPass(sampleRate_, hpfCuttoff));
     }
     
     for (int i = 0; i < eSizes::eMaxSamplerTracks; i++) {
@@ -128,9 +126,9 @@ void AudioMain::setHPF (const int cuttoff)
 void AudioMain::setHighBand (const float cuttoff, const float q, const float gain)
 {
     if ( !(cuttoff == prevHBCuttoff_ && q == prevHBQ_)) { //dont update
-        if (cuttoff * 2 < sampleRate && q > 0.0  ) {
-            filter[4].setCoefficients(IIRCoefficients::makeBandPass(sampleRate, cuttoff, q));
-            filter[5].setCoefficients(IIRCoefficients::makeBandPass(sampleRate, cuttoff, q));
+        if (cuttoff * 2 < sampleRate_ && q > 0.0  ) {
+            filter[4].setCoefficients(IIRCoefficients::makeBandPass(sampleRate_, cuttoff, q));
+            filter[5].setCoefficients(IIRCoefficients::makeBandPass(sampleRate_, cuttoff, q));
         }
     }
     
@@ -226,6 +224,7 @@ void AudioMain::reset ()
     for (int i = 0; i < 8; i++) {
         filter[i].reset();
     }
+    oscs.reset();
 }
 
 StringArray AudioMain::getAudioFileNames ()

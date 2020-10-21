@@ -23,7 +23,7 @@ public:
     /**
      Gui constructor
      */
-    Scope();
+    Scope(const int channel);
     /**
      Gui destructor
      */
@@ -64,6 +64,8 @@ private:
     Array <float> scopeBufferMax;  //as above
     void calculateScopeBuffers(void);
     
+    
+    const int channel;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Scope)
 };

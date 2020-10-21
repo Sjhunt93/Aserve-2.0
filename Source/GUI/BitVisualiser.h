@@ -33,20 +33,34 @@ static const uint32_t new_piskel_data[1][256] = {
     }
 };
 
-class BitVisualiser : public Component, public ActionBroadcaster {
+class BitVisualiser : public Component, public ActionBroadcaster, public Timer {
 public:
     BitVisualiser ();
     ~BitVisualiser ();
     
 
     void paint (Graphics & g);
+    //basic calls can use this if calling from the message thread.
     void set (UInt16 pixelRow, int row);
+    
+    
+    //Otherwise use these to call directly from any thread (namely aserve coms)
+    void setThreadSafe (UInt16 pixelRow, int row);
+    void updateThreadSafe (int x, int y, bool state);
+    void setThreadSafe (const int index, const int red, const int green, const int blue);
+    Colour getThreadSafe (int x, int y);
     
     void mouseDown (const MouseEvent& event);
 
     
+    void reset ();
+    void timerCallback();
+
 private:
+    bool paintUpdate = false;
+    std::mutex mutexLock;
     UInt16 pixelGrid[16];
+    Colour overloadedColours[16 * 16];
 };
 
 

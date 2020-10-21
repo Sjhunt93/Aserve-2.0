@@ -170,6 +170,7 @@
 		47592289252C9C02004D7C6E /* TriOsc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TriOsc.hpp; sourceTree = "<group>"; };
 		4794C2C022BA55EC008CCD7C /* AUTTestTone.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AUTTestTone.cpp; sourceTree = "<group>"; };
 		4794C2C122BA55EC008CCD7C /* AUTTestTone.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AUTTestTone.hpp; sourceTree = "<group>"; };
+		47B7925725348B09007A6A45 /* AserveHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AserveHeader.h; path = ../../Source/AserveHeader.h; sourceTree = "<group>"; };
 		47DECE5322E88A3B00946189 /* OscillatorViewer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OscillatorViewer.cpp; sourceTree = "<group>"; };
 		47DECE5422E88A3B00946189 /* OscillatorViewer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OscillatorViewer.hpp; sourceTree = "<group>"; };
 		47DECE5622E890A700946189 /* SamplerStateViewer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SamplerStateViewer.cpp; sourceTree = "<group>"; };
@@ -523,6 +524,7 @@
 				B69A02408C2C34BF6242AE66 /* Main.cpp */,
 				47561D8E215293AF0012BED1 /* AserveComs.cpp */,
 				47561D8F215293AF0012BED1 /* AserveComs.h */,
+				47B7925725348B09007A6A45 /* AserveHeader.h */,
 				47561DDF2154DF720012BED1 /* MIDIIO.h */,
 				47561DDE2154DF720012BED1 /* MIDIIO.cpp */,
 				47DECE5922E8B8D100946189 /* ConfigWindow.cpp */,

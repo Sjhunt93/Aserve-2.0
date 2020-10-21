@@ -14,6 +14,7 @@
 #include "AudioMain.h"
 
 class AserveUnitTest;
+class BitVisualiser;
 
 class AserveComs :
 private OSCReceiver,
@@ -44,11 +45,15 @@ public:
     void enableLoggger (bool state);
     
     void setUniTestPtr (AserveUnitTest * test);
+    void setBitVisualiserPointer (BitVisualiser * vis);
+    
     void reset ();
     
     void addUnitTestMessageToLog (String message);
     
     void parseRegisterMessage (int aRegister, float value);
+    
+    
 private:
     void oscMessageReceived (const OSCMessage& message) override;
     void sendOsc (const int channel, const float frequency, const float amplitude, const int wavetype);
@@ -67,6 +72,7 @@ private:
     Atomic<int>  logEnabled;
     
     AserveUnitTest * unitTest;
+    BitVisualiser * bitVisualiser;
     
 };
 #endif /* defined(__Aserve_2__AserveComs__) */
