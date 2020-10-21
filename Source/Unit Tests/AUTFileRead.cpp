@@ -21,7 +21,12 @@ AUTFileRead::~AUTFileRead ()
 void AUTFileRead::runningUnitTest ()
 {
     File file(projectPath);
-    file = file.getParentDirectory().getChildFile("Builds").getChildFile("MacOSX").getChildFile("build").getChildFile("Debug").getChildFile("exercise1.txt");
+
+#ifdef JUCE_WINDOWS
+	file = file.getParentDirectory().getChildFile("Builds").getChildFile("VisualStudio2017").getChildFile("x64").getChildFile("Debug").getChildFile("ConsoleApp").getChildFile("exercise1.txt");
+#else
+	file = file.getParentDirectory().getChildFile("Builds").getChildFile("MacOSX").getChildFile("build").getChildFile("Debug").getChildFile("exercise1.txt");
+#endif // JUCE_WINDOWS
     
     if (file.exists()) {
         file.deleteFile();

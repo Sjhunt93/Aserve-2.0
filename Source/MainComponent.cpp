@@ -268,7 +268,14 @@ public:
         else if (topLevelMenuIndex == 3) // View
         {
             pmenu.addItem(1, "Unit test setup", true);
-            pmenu.addItem(2, "Run folder of tests", true);
+
+#ifdef JUCE_WINDOWS
+			pmenu.addItem(2, "Run folder of tests - not supported on windows", false);
+#else
+			pmenu.addItem(2, "Run folder of tests", true);
+
+#endif 
+
             pmenu.addItem(3, "Prepare submission", true);
             
 //#ifdef DEBUG
