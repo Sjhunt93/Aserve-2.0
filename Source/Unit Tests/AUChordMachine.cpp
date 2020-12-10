@@ -93,7 +93,7 @@ void AUTChordMachine::runningUnitTest ()
         
         std::sort(freqReceived.begin(), freqReceived.end());
         std::sort(testSetFreq.begin(), testSetFreq.end());
-        for (int j = 0; j < testSetFreq.size() && freqReceived.size(); j++) {
+        for (int j = 0; j < testSetFreq.size() && j < freqReceived.size(); j++) {
             if ((int)testSetFreq[j] != (int)freqReceived[j]) {
                 currentState = eTestState::eEndedFail;
 //                errorMessages += "Freqency received does not match what was expected for note number: " + String(note) + "\n";
