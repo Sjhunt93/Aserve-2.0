@@ -63,9 +63,10 @@ public:
     
     void saveToFile ();
     static File fodlerForTestResults (String name);
-
+    
+    // automatic save to solutions path..
     static String solutionsPath;
-    static String projectPath;
+    static String projectPath; //student project path (sent via OSC on xcode proj startup)
 
     static StringArray getTestList ();
     static AserveUnitTest * allocateForTest (String t, AserveComs & coms); //will return nullptr

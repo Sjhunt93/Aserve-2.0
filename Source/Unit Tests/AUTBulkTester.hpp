@@ -30,6 +30,7 @@ public:
             {
                 scores[i] = 0;
             }
+            hasHiddenFile = false;
         }
         File fRoot;
         String name;
@@ -39,6 +40,7 @@ public:
         int testsNotAttempted;
         int scores[10];
         String number;
+        bool hasHiddenFile;
     };
     
     AUTBulkTester (AserveComs & coms);
@@ -53,14 +55,21 @@ public:
     TestSelector * getSelectorForName (String name);
     void resetSelectors (int idSelect);
     
-    void runBulkTest (File fPath);
-    void runFolderOfTest (File fPath);
+    
+    void runBulkTestStaff (File fPath);
+    void runFolderOfTestStudent (File fPath);
     
     void run() override;
     
+    static String aserveBulkTesterPath;
+    static String staffMarkingSolutionsFolder;
     static String sourceFolderPath;
     static String executablePath;
     static String xcodeProjPath;
+    static int numberOfTestsToRun;
+    
+    void printAllResultsStaff ();
+    void restoreStudentIAPFiles ();
 private:
     ScopedPointer<AserveUnitTest> unitTest;
     String selectedTest;

@@ -172,7 +172,7 @@ void AudioMain::playFile(const int audioFileIndex, float gain)
     audioFiles->stop(audioFileIndex);
     if (gain > 1.0) {
         gain = 1.0;
-    }
+    }   
     gain > 0.f ? audioFiles->play(audioFileIndex, gain) : audioFiles->stop(audioFileIndex);
 
 }

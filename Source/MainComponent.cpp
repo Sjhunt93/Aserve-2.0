@@ -366,7 +366,7 @@ public:
             else if (menuItemID == 2) {
                 bool value = AlertWindow::showOkCancelBox(juce::AlertWindow::AlertIconType::WarningIcon, "Test folder", "Make sure you save a copy of your work before running this");
                 if (value) {
-                    autBulk.runFolderOfTest(AserveUnitTest::solutionsPath);
+                    autBulk.runFolderOfTestStudent(AserveUnitTest::solutionsPath);
                 }
                 
             }
@@ -397,7 +397,7 @@ public:
             else if (menuItemID == 4) {
                 std::cout << "Runnning megatests \n";
                 audioMain.masterGain = 0.0;
-                autBulk.runBulkTest(File("/Users/sj4-hunt/Documents/Code/Aserve Unit Test Executer/Submissions/"));
+                autBulk.runBulkTestStaff(AUTBulkTester::staffMarkingSolutionsFolder);
                 
             }
             else if (menuItemID == 5) {
